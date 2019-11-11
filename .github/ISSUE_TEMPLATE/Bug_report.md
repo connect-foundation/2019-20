@@ -37,7 +37,7 @@ about: Project 48에 존재하는 다양한 버그들을 신고 해 주세요
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
-### 추가 정보
+### 추가 정보 (선택)
 <!-- 문제에 대한 추가적인 설명을 아래에 적어주세요. -->
 
 ### 체크리스트
