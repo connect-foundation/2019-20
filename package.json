@@ -16,10 +16,13 @@
     "husky": "^3.0.9",
     "lerna": "^3.18.4"
   },
+  "scripts": {
+    "all:precommit:check":"lerna run --concurrency 1 --stream precommit"
+  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lerna run --concurrency 1 --stream precommit"
+      "pre-commit": "./scripts/check-branch-not-master.sh && yarn all:precommit:check"
     }
   }
 }
