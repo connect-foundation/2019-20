@@ -20,10 +20,10 @@
 		"prettier": "^1.19.1"
 	},
 	"scripts": {
-		"fix": "yarn fix:prettier",
 		"fix:prettier": "prettier --write \"**/*.*\"",
-		"lint": "yarn lint:prettier",
+		"fix": "yarn fix:prettier",
 		"lint:prettier": "prettier --check \"**/*.*\"",
+		"lint": "yarn lint:prettier",
 		"all:precommit:check": "lerna run --concurrency 1 --stream precommit"
 	},
 	"eslintConfig": {
