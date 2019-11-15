@@ -1,4 +1,4 @@
-name: server api test
+name: react build and test
 
 on: 
   pull_request:
