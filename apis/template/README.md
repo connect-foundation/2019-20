@@ -18,7 +18,7 @@
   ├── routes                  
   │   ├── controllers         # Request managers
   │   ├── middlewares         # Request middlewares
-  │   └── routes.ts           # Define routes and middlewares here
+  │   └── routes.js           # Define routes and middlewares here
   ├── services                # External services implementation   
   │   ├── serviceOne
   │   └── serviceTwo
@@ -38,7 +38,7 @@
   ├── pm2.js                  # pm2 init
   ├── package.json            # 모든 서비스마다 하나의 package.json 생성
   ├── README.md         	    # 모든 서비스마다 하나의 readme 생성
-  └── app.ts         		    # App starting point
+  └── app.js         		    # App starting point
   ```
 
   - 같은 계층에 있는 폴더/파일은 같은 책임을 갖는다고 생각한다.
