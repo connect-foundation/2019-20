@@ -1,0 +1,33 @@
+name: server api deploy
+
+on: 
+  pull_request:
+    types: [closed]
+    branches:
+      - '?*\-api\/master'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-16.04
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: get current branch name
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: branchname
+    - name: get current HOST name
+      run: echo "##[set-output name=host;]$(cat hostinfo)"
+      id: hostname
+    - name: deploy to server
+      uses: appleboy/ssh-action@master
+      env:
+        BRANCHNAME: ${{ steps.branchname.outputs.branch}}
+      with:
+        host: ${{ secrets[steps.hostname.outputs.host] }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        envs: BRANCHNAME
+        script: |
+          ./deploy.sh https://github.com/connect-foundation/2019-20 $BRANCHNAME 2019-20
