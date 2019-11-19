@@ -14,20 +14,55 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: get current branch name
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: branchname
+      run: echo "##[set-output name=branch;]$(echo $GITHUB_BASE_REF)"
+      id: BaseRef
     - name: get current HOST name
-      run: echo "##[set-output name=host;]$(cat hostinfo)"
-      id: hostname
-    - name: deploy to server
-      uses: appleboy/ssh-action@master
+      run: |
+        cd ./apis/$(echo ${GITHUB_BASE_REF%-api/master})
+        echo "##[set-output name=host;]$(cat hostinfo)"
+      id: HostName
+    - name: make arguments for git deploy
+      run: |
+        echo "##[set-output name=list;]$(echo $(git remote -v) | cut -d' ' -f2) ${{ steps.BaseRef.outputs.branch }} $GITHUB_REPOSITORY"
+      id: Arguments
+    - name: Decrypt Environment and Send Data
       env:
-        BRANCHNAME: ${{ steps.branchname.outputs.branch}}
-      with:
-        host: ${{ secrets[steps.hostname.outputs.host] }}
+        LARGE_SECRET_PASSPHRASE: ${{ secrets.PRIVATEKEY }}
+        host: ${{ secrets[steps.HostName.outputs.host] }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        envs: BRANCHNAME
+      run: |
+        cd ./apis
+        cd ./$(echo ${GITHUB_BASE_REF%-api/master})
+        if [ -e env.ssl ]; then
+          echo -----BEGIN RSA PRIVATE KEY----- > private.pem
+          echo $LARGE_SECRET_PASSPHRASE >> private.pem
+          echo -----END RSA PRIVATE KEY----- >> private.pem
+          openssl rsautl -decrypt -inkey private.pem -in env.ssl -out .env
+          cp .env ../../
+        else
+          touch ../../.env
+        fi
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets[steps.HostName.outputs.host] }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        source: ".env"
+        target: "~/"
+    - name: deploy to server
+      uses: appleboy/ssh-action@master
+      env:
+        LIST: ${{ steps.Arguments.outputs.list }}
+      with:
+        host: ${{ secrets[steps.HostName.outputs.host] }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        envs: LIST
         script: |
-          ./deploy.sh https://github.com/connect-foundation/2019-20 $BRANCHNAME 2019-20
+          cd ~
+          ./deploy.sh $LIST
