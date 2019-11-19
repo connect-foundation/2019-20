@@ -10,28 +10,11 @@
   },
   "scripts": {
     "test": "jest",
-    "precommit": "lint-staged && jest",
-    "start": "babel-node ./bin/www",
+    "precommit": "lint-staged && yarn test",
+    "dev:start": "babel-node bin/www.js",
+    "build": "babel ./ -d build",
+    "start": "node ./build/bin/www.js",
     "lint:fix": "eslint . --fix"
-  },
-  "eslintConfig": {
-    "extends": [
-      "airbnb-base",
-      "plugin:jest/recommended"
-    ],
-    "plugins": [
-      "jest"
-    ],
-    "rules": {
-      "jest/no-disabled-tests": "warn",
-      "jest/no-focused-tests": "error",
-      "jest/no-identical-title": "error",
-      "jest/prefer-to-have-length": "warn",
-      "jest/valid-expect": "error"
-    },
-    "env": {
-      "jest/globals": true
-    }
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -40,8 +23,8 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
+    "@babel/cli": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
