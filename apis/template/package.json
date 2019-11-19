@@ -8,20 +8,30 @@
       "git add"
     ]
   },
-  "babel": {
-    "presets": [
-      "env"
-    ]
-  },
   "scripts": {
-    "precommit": "lint-staged",
+    "test": "jest",
+    "precommit": "lint-staged && jest",
     "start": "babel-node ./bin/www",
     "lint:fix": "eslint . --fix"
   },
   "eslintConfig": {
     "extends": [
-      "airbnb-base"
-    ]
+      "airbnb-base",
+      "plugin:jest/recommended"
+    ],
+    "plugins": [
+      "jest"
+    ],
+    "rules": {
+      "jest/no-disabled-tests": "warn",
+      "jest/no-focused-tests": "error",
+      "jest/no-identical-title": "error",
+      "jest/prefer-to-have-length": "warn",
+      "jest/valid-expect": "error"
+    },
+    "env": {
+      "jest/globals": true
+    }
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -35,6 +45,7 @@
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^23.0.4",
     "jest": "^24.9.0",
     "lint-staged": "^9.4.3"
   }
