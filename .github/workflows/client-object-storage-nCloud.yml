@@ -17,8 +17,13 @@ jobs:
         node-version: 10.x
     - name: react-build 
       run: |
+        path=$(echo ${GITHUB_BASE_REF%-web/master})
+        cd ./webapps/$path
         yarn
         yarn build
+    - name: react-build-dir
+      run: echo "##[set-output name=dir]./webapps/$(echo $GITHUB_BASE_REF%-web/master})/build/"
+      id: Dir
     - uses: jakejarvis/s3-sync-action@master
       with:
         args: --acl public-read --follow-symlinks --delete
@@ -27,5 +32,5 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'kr-standard'
-        SOURCE_DIR: './build/'
+        SOURCE_DIR: ${{ steps.Dir.outputs.dir }}
         AWS_S3_ENDPOINT:  https://kr.object.ncloudstorage.com
