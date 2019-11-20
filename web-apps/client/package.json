@@ -14,15 +14,19 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0"
   },
+  "lint-staged": {
+    "*/*.js": [
+      "yarn lint:fix",
+      "git add"
+    ]
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "cross-env CI=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "precommit": "yarn test"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "lint:fix": "eslint . --fix",
+    "precommit": "lint-staged && yarn test"
   },
   "browserslist": {
     "production": [
@@ -39,6 +43,9 @@
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "cross-env": "^6.0.3",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.7.0",
+    "lint-staged": "^9.4.3",
     "redux-devtools": "^3.5.0"
   }
 }
