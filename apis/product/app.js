@@ -1,8 +1,11 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import dotenv from 'dotenv';
+
 import db from './db';
 
+dotenv.config();
 db();
 
 const indexRouter = require('./routes/index');

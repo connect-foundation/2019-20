@@ -101,3 +101,4 @@ public/
 .idea/
 
 build/
+.env
