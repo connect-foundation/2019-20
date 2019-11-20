@@ -99,3 +99,5 @@ public/
 
 # for webstorm user
 .idea/
+
+build/
