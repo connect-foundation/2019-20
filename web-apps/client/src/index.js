@@ -4,11 +4,11 @@ import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import './index.css';
+import {createLogger} from 'redux-logger';
+import ReduxThunk from 'redux-thunk';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import rootReducer from './modules';
-import {createLogger} from 'redux-logger';
-import ReduxThunk from 'redux-thunk';
 
 const logger = createLogger();
 const store = createStore(
