@@ -22,6 +22,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: yarn install, build, test
       run: |
+        path=$(echo ${GITHUB_BASE_REF%-web/master})
+        cd ./webapps/$path
         yarn
         yarn build
         yarn test

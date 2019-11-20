@@ -20,7 +20,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: yarn install, build, test
+    - name: yarn install, test
       run: |
+        path=$(echo ${GITHUB_BASE_REF%-api/master})
+        cd ./apis/$path
         yarn
+        yarn build
         yarn test
