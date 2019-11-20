@@ -108,4 +108,36 @@ const Product = new Schema({
   },
 });
 
-module.exports = Product;
+// Create new Product document
+Product.statics.create = function (payload, cb) {
+  // this === Model
+  const product = new this(payload);
+  // return Promise
+  return product.save().then(() => cb());
+};
+
+// Find All
+Product.statics.findAll = function () {
+  // return promise
+  // V4부터 exec() 필요없음
+  return this.find({});
+};
+//
+// // Find One by productID
+// Product.statics.findOneByProductID = function(productID) {
+//   return this.findOne({productID});
+// };
+//
+// // Update by todoid
+// Product.statics.updateByProductID = function(productID, payload) {
+//   // { new: true }: return the modified document rather than the original. defaults to false
+//   return this.findOneAndUpdate({productID}, payload, {new: true});
+// };
+//
+// // Delete by todoid
+// Product.statics.deleteByTodoid = function(todoid) {
+//   return this.remove({todoid});
+// };
+
+// Create Model & Export
+module.exports = mongoose.model('Product', Product);
