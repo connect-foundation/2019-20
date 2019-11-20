@@ -3,7 +3,7 @@
 ## 참조
 
 - [Structure of a NodeJS API Project](https://medium.com/@gpp?source=post_page-----cdecb46ef3f8----------------------)
-- [왜 비즈니스 로직은 Model(Domain)에 가까울수록 좋은가?]( https://nesoy.github.io/articles/2018-04/why-close-to-domain)
+- [왜 비즈니스 로직은 Model(Domain)에 가까울수록 좋은가?](https://nesoy.github.io/articles/2018-04/why-close-to-domain)
 
 ## 디렉토리 구조
 
@@ -15,11 +15,11 @@
   │   ├── sequalize.json        # Sequalize config
   │   ├── serviceOne.json       # ServiceOne config
   │   └── ...                 # Other configurations
-  ├── routes                  
+  ├── routes
   │   ├── controllers         # Request managers
   │   ├── middlewares         # Request middlewares
   │   └── routes.js           # Define routes and middlewares here
-  ├── services                # External services implementation   
+  ├── services                # External services implementation
   │   ├── serviceOne
   │   └── serviceTwo
   │   └── ...                 # Other services
@@ -29,8 +29,8 @@
   │   ├── seeds               # Seeds
   │   └── index.js            # Sequalize instantiation
   ├── core                    # Business logic implementation
-  │   ├── accounts.js         
-  │   ├── chat.js            
+  │   ├── accounts.js
+  │   ├── chat.js
   │   └── ...                 # Other business logic implementations
   ├── utils                   # Util libs (formats, validation, etc)
   ├── tests                   # Testing
