@@ -5,16 +5,18 @@ import dotenv from 'dotenv';
 import 'core-js';
 import db from './db';
 
-dotenv.config();
-db();
+import indexRouter from './routes/index';
 
-const indexRouter = require('./routes/index');
+dotenv.config();
+db().catch(() => {
+  process.exit();
+});
 
 const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);

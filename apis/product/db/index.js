@@ -1,12 +1,19 @@
-/* eslint-disable*/
 import mongoose from 'mongoose';
 
-export default () => {
-  mongoose.connect(`${process.env.MONGO_URL}`, {
+export default async () => {
+  const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+  };
+  await mongoose.connect(`${process.env.MONGO_URL}`, options, (err) => {
+    if (err) {
+      throw new Error(err);
+    }
   });
 
+
   const db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error:'));
+  db.on('err', () => {
+    throw new Error('connection Error');
+  });
 };
