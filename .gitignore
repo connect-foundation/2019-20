@@ -102,3 +102,4 @@ public/
 
 build/
 .env
+!template.env
