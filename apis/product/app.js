@@ -6,6 +6,7 @@ import 'core-js';
 import db from './db';
 
 import indexRouter from './routes/index';
+import productRouter from './routes/product';
 
 dotenv.config();
 db().catch(() => {
@@ -20,5 +21,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
+app.use('/products', productRouter);
 
 module.exports = app;
