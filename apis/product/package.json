@@ -23,7 +23,9 @@
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
     "mongoose": "^5.7.12",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "swagger-ui-express": "^4.1.2",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.0",
