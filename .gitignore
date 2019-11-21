@@ -101,3 +101,5 @@ public/
 .idea/
 
 build/
+.env
+!template.env
