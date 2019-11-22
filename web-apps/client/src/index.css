@@ -19,6 +19,15 @@
   src: url('./styles/fonts/NanumSquareOTF_acR.otf') format('opentype');
 }
 
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0;
   font-family: 'NanumSquare', -apple-system, BlinkMacSystemFont, 'Segoe UI',
