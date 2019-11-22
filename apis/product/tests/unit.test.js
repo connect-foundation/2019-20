@@ -5,8 +5,8 @@ import dotenv from 'dotenv';
 import model from '../db/model';
 import mock from './mock-data';
 import message from '../core/message';
+import mockData from './mock-datas.json';
 import * as Core from '../core';
-
 import 'core-js';
 
 const Product = model.product;
@@ -73,12 +73,35 @@ describe('core: removeProduct method', () => {
     const result = await Core.removeProduct('aaaa', userId);
     expect(result).toBe(0);
   });
-  test('존재하는 데이터 사제 검사', async () => {
+  test('존재하는 데이터 삭제 검사', async () => {
     const result = await Core.removeProduct(product._id, userId);
     expect(result).toBe(1);
   });
   test('존재하는 데이터이지만 유저정보가 일치하지 않는 경우 삭제 검사', async () => {
     const result = await Core.removeProduct(product._id, userId);
     expect(result).toBe(1);
+  });
+});
+
+describe('core: getProducts method', () => {
+  beforeAll(async () => {
+    await Product.create(mockData.slice(0, 100));
+  });
+  afterAll(async () => {
+    await Product.remove({});
+  });
+  test('페이지네이션 마지막페이지 불러오기, 11개씩, 10페이지 (1개 출력)', async () => {
+    const result = await Core.getProducts(10, 11);
+    expect(result).toHaveLength(1);
+  });
+  test('1개의 데이터만 조회검사', async () => {
+    const result = await Core.getProducts(1, 1);
+    expect(result).toHaveLength(1);
+  });
+  test('존재하지 않는 데이터가 검색 결과', async () => {
+    const result = await Core.getProducts(1, 2, {
+      keyword: { $regex: 'ㅏㅏㅏㅏㅏㅏㅏㅏㅏ' },
+    });
+    expect(result).toHaveLength(0);
   });
 });

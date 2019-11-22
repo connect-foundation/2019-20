@@ -1,5 +1,6 @@
 import model from '../../db/model';
 import message from '../../core/message';
+import { getProducts, getProductSchemaByKey } from '../../core';
 
 const { product } = model;
 
@@ -13,7 +14,7 @@ const checkKeyword = ({ query: { keyword } }, res, next) => {
 };
 
 const checkCategoryFilterAndAddFilter = ({ body: { negativeCategory } }, res, next) => {
-  const categories = product.schema.path('category').enumValues;
+  const categories = getProductSchemaByKey('category').enumValues;
   const isCorrectCategoryName = (category) => categories.includes(category);
   let categoryTestResult = true;
   if (negativeCategory) {
@@ -90,11 +91,7 @@ const getProductList = async ({ query: { page = 1, limits = 10 } }, res) => {
     ...cur,
   }), {});
   try {
-    const list = await product
-      .find(filters)
-      .sort({ order: -1, _id: 1 })
-      .skip((page - 1) * limits)
-      .limit(limits);
+    const list = await getProducts(page, limits, filters);
     res.json(list);
   } catch (e) {
     res.status(400).json({ message: message.errorProcessing });

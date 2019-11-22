@@ -4,6 +4,29 @@ import message from './message';
 const Product = model.product;
 
 /**
+ * 등록된 중고상품 조회
+ * @description 검색 조건에 일치하는 정보를 찾아 리스트로 반환합니다.
+ * @param {Number} page 페이지네이션 번호 (default 1)
+ * @param {Number} limits 총 출력할 갯수 (default 10)
+ * @param {Object} options where 조건(필터) (default {})
+ * @param {Object} sort 정렬 방법 (default { order:-1, createdAt: -1})
+ * @returns {Promise<(Object|Array)|String>} Array(조회 결과) | String(에러메시지)
+ */
+const getProducts = async (page = 1, limits = 10,
+  options = {}, sort = { order: -1, createdAt: 1 }) => {
+  try {
+    const result = await Product
+      .find(options || {})
+      .sort(sort)
+      .skip((page - 1) * limits)
+      .limit(limits);
+    return result;
+  } catch (e) {
+    return `${message.errorProcessing} | ${e.toString()}`;
+  }
+};
+
+/**
  * 등록된 중고상품 정보 수정
  * @description 유저 아이디와 실제 document를 등록한 사용자가 일치할 경우에만 해당 정보를 수정합니다.
  * @param {String} _id 기본키(Object_ID)
@@ -43,4 +66,11 @@ const removeProduct = async (_id, userId) => {
   }
 };
 
-export { updateProduct, removeProduct };
+const getProductSchemaByKey = (key) => Product.schema.path(key);
+
+export {
+  updateProduct,
+  removeProduct,
+  getProducts,
+  getProductSchemaByKey,
+};
