@@ -1,11 +1,8 @@
 import express from 'express';
 import modifyProductController from './controller/modifyProduct';
+import deleteProductController from './controller/deleteProduct';
 import { getProductById } from './middleware/list';
 import { isLoggedInUser, getUserStatus } from '../services/user';
-import {
-  isAuthor,
-  deleteItem,
-} from './middleware/delete';
 
 const router = express.Router();
 
@@ -15,7 +12,6 @@ router.route('/:id')
     getUserStatus,
     modifyProductController)
   .delete(isLoggedInUser,
-    isAuthor,
-    deleteItem);
+    deleteProductController);
 
 export default router;

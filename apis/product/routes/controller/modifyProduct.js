@@ -1,4 +1,4 @@
-import updateProduct from '../../core';
+import { updateProduct } from '../../core';
 
 const modifyProductController = async (req, res) => {
   const { body, params: { id } } = req;

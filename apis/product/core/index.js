@@ -27,4 +27,20 @@ const updateProduct = async (_id, userId, contents) => {
   }
 };
 
-export default updateProduct;
+/**
+ * 등록된 중고상품 삭제
+ * @description 유저 아이디와 실제 document를 등록한 사용자가 일치할 경우에만 해당 정보를 삭제합니다..
+ * @param {String} _id 기본키(Object_ID)
+ * @param {String} userId 유저정보(사용자)
+ * @return {Promise<Number>} 삭제 성공시 1, 실패 시 0
+ */
+const removeProduct = async (_id, userId) => {
+  try {
+    const result = await Product.remove({ _id, userId });
+    return result.deletedCount;
+  } catch (e) {
+    return 0;
+  }
+};
+
+export { updateProduct, removeProduct };
