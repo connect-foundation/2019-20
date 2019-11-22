@@ -106,6 +106,8 @@ const Product = new Schema({
     ],
     required: true,
   },
+}, {
+  timestamps: { createdAt: true, updatedAt: true },
 });
 
 module.exports = mongoose.model('Product', Product);
