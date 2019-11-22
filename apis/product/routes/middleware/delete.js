@@ -1,5 +1,5 @@
 import model from '../../db/model';
-import message from './message';
+import message from '../../core/message';
 
 const Product = model.product;
 

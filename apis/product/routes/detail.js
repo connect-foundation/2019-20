@@ -1,7 +1,7 @@
 import express from 'express';
+import modifyProductController from './controller/modifyProduct';
 import { getProductById } from './middleware/list';
 import { isLoggedInUser, getUserStatus } from '../services/user';
-import { updateProduct } from './middleware/write';
 import {
   isAuthor,
   deleteItem,
@@ -13,7 +13,7 @@ router.route('/:id')
   .get(getProductById)
   .put(isLoggedInUser,
     getUserStatus,
-    updateProduct)
+    modifyProductController)
   .delete(isLoggedInUser,
     isAuthor,
     deleteItem);

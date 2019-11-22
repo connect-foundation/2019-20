@@ -1,5 +1,5 @@
 import model from '../../db/model';
-import message from './message';
+import message from '../../core/message';
 
 const Product = model.product;
 
@@ -40,22 +40,8 @@ const saveProduct = async (req, res) => {
   }
 };
 
-const updateProduct = async (req, res) => {
-  const { body, params: { id } } = req;
-  const fieldName = Object.keys(body).filter((key) => key !== 'id');
-  const updateData = fieldName.reduce((field, name) => ({
-    ...field,
-    [name]: body[name],
-  }), {});
-  const beforeData = await Product.findByIdAndUpdate(id, { $set: updateData });
-  res.json({
-    beforeData, updateData,
-  });
-};
-
 export {
   checkRequiredField,
   useMongooseValidator,
   saveProduct,
-  updateProduct,
 };
