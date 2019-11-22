@@ -1,0 +1,42 @@
+{
+  "name": "product",
+  "version": "0.0.0",
+  "private": true,
+  "lint-staged": {
+    "*/*.js": [
+      "yarn lint:fix",
+      "git add"
+    ]
+  },
+  "scripts": {
+    "test": "jest",
+    "precommit": "lint-staged && yarn test",
+    "dev:start": "babel-node bin/www.js",
+    "build": "babel ./ -d build",
+    "start": "node ./build/bin/www.js",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "core-js": "3",
+    "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
+    "express": "~4.16.1",
+    "mongoose": "^5.7.12",
+    "morgan": "~1.9.1",
+    "swagger-ui-express": "^4.1.2",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2",
+    "@babel/node": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^23.0.4",
+    "jest": "^24.9.0",
+    "lint-staged": "^9.4.3"
+  }
+}

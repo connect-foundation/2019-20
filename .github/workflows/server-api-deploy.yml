@@ -1,0 +1,68 @@
+name: server api deploy
+
+on: 
+  pull_request:
+    types: [closed]
+    branches:
+      - '?*\-api\/master'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-16.04
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: get current branch name
+      run: echo "##[set-output name=branch;]$(echo $GITHUB_BASE_REF)"
+      id: BaseRef
+    - name: get current HOST name
+      run: |
+        cd ./apis/$(echo ${GITHUB_BASE_REF%-api/master})
+        echo "##[set-output name=host;]$(cat hostinfo)"
+      id: HostName
+    - name: make arguments for git deploy
+      run: |
+        echo "##[set-output name=list;]$(echo $(git remote -v) | cut -d' ' -f2) ${{ steps.BaseRef.outputs.branch }} $GITHUB_REPOSITORY"
+      id: Arguments
+    - name: Decrypt Environment and Send Data
+      env:
+        LARGE_SECRET_PASSPHRASE: ${{ secrets.PRIVATEKEY }}
+        host: ${{ secrets[steps.HostName.outputs.host] }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+      run: |
+        cd ./apis
+        cd ./$(echo ${GITHUB_BASE_REF%-api/master})
+        if [ -e env.ssl ]; then
+          echo -----BEGIN RSA PRIVATE KEY----- > private.pem
+          echo $LARGE_SECRET_PASSPHRASE >> private.pem
+          echo -----END RSA PRIVATE KEY----- >> private.pem
+          openssl rsautl -decrypt -inkey private.pem -in env.ssl -out .env
+          cp .env ../../
+        else
+          touch ../../.env
+        fi
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets[steps.HostName.outputs.host] }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        source: ".env"
+        target: "~/"
+    - name: deploy to server
+      uses: appleboy/ssh-action@master
+      env:
+        LIST: ${{ steps.Arguments.outputs.list }}
+      with:
+        host: ${{ secrets[steps.HostName.outputs.host] }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        envs: LIST
+        script: |
+          cd ~
+          ./deploy.sh $LIST

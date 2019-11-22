@@ -1,0 +1,189 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  description: 상품관리를 위한 API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api/v1
+    description: we don't have any description yet.
+
+paths:
+  /detail/products/{id}:
+    get:
+      tags:
+      - productDetail
+      description: 상품의 상세정보를 조회합니다.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          description: 상품의 uuid
+      responses:
+        200:
+          description: detail information of product selected by ProductID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    put:
+      tags:
+      - productDetail
+      description: 상품의 상세정보를 변경합니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          description: 상품의 uuid
+      responses:
+        201:
+          description: update information of product selected by ProductID
+          schema:
+            type: boolean
+            items: true
+    delete:
+      tags:
+      - productDetail
+      description: 해당 상품을 삭제합니다.
+      parameters:
+        - in : path
+          name: id
+          schema:
+            type: string
+          description: 상품의 uuid
+      responses:
+         202:
+          description: delete information of product selected by ProductID
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+
+
+
+components:
+  schemas:
+    Product:
+      required:
+        - title
+        - userId
+        - order
+        - latitude
+        - longitude
+        - zipCode
+        - areaRange
+        - price
+        - pictures
+        - contents
+        - negotiable
+        - hits
+        - interests
+        - currentStatus
+        - productStatus
+        - deliverAvailable
+        - category
+      properties:
+        title:
+          type: string
+          description: title of product
+        userId:
+          type: string
+          description: 판매자 아이디
+        order:
+          type: string
+          format: date
+          description: 순서 정렬을 위한 timestamp
+        latitude:
+          type: number
+          format: double
+          description: 위도
+        longitude:
+          type: number
+          format: double
+          description: 경도
+        zipCode:
+          type: string
+          description: 우편번호
+        areaRange:
+          type: string
+          enum:
+            - 1
+            - 2
+            - 3
+          description: 거래 지역 범위
+        price:
+          type: number
+          description: 상품 가격
+        pictures:
+          type: array
+          items:
+            oneOf:
+              - type: string
+          description: 상품 사진 목록
+        contents:
+          type: string
+          description: 상품 판매를 위한 설명
+        negotiable:
+          type: boolean
+          description: 네고 가능 여부
+        hits:
+          type: number
+          description: 게시물 조회수
+        interests:
+          type: number
+          description: 게시물 하트 수
+        currentStatus:
+          type: string
+          enum:
+            - 대기
+            - 거래중
+            - 거래완료
+            - 비공개
+          description: 현재 거래 상태
+        productStatus:
+          type: string
+          enum:
+            - 미개봉
+            - 미사용
+            - A급
+            - 사용감 있음
+            - 전투용
+            - 고장/부품
+          description: 상품 상태
+        deliverAvailable:
+          type: boolean
+          description: 택배거래 가능 여부
+        category:
+          type: string
+          enum:
+            - 디지털/가전
+            - 가구/인테리어
+            - 유아동/유아도서
+            - 생활/가공식품
+            - 여성의류
+            - 여성잡화
+            - 뷰티/미용
+            - 남성패션/잡화
+            - 스포츠/레저
+            - 게임/취미
+            - 도서/티켓/음반
+            - 반려동물용품
+            - 기타 중고물품
+          description: 상품 카테고리
+  requestBodies:
+    ProductBody:
+      description: A JSON object containing pet information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/Product'

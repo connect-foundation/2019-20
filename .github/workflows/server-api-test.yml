@@ -1,0 +1,29 @@
+name: server api test
+
+on: 
+  pull_request:
+    branches:
+      - '?*\-api\/master'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-16.04
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: yarn install, test
+      run: |
+        path=$(echo ${GITHUB_BASE_REF%-api/master})
+        cd ./apis/$path
+        yarn
+        yarn build
+        yarn test

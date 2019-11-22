@@ -1,0 +1,9 @@
+*.*
+!*.js
+!*.json
+!*.yml
+node_modules/
+apis/*/node_modules/
+web-apps/*/node_modules/
+serviceWorker.js
+build
