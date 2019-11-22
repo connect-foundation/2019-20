@@ -12,6 +12,7 @@ import 'core-js';
 const Product = model.product;
 
 dotenv.config();
+jest.setTimeout(10000);
 
 beforeAll(() => {
   mongoose.connect(process.env.MONGO_TEST_URL, {
@@ -84,8 +85,9 @@ describe('core: removeProduct method', () => {
 });
 
 describe('core: getProducts method', () => {
+  const inputData = mockData.slice(0, 100);
   beforeAll(async () => {
-    await Product.create(mockData.slice(0, 100));
+    await Product.create(inputData);
   });
   afterAll(async () => {
     await Product.remove({});
@@ -103,5 +105,11 @@ describe('core: getProducts method', () => {
       keyword: { $regex: 'ㅏㅏㅏㅏㅏㅏㅏㅏㅏ' },
     });
     expect(result).toHaveLength(0);
+  });
+  test('정상적으로 데이터를 검색하는 지 검사', async () => {
+    const keyword = new RegExp(inputData[0].title);
+    const expectResult = inputData.filter((data) => keyword.test(data.title));
+    const result = await Core.getProducts(1, inputData.length, { title: { $regex: keyword } });
+    expect(result).toHaveLength(expectResult.length);
   });
 });

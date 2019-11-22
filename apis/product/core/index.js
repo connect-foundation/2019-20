@@ -13,7 +13,7 @@ const Product = model.product;
  * @returns {Promise<(Object|Array)|String>} Array(조회 결과) | String(에러메시지)
  */
 const getProducts = async (page = 1, limits = 10,
-  options = {}, sort = { order: -1, createdAt: 1 }) => {
+  options = {}, sort = { order: -1, createdAt: -1 }) => {
   try {
     const result = await Product
       .find(options || {})

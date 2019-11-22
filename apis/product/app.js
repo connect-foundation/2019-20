@@ -7,7 +7,6 @@ import db from './db';
 
 import indexRouter from './routes/index';
 import productRouter from './routes/product';
-import productDetailRouter from './routes/detail';
 
 dotenv.config();
 db().catch(() => {
@@ -23,6 +22,5 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/products', productRouter);
-app.use('/detail/products', productDetailRouter);
 
 module.exports = app;
