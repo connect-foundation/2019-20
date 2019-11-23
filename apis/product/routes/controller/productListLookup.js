@@ -1,6 +1,6 @@
 import { getProducts } from '../../core';
 
-const productListLookupController = async (req, res) => {
+const productListLookupController = async (req, res, next) => {
   const {
     options = {},
     sort = { order: -1, createAt: 1 },
@@ -9,7 +9,11 @@ const productListLookupController = async (req, res) => {
   } = res.lcoals;
 
   const result = await getProducts(options, sort, page, limits);
-  res.json(result);
+  if (typeof result === 'string') {
+    next({ status: 400, message: result });
+  } else {
+    res.json(result);
+  }
 };
 
 export default productListLookupController;

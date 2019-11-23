@@ -27,7 +27,10 @@ const addCategoryToFilter = ({ query: { category } }, res, next) => {
       const query = convertStringCategoryToQuery(category);
       res.locals.filters = { ...res.locals.filters, ...query };
     } catch (e) {
-      next(e.toString());
+      next({
+        status: 400,
+        message: e.message,
+      });
     }
   }
   next();
@@ -45,14 +48,17 @@ const addZipCodeToFilter = ({ query: { zipCode } }, res, next) => {
 
 const addPriceToFilter = ({ query: { price } }, res, next) => {
   if (price) {
-    const query = convertStringPriceToQuery(price);
     try {
+      const query = convertStringPriceToQuery(price);
       res.locals.filters = {
         ...res.locals.filters,
         ...query,
       };
     } catch (e) {
-      next(e.toString());
+      next({
+        status: 400,
+        message: e.message,
+      });
     }
   }
   next();
@@ -67,7 +73,10 @@ const addDealStatusToFilter = ({ query: { status } }, res, next) => {
         ...query,
       };
     } catch (e) {
-      next(e.toString());
+      next({
+        status: 400,
+        message: e.message,
+      });
     }
   } else {
     res.locals.filters = {

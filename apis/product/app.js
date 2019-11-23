@@ -23,4 +23,10 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/products', productRouter);
 
+app.use((err, req, res, next) => {
+  const message = err.message.split('|')[0].trim();
+  res.status(err.status || 500);
+  res.json(message);
+});
+
 module.exports = app;
