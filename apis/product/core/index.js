@@ -4,6 +4,20 @@ import message from './message';
 const Product = model.product;
 
 /**
+ * 중고 상품 등록
+ * @param {*} contents 새로운 데이터(Product 스키마를 따름)
+ * @returns {Promise} aaa;
+ */
+const insertProduct = async (contents) => {
+  try {
+    const result = await Product.create(contents);
+    return result;
+  } catch (e) {
+    return `${message.errorProcessing} | ${e.toString()}`;
+  }
+};
+
+/**
  * 등록된 중고상품 조회
  * @description 검색 조건에 일치하는 정보를 찾아 리스트로 반환합니다.
  * @param {Number} page 페이지네이션 번호 (default 1)
@@ -69,6 +83,7 @@ const removeProduct = async (_id, userId) => {
 const getProductSchemaByKey = (key) => Product.schema.path(key);
 
 export {
+  insertProduct,
   updateProduct,
   removeProduct,
   getProducts,

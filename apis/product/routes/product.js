@@ -1,13 +1,9 @@
 import express from 'express';
-import {
-  checkRequiredField,
-  useMongooseValidator,
-  saveProduct,
-} from './middleware/write';
 import queryAnalysisMiddleware from './middleware/listView';
 import modifyProductController from './controller/modifyProduct';
 import deleteProductController from './controller/deleteProduct';
-import { isLoggedInUser, getUserStatus } from '../services/user';
+import writeProductCotroller from './controller/writeProduct';
+import isLoggedInUser from '../services/user';
 import { getProductListController, findProductByIdController } from './controller/getProductInfo';
 
 const router = express.Router();
@@ -26,15 +22,11 @@ const router = express.Router();
 router.route('/')
   .get(...queryAnalysisMiddleware, getProductListController)
   .post(isLoggedInUser,
-    getUserStatus,
-    checkRequiredField,
-    useMongooseValidator,
-    saveProduct);
+    writeProductCotroller);
 
 router.route('/:id')
   .get(findProductByIdController)
   .put(isLoggedInUser,
-    getUserStatus,
     modifyProductController)
   .delete(isLoggedInUser,
     deleteProductController);

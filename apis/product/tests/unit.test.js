@@ -113,3 +113,28 @@ describe('core: getProducts method', () => {
     expect(result).toHaveLength(expectResult.length);
   });
 });
+
+describe('core: deleteProduct method', () => {
+  const inputData = mockData.slice(0, 1);
+  afterAll(async () => {
+    await Product.remove({});
+  });
+  test('정상적인 데이터 삽입 확인', async () => {
+    await Core.insertProduct(inputData[0]);
+    expect(await Product.count()).toBe(1);
+  });
+  test('비정상적인 데이터 삽입이 안되는지 검사', async () => {
+    const abnormalData = inputData[0];
+    abnormalData.category = '존재하지 않는 항목';
+    const result = await Core.insertProduct(inputData[0]);
+    const prfixMessage = result.split('|')[0].trim();
+    expect(prfixMessage).toBe(message.errorProcessing);
+  });
+  test('필수 항목 누락이 되었을 때 삽입이 안되는지 검사', async () => {
+    const abnormalData = JSON.parse(JSON.stringify(inputData[0]));
+    delete abnormalData.title;
+    const result = await Core.insertProduct(inputData[0]);
+    const prfixMessage = result.split('|')[0].trim();
+    expect(prfixMessage).toBe(message.errorProcessing);
+  });
+});
