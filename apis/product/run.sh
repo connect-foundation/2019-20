@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# read env
+while IFS='=' read -r name value
+do
+    if [ "$name" == "MONGOPORT" ]; then
+        MONGOPORT=$value
+    fi
+    if [ "$name" == "MONGOVOLUME" ]; then
+        MONGOVOLUME=$value
+    fi
+done < .env
+
 # docker setting
 DOCKERINSTALL=$(which docker)
 if [ "docker" != "$DOCKERINSTALL" ]; then
@@ -10,7 +21,7 @@ fi
 # mongo db start
 MONGODBRUN=$(docker container ls | grep -w -o mongodb)
 if [ "mongodb" != "$MONGODBRUN" ]; then
-    docker run --name mongodb -p 27017:27017 -v ~/mongodb/data:/data/db -d mongo
+    docker run --name mongodb -p ${MONGOPORT} -v ${VOLUME} -d mongo
 fi
 
 # server setting
