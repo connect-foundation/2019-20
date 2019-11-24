@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import model from '../db/model';
 import mock from './mock-data';
 import message from '../core/message';
-import mockData from './mock-datas.json';
+import mockData from './mock-datas';
 import * as Core from '../core';
 import 'core-js';
 
@@ -14,15 +14,15 @@ const Product = model.product;
 dotenv.config();
 jest.setTimeout(10000);
 
-beforeAll(() => {
-  mongoose.connect(process.env.MONGO_TEST_URL, {
+beforeAll(async () => {
+  await mongoose.connect(process.env.MONGO_TEST_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
 });
 
-afterAll(() => {
-  mongoose.disconnect();
+afterAll(async () => {
+  await mongoose.disconnect();
 });
 
 describe('core: productUpate method', () => {
