@@ -6,14 +6,14 @@ const Product = model.product;
 /**
  * 중고 상품 등록
  * @param {*} contents 새로운 데이터(Product 스키마를 따름)
- * @returns {Promise} aaa;
+ * @returns {Promise<String>} Object(등록 완료)
  */
 const insertProduct = async (contents) => {
   try {
     const result = await Product.create(contents);
     return result;
   } catch (e) {
-    return `${message.errorProcessing} | ${e.toString()}`;
+    throw Error(message.errorProcessing);
   }
 };
 
@@ -24,7 +24,7 @@ const insertProduct = async (contents) => {
  * @param {Number} limits 총 출력할 갯수 (default 10)
  * @param {Object} options where 조건(필터) (default {})
  * @param {Object} sort 정렬 방법 (default { order:-1, createdAt: -1})
- * @returns {Promise<(Object|Array)|String>} Array(조회 결과) | String(에러메시지)
+ * @returns {Promise<(Object|Array)>} Array(조회 결과)
  */
 const getProducts = async (page = 1, limits = 10,
   options = {}, sort = { order: -1, createdAt: -1 }) => {
@@ -36,7 +36,7 @@ const getProducts = async (page = 1, limits = 10,
       .limit(limits);
     return result;
   } catch (e) {
-    return `${message.errorProcessing} | ${e.toString()}`;
+    throw Error(message.errorProcessing);
   }
 };
 
@@ -46,13 +46,13 @@ const getProducts = async (page = 1, limits = 10,
  * @param {String} _id 기본키(Object_ID)
  * @param {String} userId 유저정보(사용자)
  * @param {Object} contents 업데이트할 내용(product 모델 참조)
- * @return {Promise<String|Object>} String(오류 메시지) | Object(Product object)
+ * @return {Promise<Object>} Object(Product object)
  */
 const updateProduct = async (_id, userId, contents) => {
   try {
     const product = await Product.findById(_id);
     if (product.userId !== userId) {
-      return message.doNotHavePermission;
+      throw Error(message.doNotHavePermission);
     }
     Object.keys(contents).forEach((key) => {
       product[key] = contents[key];
@@ -60,7 +60,7 @@ const updateProduct = async (_id, userId, contents) => {
     const result = await product.save();
     return result;
   } catch (e) {
-    return `${message.errorProcessing} | ${e.toString()}`;
+    throw Error(message.errorProcessing);
   }
 };
 

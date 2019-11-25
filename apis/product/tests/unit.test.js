@@ -4,8 +4,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import model from '../db/model';
 import mock from './mock-data';
-import message from '../core/message';
 import mockData from './mock-datas';
+import message from '../core/message';
 import * as Core from '../core';
 import 'core-js';
 
@@ -41,9 +41,9 @@ describe('core: productUpate method', () => {
   });
   test('잘못된 데이터로 수정했을 때 예외처리가 되는지 검사', async () => {
     const categoryChanged = '가가가가';
-    const result = await Core.updateProduct(product._id, userId, { category: categoryChanged });
-    const prefixMessage = result.split('|')[0].trim();
-    expect(prefixMessage).toBe(message.errorProcessing);
+    await expect(Core.updateProduct(product._id, userId, { category: categoryChanged }))
+      .rejects
+      .toThrow(message.errorProcessing);
   });
   test('스키마에 정의되지 않는 데이터가 들어갔을 때 추가가 안되는지 검사', async () => {
     await Core.updateProduct(product._id, userId, {
@@ -54,10 +54,9 @@ describe('core: productUpate method', () => {
   });
   test('정상적이지 않은 사용자가 document 수정이 불가능하지 검사', async () => {
     const id = '123123';
-    const result = await Core.updateProduct(product._id, id, {
+    await expect(Core.updateProduct(product._id, id, {
       title: '123',
-    });
-    expect(result).toBe(message.doNotHavePermission);
+    })).rejects.toThrow(message.errorProcessing);
   });
 });
 
@@ -126,15 +125,11 @@ describe('core: deleteProduct method', () => {
   test('비정상적인 데이터 삽입이 안되는지 검사', async () => {
     const abnormalData = inputData[0];
     abnormalData.category = '존재하지 않는 항목';
-    const result = await Core.insertProduct(inputData[0]);
-    const prfixMessage = result.split('|')[0].trim();
-    expect(prfixMessage).toBe(message.errorProcessing);
+    await expect(Core.insertProduct(inputData[0])).rejects.toThrow(message.errorProcessing);
   });
   test('필수 항목 누락이 되었을 때 삽입이 안되는지 검사', async () => {
     const abnormalData = JSON.parse(JSON.stringify(inputData[0]));
     delete abnormalData.title;
-    const result = await Core.insertProduct(inputData[0]);
-    const prfixMessage = result.split('|')[0].trim();
-    expect(prfixMessage).toBe(message.errorProcessing);
+    await expect(Core.insertProduct(inputData[0])).rejects.toThrow(message.errorProcessing);
   });
 });

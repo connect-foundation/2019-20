@@ -2,7 +2,8 @@ import message from './message';
 import { getProductSchemaByKey } from './index';
 
 const convertStringStatusToQuery = (status) => {
-  const currentStatus = getProductSchemaByKey('currentStatus').enumValues.filter((name) => name !== '비공개');
+  const secretField = '비공개';
+  const currentStatus = getProductSchemaByKey('currentStatus').enumValues.filter((name) => name !== secretField);
   const isCorrectStatusName = (name) => currentStatus.includes(name);
   const statusList = status.split(',');
   const statusTestResult = statusList.every(isCorrectStatusName);
@@ -15,18 +16,18 @@ const convertStringStatusToQuery = (status) => {
   };
 };
 
-const convertStringPriceToQuery = (price) => {
+const convertStringPriceRangeToQuery = (price) => {
   const [min, max] = price.split(',');
-  if (min > 0 && !max) {
-    return { price: { $gte: min } };
+  if (+min > 0 && !max) {
+    return { price: { $gte: +min } };
   }
-  if (min < 0 || min > max) {
+  if (+min < 0 || +min > +max) {
     throw new Error(message.invalidPriceRange);
   }
   return {
     $and: [
-      { price: { $gte: min } },
-      { price: { $lte: max } },
+      { price: { $gte: +min } },
+      { price: { $lte: +max } },
     ],
   };
 };
@@ -61,7 +62,7 @@ const convertStringOrderToOption = (order) => {
 
 export {
   convertStringStatusToQuery,
-  convertStringPriceToQuery,
+  convertStringPriceRangeToQuery,
   convertStringCategoryToQuery,
   convertStringOrderToOption,
 };

@@ -1,6 +1,6 @@
 import {
   convertStringStatusToQuery,
-  convertStringPriceToQuery,
+  convertStringPriceRangeToQuery,
   convertStringCategoryToQuery,
   convertStringOrderToOption,
 } from '../../core/string-conveter';
@@ -49,7 +49,7 @@ const addZipCodeToFilter = ({ query: { zipCode } }, res, next) => {
 const addPriceToFilter = ({ query: { price } }, res, next) => {
   if (price) {
     try {
-      const query = convertStringPriceToQuery(price);
+      const query = convertStringPriceRangeToQuery(price);
       res.locals.filters = {
         ...res.locals.filters,
         ...query,

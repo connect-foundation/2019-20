@@ -23,10 +23,8 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/products', productRouter);
 
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  if (!err.message) {
-    next();
-  }
   const message = err.message.split('|')[0].trim();
   res.status(err.status || 500);
   res.json(message);

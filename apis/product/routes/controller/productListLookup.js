@@ -7,12 +7,11 @@ const productListLookupController = async (req, res, next) => {
     page = 1,
     limits = 10,
   } = res.lcoals;
-
-  const result = await getProducts(options, sort, page, limits);
-  if (typeof result === 'string') {
-    next({ status: 400, message: result });
-  } else {
+  try {
+    const result = await getProducts(options, sort, page, limits);
     res.json(result);
+  } catch (e) {
+    next({ status: 400, message: e.toString() });
   }
 };
 

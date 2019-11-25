@@ -3,11 +3,11 @@ import { updateProduct } from '../../core';
 const modifyProductController = async (req, res, next) => {
   const { body, params: { id } } = req;
   const { locals: { userId } } = res;
-  const result = await updateProduct(id, userId, body);
-  if (typeof result === 'string') {
-    next({ status: 400, message: result });
-  } else {
+  try {
+    const result = await updateProduct(id, userId, body);
     res.json(result);
+  } catch (e) {
+    next({ status: 400, message: e.toString() });
   }
 };
 

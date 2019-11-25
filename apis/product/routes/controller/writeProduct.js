@@ -1,11 +1,11 @@
 import { insertProduct } from '../../core';
 
 const writeProductCotroller = async ({ body }, res, next) => {
-  const result = await insertProduct(body);
-  if (typeof result === 'string') {
-    next({ status: 400, message: result });
-  } else {
+  try {
+    const result = await insertProduct(body);
     res.json(result);
+  } catch (e) {
+    next({ status: 400, message: e.toString() });
   }
 };
 

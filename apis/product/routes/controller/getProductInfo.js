@@ -7,20 +7,20 @@ const getProductListController = async (req, res, next) => {
     filters,
     sort,
   } = res.locals;
-  const list = await getProducts(page, limits, filters, sort);
-  if (typeof list === 'string') {
-    next({ status: 400, message: list });
-  } else {
+  try {
+    const list = await getProducts(page, limits, filters, sort);
     res.json(list);
+  } catch (e) {
+    next({ status: 400, message: e.toString() });
   }
 };
 
 const findProductByIdController = async ({ params: { id } }, res, next) => {
-  const result = await getProducts(1, 1, { _id: id });
-  if (typeof result === 'string') {
-    next({ status: 400, message: result });
-  } else {
+  try {
+    const result = await getProducts(1, 1, { _id: id });
     res.json(result);
+  } catch (e) {
+    next({ status: 400, message: e.toString() });
   }
 };
 
