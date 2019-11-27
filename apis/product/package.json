@@ -9,7 +9,7 @@
     ]
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand",
     "precommit": "lint-staged && yarn test",
     "dev:start": "babel-node bin/www.js",
     "build": "babel ./ -d build",
