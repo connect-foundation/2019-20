@@ -14,7 +14,8 @@
     "dev:start": "babel-node bin/www.js",
     "build": "babel ./ -d build",
     "start": "node ./build/bin/www.js",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "seed": "babel-node ./db/seeds/product.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
