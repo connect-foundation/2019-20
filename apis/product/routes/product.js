@@ -3,8 +3,12 @@ import modifyProductController from './controller/modifyProduct';
 import deleteProductController from './controller/deleteProduct';
 import writeProductCotroller from './controller/writeProduct';
 import isLoggedInUser from '../services/user';
-import { getProductListController, findProductByIdController } from './controller/getProductInfo';
+import {
+  getProductListController,
+  findProductByIdController,
+} from './controller/getProductInfo';
 import queryAnalysisMiddleware from './middleware/listView';
+import pictureRouter from './picture';
 
 const router = express.Router();
 
@@ -19,16 +23,17 @@ const router = express.Router();
  * status=거래중,거래완료
  * order=order,-userId (order 오름차순, userId 내림차순)
  */
-router.route('/')
-  .get(queryAnalysisMiddleware, getProductListController)
-  .post(isLoggedInUser,
-    writeProductCotroller);
+router.use('/picture', pictureRouter);
 
-router.route('/:id')
+router
+  .route('/')
+  .get(queryAnalysisMiddleware, getProductListController)
+  .post(isLoggedInUser, writeProductCotroller);
+
+router
+  .route('/:id')
   .get(findProductByIdController)
-  .put(isLoggedInUser,
-    modifyProductController)
-  .delete(isLoggedInUser,
-    deleteProductController);
+  .put(isLoggedInUser, modifyProductController)
+  .delete(isLoggedInUser, deleteProductController);
 
 export default router;
