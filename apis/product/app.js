@@ -2,7 +2,6 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import dotenv from 'dotenv';
-import 'core-js';
 import db from './db';
 
 import indexRouter from './routes/index';

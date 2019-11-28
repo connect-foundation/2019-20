@@ -7,7 +7,6 @@ import mock from './mock-data';
 import mockData from './mock-datas';
 import message from '../core/message';
 import * as Core from '../core';
-import 'core-js';
 
 const Product = model.product;
 
