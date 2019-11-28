@@ -12,7 +12,7 @@
     "test": "jest --runInBand",
     "precommit": "lint-staged && yarn test",
     "dev:start": "babel-node bin/www.js",
-    "build": "babel ./ -d build",
+    "build": "babel ./ -d build --copy-files '*.json'",
     "start": "node ./build/bin/www.js",
     "lint:fix": "eslint . --fix",
     "seed": "babel-node ./db/seeds/product.js"
