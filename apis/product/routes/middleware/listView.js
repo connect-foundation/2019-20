@@ -5,10 +5,17 @@ import {
   convertStringOrderToOption,
 } from '../../core/string-conveter';
 
-const addPageToOption = ({ query: { page } }, res, next) => {
-  const number = parseInt(page, 10);
+const addFilter = (filter = [], query) => {
+  if ('range' in query) {
+    return [...filter, query];
+  }
+  return [...filter, { bool: query }];
+};
+
+const addFromToOption = ({ query: { from } }, res, next) => {
+  const number = parseInt(from, 10);
   if (number > 0) {
-    res.locals.page = number;
+    res.locals.from = number;
   }
   next();
 };
@@ -16,7 +23,7 @@ const addPageToOption = ({ query: { page } }, res, next) => {
 const addNumberOfListToOption = ({ query: { limits } }, res, next) => {
   const number = parseInt(limits, 10);
   if (number > 0) {
-    res.locals.limits = number;
+    res.locals.size = number;
   }
   next();
 };
@@ -25,7 +32,7 @@ const addCategoryToFilter = ({ query: { category } }, res, next) => {
   if (category) {
     try {
       const query = convertStringCategoryToQuery(category);
-      res.locals.filters = { ...res.locals.filters, ...query };
+      res.locals.filter = addFilter(res.locals.filter, query);
     } catch (e) {
       next({
         status: 400,
@@ -36,10 +43,11 @@ const addCategoryToFilter = ({ query: { category } }, res, next) => {
   next();
 };
 
+// TODO Elastic Search에 맞는 위키 기반 쿼리
 const addZipCodeToFilter = ({ query: { zipCode } }, res, next) => {
   if (zipCode) {
-    res.locals.filters = {
-      ...res.locals.filters,
+    res.locals.filter = {
+      ...res.locals.filter,
       zipCode,
     };
   }
@@ -50,10 +58,7 @@ const addPriceToFilter = ({ query: { price } }, res, next) => {
   if (price) {
     try {
       const query = convertStringPriceRangeToQuery(price);
-      res.locals.filters = {
-        ...res.locals.filters,
-        ...query,
-      };
+      res.locals.filter = addFilter(res.locals.filter, query);
     } catch (e) {
       next({
         status: 400,
@@ -68,24 +73,13 @@ const addDealStatusToFilter = ({ query: { status } }, res, next) => {
   if (status && status.length > 0) {
     try {
       const query = convertStringStatusToQuery(status);
-      res.locals.filters = {
-        ...res.locals.filters,
-        ...query,
-      };
+      res.locals.filter = addFilter(res.locals.filter, query);
     } catch (e) {
       next({
         status: 400,
         message: e.message,
       });
     }
-  } else {
-    res.locals.filters = {
-      ...res.locals.filters,
-      $or: [
-        { currentStatus: '대기' },
-        { currentStatus: '거래중' },
-      ],
-    };
   }
   next();
 };
@@ -98,16 +92,17 @@ const addOrderToOption = ({ query: { sort } }, res, next) => {
   next();
 };
 
+// TODO 키워드 검색(토크나이저...)
 const addKeywordTofilter = ({ query: { keyword } }, res, next) => {
   if (keyword) {
-    res.locals.filters = { ...res.locals.filters, title: { $regex: new RegExp(keyword) } };
+    res.locals.filter = { ...res.locals.filter, title: { $regex: new RegExp(keyword) } };
   }
   next();
 };
 
 const queryAnalysisMiddleware = [
   addKeywordTofilter,
-  addPageToOption,
+  addFromToOption,
   addNumberOfListToOption,
   addCategoryToFilter,
   addZipCodeToFilter,

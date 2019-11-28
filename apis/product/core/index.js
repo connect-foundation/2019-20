@@ -40,9 +40,12 @@ const getProducts = async (page = 1, limits = 10,
   }
 };
 
+const isCurrentStatusPrivate = (document) => document.currentStatus === '비공개';
+
 /**
  * 등록된 중고상품 정보 수정
  * @description 유저 아이디와 실제 document를 등록한 사용자가 일치할 경우에만 해당 정보를 수정합니다.
+ * 상태값이 '비공개'일 경우 일래스틱 서치에서 인덱스 목록에 제거합니다.
  * @param {String} _id 기본키(Object_ID)
  * @param {String} userId 유저정보(사용자)
  * @param {Object} contents 업데이트할 내용(product 모델 참조)
@@ -57,6 +60,9 @@ const updateProduct = async (_id, userId, contents) => {
     Object.keys(contents).forEach((key) => {
       product[key] = contents[key];
     });
+    if (isCurrentStatusPrivate(product)) {
+      await product.unIndex();
+    }
     const result = await product.save();
     return result;
   } catch (e) {
@@ -73,10 +79,43 @@ const updateProduct = async (_id, userId, contents) => {
  */
 const removeProduct = async (_id, userId) => {
   try {
-    const result = await Product.remove({ _id, userId });
-    return result.deletedCount;
+    const product = await Product.findById({ _id });
+    if (product.userId !== userId) {
+      return 0;
+    }
+    await product.remove();
+    return 1;
   } catch (e) {
     return 0;
+  }
+};
+
+const isNotDefaultSetSortOption = (sort) => !sort || !sort.includes((info) => 'order' in info);
+
+/**
+ * 일래스틱 서치 검색
+ * @description 일래스틱 서치 검색결과를 조회합니다.
+ * @param {Object.<from, size, filter, query, sort>} esquery 일래스틱 서치 쿼리
+ * @param esquery.from 시작 지점(페이지 네이션)
+ * @param esquery.size 한번에 보여줄 페이지의 수
+ * @param esquery.query 일래스틱 서치 쿼리
+ * @param esquery.sort 일래스틱 서치 정렬
+ */
+const getElasticSearchResults = async (esquery) => {
+  let sort = esquery.sort || [];
+  if (isNotDefaultSetSortOption(sort)) {
+    sort = [
+      ...sort,
+      { order: 'desc' },
+    ];
+  }
+  const query = { ...esquery, sort };
+  try {
+    const respone = await Product.search(query, {});
+    const result = respone.hits.hits;
+    return result;
+  } catch (e) {
+    throw new Error(e);
   }
 };
 
@@ -88,4 +127,5 @@ export {
   removeProduct,
   getProducts,
   getProductSchemaByKey,
+  getElasticSearchResults,
 };

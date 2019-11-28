@@ -1,14 +1,16 @@
-import { getProducts } from '../../core';
+import { getProducts, getElasticSearchResults } from '../../core';
 
 const getProductListController = async (req, res, next) => {
-  const {
-    page,
-    limits,
-    filters,
-    sort,
-  } = res.locals;
+  if (res.locals.filter) {
+    res.locals.query = {
+      bool: {
+        must: res.locals.filter,
+      },
+    };
+    delete res.locals.filter;
+  }
   try {
-    const list = await getProducts(page, limits, filters, sort);
+    const list = await getElasticSearchResults(res.locals);
     res.json(list);
   } catch (e) {
     next({ status: 400, message: e.toString() });
