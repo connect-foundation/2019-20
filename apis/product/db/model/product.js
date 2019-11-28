@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import mongoosastic from 'mongoosastic';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const { Schema } = mongoose;
 const Product = new Schema({
@@ -136,7 +139,7 @@ const Product = new Schema({
 
 Product.plugin(mongoosastic, {
   hosts: [
-    'localhost:9200',
+    `${process.env.ELASTICSEARCH}`,
   ],
   bulk: {
     size: 100,
