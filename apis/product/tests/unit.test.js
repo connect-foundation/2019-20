@@ -3,8 +3,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import model from '../db/model';
-import mock from './mock-data';
-import mockData from './mock-datas';
+import mockData from '../db/seeds/20191127.json';
 import message from '../core/message';
 import * as Core from '../core';
 
@@ -26,9 +25,9 @@ afterAll(async () => {
 
 describe('core: productUpate method', () => {
   let product;
-  const { userId } = mock;
+  const { userId } = mockData[0];
   beforeEach(async () => {
-    product = await Product.create(mock);
+    product = await Product.create(mockData[0]);
   });
   afterEach(async () => {
     await product.deleteOne({ _id: product._id });
@@ -61,9 +60,9 @@ describe('core: productUpate method', () => {
 
 describe('core: removeProduct method', () => {
   let product;
-  const { userId } = mock;
+  const { userId } = mockData[0];
   beforeEach(async () => {
-    product = await Product.create(mock);
+    product = await Product.create(mockData[0]);
   });
   afterEach(async () => {
     await product.deleteOne({ _id: product._id });

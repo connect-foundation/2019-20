@@ -1,27 +1,38 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import mongoosastic from 'mongoosastic';
 
 const { Schema } = mongoose;
 const Product = new Schema({
   title: {
     type: String,
     required: true,
+    es_indexed: true,
   },
   userId: {
     type: String,
     required: true,
+    es_indexed: true,
   },
   order: {
     type: Date,
     default: Date.now,
     required: true,
+    es_type: 'date',
+    es_indexed: true,
   },
-  latitude: {
-    type: Number,
-    required: true,
-  },
-  longitude: {
-    type: Number,
-    required: true,
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+      es_type: 'geo_point',
+      es_indexed: true,
+      es_include_in_parent: false,
+    },
   },
   zipCode: {
     type: String,
@@ -32,16 +43,21 @@ const Product = new Schema({
       message: '5자리의 올바른 우편번호가 아닙니다.',
     },
     required: true,
+    es_boost: 2.0,
   },
   areaRange: {
     type: String,
     enum: ['1', '2', '3'],
     default: '1',
     required: true,
+    es_type: 'string',
+    es_indexed: true,
   },
   price: {
     type: Number,
     required: true,
+    es_type: 'integer',
+    es_indexed: true,
   },
   pictures: {
     type: Array,
@@ -66,17 +82,23 @@ const Product = new Schema({
     type: Number,
     default: 0,
     required: true,
+    es_type: 'integer',
+    es_indexed: true,
   },
   interests: {
     type: Number,
     default: 0,
     required: true,
+    es_type: 'integer',
+    es_indexed: true,
   },
   currentStatus: {
     type: String,
     enum: ['대기', '거래중', '거래완료', '비공개'],
     default: '대기',
     required: true,
+    es_type: 'string',
+    es_indexed: true,
   },
   productStatus: {
     type: String,
@@ -104,10 +126,39 @@ const Product = new Schema({
       '반려동물용품',
       '기타 중고물품',
     ],
+    es_type: 'string',
     required: true,
+    es_indexed: true,
   },
 }, {
   timestamps: { createdAt: true, updatedAt: true },
 });
 
-module.exports = mongoose.model('Product', Product);
+Product.plugin(mongoosastic, {
+  hosts: [
+    'localhost:9200',
+  ],
+  bulk: {
+    size: 100,
+    delay: 1000,
+  },
+  filter: (doc) => doc.currentStatus === '비공개',
+});
+
+function customSearch(query, options) {
+  return new Promise((resolve, reject) => {
+    this.esSearch(query, options, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+Product.static('search', customSearch);
+
+const productSchema = mongoose.model('Product', Product);
+
+module.exports = productSchema;
