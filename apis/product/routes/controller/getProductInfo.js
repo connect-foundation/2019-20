@@ -13,7 +13,7 @@ const getProductListController = async (req, res, next) => {
     res.locals.query = {
       ...res.locals.query,
       ...res.locals.keyword,
-    }
+    };
     delete res.locals.keyword;
   }
   try {

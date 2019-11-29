@@ -22,6 +22,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
+    "etag": "^1.8.1",
     "express": "~4.16.1",
     "mongoosastic": "^4.5.1",
     "mongoose": "^5.7.12",

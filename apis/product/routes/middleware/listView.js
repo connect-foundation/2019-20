@@ -96,7 +96,7 @@ const addOrderToOption = ({ query: { sort } }, res, next) => {
 const addKeywordTofilter = ({ query: { keyword } }, res, next) => {
   if (keyword) {
     res.locals.keyword = {
-      term: { title: keyword }
+      term: { title: keyword },
     };
   }
   next();
