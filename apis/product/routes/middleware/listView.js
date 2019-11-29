@@ -95,7 +95,9 @@ const addOrderToOption = ({ query: { sort } }, res, next) => {
 // TODO 키워드 검색(토크나이저...)
 const addKeywordTofilter = ({ query: { keyword } }, res, next) => {
   if (keyword) {
-    res.locals.filter = { ...res.locals.filter, title: { $regex: new RegExp(keyword) } };
+    res.locals.keyword = {
+      term: { title: keyword }
+    };
   }
   next();
 };
