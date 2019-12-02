@@ -1,6 +1,7 @@
-import React, {useState, createContext} from 'react';
+import React from 'react';
 import Header from '../components/header';
 import ProductForm from '../components/productForm';
+import ImageStore from '../contexts/imageStore';
 import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -10,17 +11,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const ImageContext = createContext();
-
 const NewProduct = () => {
   const classes = useStyles();
-  const [images, setImages] = useState([]);
 
   return (
-    <ImageContext.Provider value={{images, setImages}}>
+    <ImageStore>
       <Header />
       <ProductForm className={classes.productForm} />
-    </ImageContext.Provider>
+    </ImageStore>
   );
 };
 

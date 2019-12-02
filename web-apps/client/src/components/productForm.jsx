@@ -6,7 +6,7 @@ import useFetch from '../hooks/useFetch';
 import DealType from './dealType';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import {ImageContext} from '../pages/newProduct';
+import {ImageContext} from '../contexts/imageStore';
 import ProductImage from './productImage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -57,6 +57,9 @@ const useStyles = makeStyles(() => ({
       background: 'powderblue',
     },
   },
+  imageCard: {
+    listStyle: 'none',
+  },
 }));
 
 const ProductForm = () => {
@@ -81,8 +84,10 @@ const ProductForm = () => {
   let imageList = '';
   if (images.length) {
     if (images[0].uri) {
-      imageList = images.map((image) => (
-        <ProductImage uri={image.uri} name={image.name} />
+      imageList = images.map((image, index) => (
+        <li key={index} className={classes.imageCard}>
+          <ProductImage uri={image.uri} name={image.name} />
+        </li>
       ));
     } else {
       imageList = <CircularProgress variant='determinate' value={progress} />;
@@ -146,7 +151,7 @@ const ProductForm = () => {
             }}
           />
         </div>
-        <div className={classes.imgList}>{imageList}</div>
+        <ul className={classes.imgList}>{imageList}</ul>
         <textarea
           className={classes.contents}
           placeholder='물품에 대해 소개해 주세요'

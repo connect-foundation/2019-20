@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AddPicture from './addPicture';
+
 const useStyles = makeStyles(() => ({
   headerButtons: {
     display: 'flex',

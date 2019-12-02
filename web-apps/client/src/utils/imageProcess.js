@@ -12,39 +12,21 @@ const dataURItoFile = (dataURI, fileName) => {
   return new File([u8arr], fileName, {type: mime});
 };
 
-const getResizedImageInDataURI = (
-  image,
-  max_Width,
-  max_Height,
-  quality,
-  type,
-) => {
+const getResizedImageInDataURI = (image, rate, type) => {
   const canvas = document.createElement('canvas');
 
-  let width = image.width;
-  let height = image.height;
-
-  if (width > height) {
-    if (width > max_Width) {
-      height = Math.round((height * max_Width) / width);
-      width = max_Width;
-    }
-  } else {
-    if (height > max_Height) {
-      width = Math.round((width * max_Height) / height);
-      height = max_Height;
-    }
-  }
+  const width = image.width * rate;
+  const height = image.height * rate;
 
   canvas.width = width;
   canvas.height = height;
 
   const ctx = canvas.getContext('2d');
   ctx.drawImage(image, 0, 0, width, height);
-  return canvas.toDataURL(type, quality);
+  return canvas.toDataURL(type);
 };
 
-const makeImageByURI = (uri, type) => {
+const makeImageObjectByURI = (uri, type) => {
   const image = new Image();
   image.src = uri;
   return new Promise((resolve) => {
@@ -69,4 +51,9 @@ const readFileAsURI = async (file) => {
   });
 };
 
-export {dataURItoFile, getResizedImageInDataURI, makeImageByURI, readFileAsURI};
+export {
+  dataURItoFile,
+  getResizedImageInDataURI,
+  makeImageObjectByURI,
+  readFileAsURI,
+};

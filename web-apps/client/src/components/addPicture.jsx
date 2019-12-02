@@ -1,91 +1,55 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import {makeStyles} from '@material-ui/core/styles';
 import axios from 'axios';
-import {
-  dataURItoFile,
-  getResizedImageInDataURI,
-  makeImageByURI,
-  readFileAsURI,
-} from '../utils/imageProcess';
-import {ImageContext} from '../pages/newProduct';
+import {ImageContext} from '../contexts/imageStore';
+import getFormData from '../utils/resizeProcess';
 
 const useStyles = makeStyles(() => ({
-  input: {
-    display: 'none',
-  },
-  camera: {
-    color: 'white',
-  },
+  input: {display: 'none'},
+  camera: {color: 'white'},
 }));
 
 const AddPicture = () => {
   const classes = useStyles();
-
+  const inputRef = useRef(false);
   const {setImages} = useContext(ImageContext);
 
-  const uploadImages = async (forms, imageList) => {
-    const uploadedImageList = forms.map(async (frm) => {
-      const response = await axios.post(
-        `http://localhost:5000/products/picture/`,
-        frm,
-      );
-      const result = await response;
+  const uploadImages = async (dataList) => {
+    const uri = 'http://localhost:5000/products/picture/';
+    const imageCDN = [];
 
-      return result.data;
-    });
-
-    const result = await Promise.all(uploadedImageList);
-
-    setImages(imageList);
-
-    return result;
-  };
-
-  const doResizeImages = async (files) => {
-    const resizedImages = [];
-    const imageList = [];
-    const maxWidth = 600;
-    const maxHeight = 600;
-
-    for (let file of files) {
-      const {dataURI, type, name} = await readFileAsURI(file);
-      imageList.push({
-        uri: dataURI,
-        name,
-        loading: true,
-      });
-
-      const form = new FormData();
-      form.append('MyImg', file);
-
-      if (file.size > 2 * 1024 * 1024) {
-        const originalImage = await makeImageByURI(dataURI, type);
-        const resizedImage = getResizedImageInDataURI(
-          originalImage,
-          maxWidth,
-          maxHeight,
-        );
-        const resizedImageFile = dataURItoFile(resizedImage, name);
-        form.append('MyImg', resizedImageFile);
+    for (let data of dataList) {
+      try {
+        const form = data.form;
+        const name = data.name;
+        const response = await axios.post(uri, form);
+        const result = await response;
+        imageCDN.push({result, name});
+      } catch (err) {
+        alert('err');
+        setImages([]);
+        inputRef.current.value = '';
+        return;
       }
-      resizedImages.push(form);
     }
 
-    return {resizedImages, imageList};
-  };
-  const multipleImagesResizeAndUpload = async (files) => {
-    const {resizedImages, imageList} = await doResizeImages(files);
-    const imgaesCDN = await uploadImages(resizedImages, imageList);
-    return imgaesCDN;
+    const loadImage = imageCDN.map((image) => {
+      return {uri: image.result.data.mobile, name: image.name};
+    });
+    setImages(loadImage);
+
+    return imageCDN;
   };
 
   const imageUploadListener = async (evt) => {
     const files = Array.from(evt.target.files);
-    const preResized = files.map((file) => ({name: file.name}));
+    const preResized = files.map((_) => ({loading: true}));
     setImages(preResized);
-    const urls = await multipleImagesResizeAndUpload(files);
+
+    const dataList = await getFormData(files);
+    const imagesCDN = await uploadImages(dataList);
   };
 
   return (
@@ -97,6 +61,7 @@ const AddPicture = () => {
         type='file'
         onChange={imageUploadListener}
         multiple
+        ref={inputRef}
       />
       <label htmlFor='icon-button-file'>
         <IconButton aria-label='upload picture' component='span'>
