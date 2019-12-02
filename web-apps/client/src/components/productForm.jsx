@@ -1,20 +1,24 @@
 import React, {useState, useEffect, useContext} from 'react';
+import {ImageContext} from '../contexts/imageStore';
+
 import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Drawer from './drawer';
-import useFetch from '../hooks/useFetch';
-import DealType from './dealType';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import {ImageContext} from '../contexts/imageStore';
-import ProductImage from './productImage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import useFetch from '../hooks/useFetch';
+
+import Drawer from './drawer';
+import DealType from './dealType';
+import ProductImage from './productImage';
+
 const useStyles = makeStyles(() => ({
-  newProductForm: {
+  formContainer: {
     display: 'flex',
     justifyContent: 'center',
   },
+  newProductForm: {},
   list: {
     width: 250,
   },
@@ -67,12 +71,11 @@ const ProductForm = () => {
   const [category, setCategory] = useState([]);
   const [statusTypeList, setStatusTypeList] = useState([]);
   const [negotiable, setNegotiable] = useState(false);
+  const [progress, setProgress] = useState(0);
   const {images} = useContext(ImageContext);
-  const [progress, setProgress] = React.useState(0);
 
   useEffect(() => {
     function tick() {
-      // reset when reaching 100%
       setProgress((oldProgress) => (oldProgress >= 100 ? 0 : oldProgress + 1));
     }
 
@@ -129,8 +132,8 @@ const ProductForm = () => {
     evt.preventDefault();
   };
   return (
-    <div className={classes.newProductForm}>
-      <form>
+    <div className={classes.formContainer}>
+      <form className={classes.newProductForm}>
         <TextField id='standard-basic' label='제품명' />
         <Drawer name='카테고리' data={category} loading={loadCategory} />
         <Drawer

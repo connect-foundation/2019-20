@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 const AddPicture = () => {
   const classes = useStyles();
   const inputRef = useRef(false);
-  const {setImages} = useContext(ImageContext);
+  const {setImages, setAlertOpen} = useContext(ImageContext);
 
   const uploadImages = async (dataList) => {
     const uri = 'http://localhost:5000/products/picture/';
@@ -28,7 +28,7 @@ const AddPicture = () => {
         const result = await response;
         imageCDN.push({result, name});
       } catch (err) {
-        alert('err');
+        setAlertOpen(true);
         setImages([]);
         inputRef.current.value = '';
         return;
