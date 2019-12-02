@@ -1,19 +1,27 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import zIndex from '@material-ui/core/styles/zIndex';
 
 const useStyles = makeStyles((theme) => ({
-  bigAvatar: {
-    width: 60,
-    height: 60,
+  imageContainer: {
+    position: 'relative',
+  },
+  productImg: {
+    width: '2.5rem',
+    height: '2.5rem',
+    border: '1px solid black',
+    borderRadius: '10px',
+    margin: '0.2rem 0.25rem',
+    top: '0.2rem',
   },
 }));
 
-const ProductImage = ({uri, name}) => {
+const ProductImage = ({image}) => {
   const classes = useStyles();
   return (
-    <div>
-      <Avatar alt='Remy Sharp' src={uri} className={classes.bigAvatar} />
+    <div className={classes.imageContainer}>
+      <img alt={image.name} src={image.uri} className={classes.productImg} />
     </div>
   );
 };

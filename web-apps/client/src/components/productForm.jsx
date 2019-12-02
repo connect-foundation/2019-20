@@ -1,24 +1,21 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {ImageContext} from '../contexts/imageStore';
+import React, {useState} from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import useFetch from '../hooks/useFetch';
 
 import Drawer from './drawer';
 import DealType from './dealType';
-import ProductImage from './productImage';
+import ImageList from './imageList';
+import PriceField from './priceField';
 
 const useStyles = makeStyles(() => ({
   formContainer: {
     display: 'flex',
     justifyContent: 'center',
   },
-  newProductForm: {},
   list: {
     width: 250,
   },
@@ -31,16 +28,6 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
     borderBottom: '1px solid black',
     marginTop: '1rem',
-  },
-  price: {
-    display: 'flex',
-    width: '13rem',
-  },
-  imgList: {
-    height: '3rem',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   contents: {
     marginTop: '0.2rem',
@@ -61,41 +48,12 @@ const useStyles = makeStyles(() => ({
       background: 'powderblue',
     },
   },
-  imageCard: {
-    listStyle: 'none',
-  },
 }));
 
 const ProductForm = () => {
   const classes = useStyles();
   const [category, setCategory] = useState([]);
   const [statusTypeList, setStatusTypeList] = useState([]);
-  const [negotiable, setNegotiable] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const {images} = useContext(ImageContext);
-
-  useEffect(() => {
-    function tick() {
-      setProgress((oldProgress) => (oldProgress >= 100 ? 0 : oldProgress + 1));
-    }
-
-    const timer = setInterval(tick, 20);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-  let imageList = '';
-  if (images.length) {
-    if (images[0].uri) {
-      imageList = images.map((image, index) => (
-        <li key={index} className={classes.imageCard}>
-          <ProductImage uri={image.uri} name={image.name} />
-        </li>
-      ));
-    } else {
-      imageList = <CircularProgress variant='determinate' value={progress} />;
-    }
-  }
 
   const categoryAPI = [
     '디지털/가전',
@@ -124,16 +82,12 @@ const ProductForm = () => {
   const loadCategory = useFetch(categoryAPI, setCategory);
   const loadStatusType = useFetch(statusTypeListAPI, setStatusTypeList);
 
-  const onChangeNegotiable = () => {
-    setNegotiable(!negotiable);
-  };
-
   const submitListener = (evt) => {
     evt.preventDefault();
   };
   return (
     <div className={classes.formContainer}>
-      <form className={classes.newProductForm}>
+      <form>
         <TextField id='standard-basic' label='제품명' />
         <Drawer name='카테고리' data={category} loading={loadCategory} />
         <Drawer
@@ -142,19 +96,8 @@ const ProductForm = () => {
           loading={loadStatusType}
         />
         <DealType />
-        <div className={classes.price}>
-          <TextField id='standard-basic' label='가격(원)' />
-          <Checkbox
-            checked={negotiable}
-            onChange={onChangeNegotiable}
-            value='checkedB'
-            color='primary'
-            inputProps={{
-              'aria-label': 'secondary checkbox',
-            }}
-          />
-        </div>
-        <ul className={classes.imgList}>{imageList}</ul>
+        <PriceField />
+        <ImageList />
         <textarea
           className={classes.contents}
           placeholder='물품에 대해 소개해 주세요'

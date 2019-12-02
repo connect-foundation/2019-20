@@ -10,7 +10,6 @@ const useStyles = makeStyles(() => ({
   input: {display: 'none'},
   camera: {color: 'white'},
 }));
-
 const AddPicture = () => {
   const classes = useStyles();
   const inputRef = useRef(false);
@@ -36,8 +35,9 @@ const AddPicture = () => {
     }
 
     const loadImage = imageCDN.map((image) => {
-      return {uri: image.result.data.mobile, name: image.name};
+      return {uri: image.result.data.mobile, name: image.name, loading: false};
     });
+
     setImages(loadImage);
 
     return imageCDN;

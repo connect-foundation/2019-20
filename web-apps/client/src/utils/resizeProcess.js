@@ -5,35 +5,27 @@ import {
   readFileAsURI,
 } from './imageProcess';
 
-const getFormData = async (pictures) => {
-  const dataList = [];
-
-  for (let picture of pictures) {
-    const form = new FormData();
-    const resizedImages = await makeProperSizeOfPicture(picture);
-    for (let img of resizedImages) {
-      form.append('MyImg', img);
-    }
-    dataList.push({form, name: picture.name});
-  }
-
-  return dataList;
-};
 const readPicture = async (picture) => {
   const {dataURI, type, name} = await readFileAsURI(picture);
   return {uri: dataURI, type, name};
 };
+const resizeImage = (originImg, name, size, type, properSizeForMobile) => {
+  const rate = properSizeForMobile / size;
+  const resizedImage = getResizedImageInDataURI(originImg, rate, type);
+  const result = dataURItoFile(resizedImage, name);
+  return result;
+};
 const makeProperSizeOfPicture = async (picture) => {
   const properSizeForDesktop = 5 * 1024 * 1024;
   const properSizeForMobile = 2 * 1024 * 1024;
-  const size = picture.size;
+  const {size} = picture;
 
   if (size < properSizeForMobile) {
     return [picture];
   }
 
   const {uri, type, name} = await readPicture(picture);
-  const originImg = await makeImageObjectByURI(uri, type);
+  const originImg = await makeImageObjectByURI(uri);
 
   if (size < properSizeForDesktop) {
     const mobileImg = resizeImage(
@@ -44,7 +36,8 @@ const makeProperSizeOfPicture = async (picture) => {
       properSizeForMobile,
     );
     return [mobileImg, picture];
-  } else if (size > properSizeForDesktop) {
+  }
+  if (size > properSizeForDesktop) {
     const mobileImg = resizeImage(
       originImg,
       name,
@@ -61,12 +54,28 @@ const makeProperSizeOfPicture = async (picture) => {
     );
     return [mobileImg, desktopImg];
   }
+  return undefined;
 };
-const resizeImage = (originImg, name, size, type, properSizeForMobile) => {
-  const rate = properSizeForMobile / size;
-  const resizedImage = getResizedImageInDataURI(originImg, rate, type);
-  const result = dataURItoFile(resizedImage, name);
-  return result;
+
+const getFormData = async (pictures) => {
+  const formData = pictures.map(async (picture) => {
+    const form = new FormData();
+
+    const resizedImages = await makeProperSizeOfPicture(picture);
+    resizedImages.forEach((img) => {
+      form.append('MyImg', img);
+      console.log(img);
+    });
+    return {form, name: picture.name};
+  });
+
+  const result = await Promise.all(formData);
+
+  const dataList = result.reduce((acc, cur) => {
+    return acc.concat(cur);
+  }, []);
+
+  return dataList;
 };
 
 export default getFormData;
