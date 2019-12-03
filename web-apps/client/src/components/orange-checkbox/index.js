@@ -6,18 +6,18 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import checkBoxStyles from './style';
 
-const ColoredCheckBox = ({ label, inputRef, onChange = (() => { }) }) => {
+const ColoredCheckBox = ({ label, onChange = (() => { }), checked = false }) => {
   const OrangeCheckbox = withStyles(checkBoxStyles)(Checkbox);
   return (
     <>
       <FormControlLabel
+        onChange={onChange}
         control={(
           <OrangeCheckbox
+            checked={checked}
             icon={<UnCheckedIcon />}
             checkedIcon={<CheckIcon />}
             label={label}
-            inputRef={inputRef}
-            onChnage={onChange}
           />
         )}
         label={label}
@@ -28,12 +28,13 @@ const ColoredCheckBox = ({ label, inputRef, onChange = (() => { }) }) => {
 
 ColoredCheckBox.propTypes = {
   label: PropTypes.string.isRequired,
-  inputRef: PropTypes.element.isRequired,
   onChange: PropTypes.func,
+  checked: PropTypes.bool,
 };
 
 ColoredCheckBox.defaultProps = {
   onChange: () => { },
+  checked: false,
 };
 
 export default ColoredCheckBox;
