@@ -27,8 +27,13 @@ const ImageList = () => {
     if (images[0].loading) {
       imageList = <Loading />;
     } else if (!images[0].loading) {
-      imageList = images.map((image) => (
-        <ProductImage uri={image.uri} name={image.name} />
+      imageList = images.map((image, index) => (
+        <ProductImage
+          key={index}
+          mobile={image.mobile}
+          name={image.name}
+          deskTop={image.deskTop}
+        />
       ));
     }
   } else if (storageData !== null) {
@@ -36,8 +41,11 @@ const ImageList = () => {
     if (storageImage[0] === 'loading') {
       imageList = <Loading />;
     } else {
-      imageList = storageImage.map((image) => {
-        return <ProductImage uri={image} />;
+      imageList = storageImage.map((image, index) => {
+        const uris = image.split('$$');
+        const mobile = uris[0];
+        const deskTop = uris[1];
+        return <ProductImage key={index} mobile={mobile} deskTop={deskTop} />;
       });
     }
   }

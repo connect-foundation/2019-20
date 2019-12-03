@@ -2,9 +2,10 @@ import React, {useContext, useRef} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import {makeStyles} from '@material-ui/core/styles';
-import axios from 'axios';
+
 import {ImageContext} from '../contexts/imageStore';
 import getFormData from '../utils/resizeProcess';
+import {uploadImages} from '../utils/apiCall';
 
 const useStyles = makeStyles(() => ({
   input: {display: 'none'},
@@ -15,16 +16,14 @@ const AddPicture = () => {
   const inputRef = useRef(false);
   const {setImages, setAlertOpen} = useContext(ImageContext);
 
-  const uploadImages = async (dataList) => {
-    const uri = 'http://localhost:5000/products/picture/';
+  const uploadProcess = async (dataList) => {
     const imageCDN = [];
 
     for (let data of dataList) {
       try {
         const form = data.form;
         const name = data.name;
-        const response = await axios.post(uri, form);
-        const result = await response;
+        const result = await uploadImages(form);
         imageCDN.push({result, name});
       } catch (err) {
         setAlertOpen(true);
@@ -35,12 +34,16 @@ const AddPicture = () => {
     }
 
     const loadImage = imageCDN.map((image) => {
-      return {uri: image.result.data.mobile, name: image.name, loading: false};
+      return {
+        mobile: image.result.data.mobile,
+        deskTop: image.result.data.deskTop,
+        name: image.name,
+        loading: false,
+      };
     });
 
     setImages(loadImage);
-
-    return imageCDN;
+    inputRef.current.value = '';
   };
 
   const imageUploadListener = async (evt) => {
@@ -49,7 +52,7 @@ const AddPicture = () => {
     setImages(preResized);
 
     const dataList = await getFormData(files);
-    const imagesCDN = await uploadImages(dataList);
+    await uploadProcess(dataList);
   };
 
   return (

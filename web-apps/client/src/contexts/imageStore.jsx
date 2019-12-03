@@ -12,7 +12,7 @@ const ImageStore = ({children}) => {
         window.localStorage.setItem('images', 'loading');
       } else if (!images[0].loading) {
         const imageListToString = images.reduce((acc, cur) => {
-          return acc + cur.uri + ' ';
+          return acc + cur.mobile + '$$' + cur.deskTop + ' ';
         }, '');
 
         window.localStorage.setItem('images', imageListToString);

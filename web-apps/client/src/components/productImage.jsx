@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import {ImageContext} from '../contexts/imageStore';
 import {makeStyles} from '@material-ui/core/styles';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import {deletePicture} from '../utils/apiCall';
 
 const useStyles = makeStyles((theme) => ({
   imageContainer: {
@@ -28,16 +29,53 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProductImage = ({uri, name}) => {
+const ProductImage = ({mobile, name, deskTop}) => {
   const classes = useStyles();
   const {images, setImages} = useContext(ImageContext);
 
-  const onDelete = (e) => {};
+  const onDelete = async () => {
+    const mobileKey = mobile.split('/').slice(-1)[0];
+    const deskTopKey = deskTop.split('/').slice(-1)[0];
+
+    const storageData = window.localStorage.getItem('images');
+    const storageImage = storageData.split(' ').slice(0, -1);
+
+    try {
+      await deletePicture(mobileKey, deskTopKey);
+
+      if (storageImage[0].length && storageImage[0] !== 'loading') {
+        const deleted = storageImage.filter((image) => {
+          const mobileImg = image.split('$$')[0];
+          if (mobileImg !== mobile) {
+            return image;
+          }
+        });
+
+        const result = deleted.reduce((acc, cur) => {
+          return acc + cur + ' ';
+        }, '');
+        window.localStorage.setItem('images', result);
+
+        const filteredImage = deleted.map((img) => {
+          const split = img.split('$$');
+          const mobileImg = split[0];
+          const deskTopImg = split[1];
+          return {
+            mobile: mobileImg,
+            deskTop: deskTopImg,
+            loading: false,
+          };
+        });
+
+        setImages(filteredImage);
+      }
+    } catch (err) {}
+  };
 
   return (
     <div className={classes.imageContainer}>
       <HighlightOffIcon className={classes.removeBtn} onClick={onDelete} />
-      <img alt={name} src={uri} className={classes.productImg} />
+      <img alt={name} src={mobile} className={classes.productImg} />
     </div>
   );
 };
