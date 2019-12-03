@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Drawer = ({name, data, loading}) => {
+const Drawer = ({name, data, loading, onDrawerSelected}) => {
   const classes = useStyles();
   const [state, setState] = useState({
     bottom: false,
@@ -37,6 +37,11 @@ const Drawer = ({name, data, loading}) => {
     setState({...state, [side]: open});
   };
 
+  const onListClick = (e) => {
+    const name = e.target.textContent;
+    onDrawerSelected(name);
+  };
+
   const list = (side) => {
     if (loading) {
       return 'loading';
@@ -50,7 +55,7 @@ const Drawer = ({name, data, loading}) => {
       >
         <List>
           {data.map((text) => (
-            <ListItem button key={text}>
+            <ListItem button key={text} onClick={onListClick}>
               <ListItemText primary={text} />
             </ListItem>
           ))}

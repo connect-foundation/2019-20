@@ -1,15 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import useFetch from '../hooks/useFetch';
+import {ImageContext} from '../contexts/imageStore';
 
 import Drawer from './drawer';
 import DealType from './dealType';
 import ImageList from './imageList';
 import PriceField from './priceField';
+import {uploadProduct} from '../utils/apiCall';
+import {getCurrentPosition} from '../utils/util';
 
 const useStyles = makeStyles(() => ({
   formContainer: {
@@ -52,36 +55,156 @@ const useStyles = makeStyles(() => ({
 
 const ProductForm = () => {
   const classes = useStyles();
-  const [category, setCategory] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
   const [statusTypeList, setStatusTypeList] = useState([]);
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('카테고리');
+  const [status, setStatus] = useState('제품상태');
+  const [dealType, setDealType] = useState('');
+  const [price, setPrice] = useState('');
+  const [negotiable, setNegotiable] = useState(false);
+  const [contents, setContents] = useState('');
+
+  const {setAlertMessage} = useContext(ImageContext);
 
   const categoryAPI = 'category';
   const statusTypeListAPI = 'statusType';
 
-  const loadCategory = useFetch(categoryAPI, setCategory);
+  const loadCategory = useFetch(categoryAPI, setCategoryList);
   const loadStatusType = useFetch(statusTypeListAPI, setStatusTypeList);
 
-  const submitListener = (evt) => {
-    evt.preventDefault();
-    //collect data
-    //send to post:/products
+  const checkAllInfoFilled = (product) => {
+    const {
+      title,
+      userId,
+      price,
+      pictures,
+      contents,
+      productStatus,
+      category,
+    } = product;
+
+    if (!title || !userId || !price || !pictures || !contents) {
+      return false;
+    } else if (
+      !title.length ||
+      !userId.length ||
+      !price.length ||
+      !pictures.length ||
+      !contents.length ||
+      productStatus === '제품상태' ||
+      category === '카테고리'
+    ) {
+      return false;
+    }
+    return true;
   };
+
+  const submitListener = async (evt) => {
+    evt.preventDefault();
+
+    const images = window.localStorage.getItem('images');
+    const imageList = images.split(' ').slice(0, -1);
+    const enrolledImages = imageList.map((image) => {
+      const split = image.split('$$');
+      const mobile = split[0];
+      const deskTop = split[1];
+      return {mobile, deskTop};
+    });
+
+    try {
+      const position = await getCurrentPosition();
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      const product = {
+        title,
+        userId: 'Johnie',
+        location: {type: 'Point', coordinates: [`${latitude}`, `${longitude}`]},
+        zipCode: '12345',
+        price,
+        pictures: enrolledImages,
+        contents,
+        negotiable,
+        productStatus: status,
+        deliverAvailable: dealType === '택배거래',
+        category,
+      };
+
+      if (!checkAllInfoFilled(product)) {
+        setAlertMessage('비어있는 항목이 있습니다. 확인해 주세요 :D');
+        return;
+      }
+
+      try {
+        await uploadProduct(product);
+      } catch (err) {
+        setAlertMessage(
+          '상품 등록에 실패했습니다. 잠시후 다시 시도해 주세요. :D',
+        );
+      }
+    } catch (err) {
+      setAlertMessage('위치 등록에 실패했습니다. 다시 시도해 주세요 :D');
+    }
+  };
+
+  const onTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+
+  const onCategoryChange = (name) => {
+    setCategory(name);
+  };
+
+  const onStatusChange = (name) => {
+    setStatus(name);
+  };
+
+  const onDealTypeChange = (type) => {
+    setDealType(type);
+  };
+
+  const onPriceChange = (price) => {
+    setPrice(price);
+  };
+  const onNegotiableChange = (negotiable) => {
+    setNegotiable(negotiable);
+  };
+  const onContentChange = (e) => {
+    setContents(e.target.value);
+  };
+
   return (
     <div className={classes.formContainer}>
       <form>
-        <TextField id='standard-basic' label='제품명' />
-        <Drawer name='카테고리' data={category} loading={loadCategory} />
+        <TextField
+          id='standard-basic'
+          label='제품명'
+          value={title}
+          onChange={onTitleChange}
+        />
         <Drawer
-          name='제품상태'
+          name={category}
+          data={categoryList}
+          loading={loadCategory}
+          onDrawerSelected={onCategoryChange}
+        />
+        <Drawer
+          name={status}
           data={statusTypeList}
           loading={loadStatusType}
+          onDrawerSelected={onStatusChange}
         />
-        <DealType />
-        <PriceField />
+        <DealType onDealTypeChange={onDealTypeChange} />
+        <PriceField
+          setPrice={onPriceChange}
+          negotiable={negotiable}
+          setNegotiable={onNegotiableChange}
+        />
         <ImageList />
         <textarea
           className={classes.contents}
           placeholder='물품에 대해 소개해 주세요'
+          onChange={onContentChange}
         />
         <Button
           variant='contained'

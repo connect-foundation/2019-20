@@ -4,7 +4,7 @@ export const ImageContext = createContext();
 
 const ImageStore = ({children}) => {
   const [images, setImages] = useState([]);
-  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     if (images.length) {
@@ -34,8 +34,8 @@ const ImageStore = ({children}) => {
       value={{
         images,
         setImages,
-        alertOpen,
-        setAlertOpen,
+        alertMessage,
+        setAlertMessage,
       }}
     >
       {children}

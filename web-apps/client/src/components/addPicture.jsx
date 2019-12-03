@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 const AddPicture = () => {
   const classes = useStyles();
   const inputRef = useRef(false);
-  const {setImages, setAlertOpen} = useContext(ImageContext);
+  const {setImages, setAlertMessage} = useContext(ImageContext);
 
   const uploadProcess = async (dataList) => {
     const imageCDN = [];
@@ -26,7 +26,9 @@ const AddPicture = () => {
         const result = await uploadImages(form);
         imageCDN.push({result, name});
       } catch (err) {
-        setAlertOpen(true);
+        setAlertMessage(
+          '이미지를 업로드하는데 실패했습니다. 다시 시도해주세요.',
+        );
         setImages([]);
         inputRef.current.value = '';
         return;

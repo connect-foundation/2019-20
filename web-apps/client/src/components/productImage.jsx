@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductImage = ({mobile, name, deskTop}) => {
   const classes = useStyles();
-  const {images, setImages} = useContext(ImageContext);
+  const {setImages} = useContext(ImageContext);
 
   const onDelete = async () => {
     const mobileKey = mobile.split('/').slice(-1)[0];

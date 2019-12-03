@@ -14,9 +14,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const PriceField = () => {
+const PriceField = ({setPrice, negotiable, setNegotiable}) => {
   const classes = useStyles();
-  const [negotiable, setNegotiable] = useState(false);
+
+  const onPriceChange = (e) => {
+    setPrice(e.target.value);
+  };
 
   const onChangeNegotiable = () => {
     setNegotiable(!negotiable);
@@ -24,7 +27,11 @@ const PriceField = () => {
 
   return (
     <div className={classes.price}>
-      <TextField id='standard-basic' label='가격(원)' />
+      <TextField
+        id='standard-basic'
+        label='가격(원)'
+        onChange={onPriceChange}
+      />
       <div className={classes.negotiable}>
         <Checkbox
           checked={negotiable}
