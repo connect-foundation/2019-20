@@ -64,7 +64,6 @@ const getFormData = async (pictures) => {
     const resizedImages = await makeProperSizeOfPicture(picture);
     resizedImages.forEach((img) => {
       form.append('MyImg', img);
-      console.log(img);
     });
     return {form, name: picture.name};
   });
