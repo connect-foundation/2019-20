@@ -1,0 +1,32 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Grid } from '@material-ui/core';
+import ImageSection from './image-section';
+import ContentSection from './content-section';
+import useStyle from './style';
+
+const Card = ({ title, image, area, date, price, chat, interests }) => {
+  const classes = useStyle({});
+  return (
+    <>
+      <Grid container spacing={1} className={classes.root}>
+        <ImageSection src={image} alt={title} />
+        <ContentSection
+          title={title}
+          area={area}
+          date={date}
+          price={price}
+          chat={chat}
+          interests={interests}
+        />
+      </Grid>
+    </>
+  );
+};
+
+Card.propTypes = {
+  ...ContentSection,
+  image: PropTypes.string.isRequired,
+};
+
+export default Card;
