@@ -16,36 +16,35 @@ const AddPicture = () => {
   const inputRef = useRef(false);
   const {setImages, setAlertMessage} = useContext(ImageContext);
 
+  const ImageUploadErrorMessage =
+    '이미지를 업로드하는데 실패했습니다. 다시 시도해주세요.';
+
+  const resetFileInputs = (image) => {
+    setImages(image);
+    inputRef.current.value = '';
+  };
+
   const uploadProcess = async (dataList) => {
     const imageCDN = [];
 
     for (let data of dataList) {
       try {
-        const form = data.form;
-        const name = data.name;
+        const {form, name} = data;
         const result = await uploadImages(form);
         imageCDN.push({result, name});
       } catch (err) {
-        setAlertMessage(
-          '이미지를 업로드하는데 실패했습니다. 다시 시도해주세요.',
-        );
-        setImages([]);
-        inputRef.current.value = '';
-        return;
+        throw new Error(ImageUploadErrorMessage);
       }
     }
 
-    const loadImage = imageCDN.map((image) => {
-      return {
-        mobile: image.result.data.mobile,
-        deskTop: image.result.data.deskTop,
-        name: image.name,
-        loading: false,
-      };
-    });
+    const loadImage = imageCDN.map((image) => ({
+      mobile: image.result.data.mobile,
+      deskTop: image.result.data.deskTop,
+      name: image.name,
+      loading: false,
+    }));
 
-    setImages(loadImage);
-    inputRef.current.value = '';
+    resetFileInputs(loadImage);
   };
 
   const imageUploadListener = async (evt) => {
@@ -54,7 +53,12 @@ const AddPicture = () => {
     setImages(preResized);
 
     const dataList = await getFormData(files);
-    await uploadProcess(dataList);
+    try {
+      await uploadProcess(dataList);
+    } catch (err) {
+      setAlertMessage(err.message);
+      resetFileInputs([]);
+    }
   };
 
   return (

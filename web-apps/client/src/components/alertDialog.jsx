@@ -11,7 +11,7 @@ const AlertDialog = () => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (alertMessage.length) {
+    if (alertMessage.length > 0) {
       setOpen(true);
     } else {
       setOpen(false);
@@ -19,7 +19,7 @@ const AlertDialog = () => {
   }, [alertMessage]);
 
   const handleClose = () => {
-    setAlertMessage('');
+    setOpen(false);
   };
 
   return (

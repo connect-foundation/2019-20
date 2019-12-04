@@ -1,8 +1,7 @@
-const getCurrentPosition = (options) => {
+const getCurrentGeoLocation = (options) => {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 };
 
-
-export {getCurrentPosition}
+export default getCurrentGeoLocation;

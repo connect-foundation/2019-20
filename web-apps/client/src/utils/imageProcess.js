@@ -6,7 +6,7 @@ const dataURItoFile = (dataURI, fileName) => {
   const u8arr = new Uint8Array(n);
 
   while (n > 0) {
-    n = n - 1;
+    n -= 1;
     u8arr[n] = bstr.charCodeAt(n);
   }
 
@@ -38,8 +38,7 @@ const makeImageObjectByURI = (uri) => {
 };
 
 const readFileAsURI = async (file) => {
-  const {name} = file;
-  const {type} = file;
+  const {name, type} = file;
   const reader = new FileReader();
 
   await reader.readAsDataURL(file);

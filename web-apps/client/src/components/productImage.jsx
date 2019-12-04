@@ -31,21 +31,23 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductImage = ({mobile, name, deskTop}) => {
   const classes = useStyles();
-  const {setImages} = useContext(ImageContext);
+  const {setImages, fileDelimiter, mobileDesktopDelimiter} = useContext(
+    ImageContext,
+  );
 
   const onDelete = async () => {
     const mobileKey = mobile.split('/').slice(-1)[0];
     const deskTopKey = deskTop.split('/').slice(-1)[0];
 
     const storageData = window.localStorage.getItem('images');
-    const storageImage = storageData.split(' ').slice(0, -1);
+    const storageImage = storageData.split(fileDelimiter).slice(0, -1);
 
     try {
       await deletePicture(mobileKey, deskTopKey);
 
       if (storageImage[0].length && storageImage[0] !== 'loading') {
         const deleted = storageImage.filter((image) => {
-          const mobileImg = image.split('$$')[0];
+          const mobileImg = image.split(mobileDesktopDelimiter)[0];
           if (mobileImg !== mobile) {
             return image;
           }

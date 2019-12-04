@@ -1,16 +1,11 @@
 import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import DrawerList from './drawerList';
+
 const useStyles = makeStyles(() => ({
-  fullList: {
-    width: 'auto',
-    height: '15rem',
-  },
   field: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -26,43 +21,25 @@ const Drawer = ({name, data, loading, onDrawerSelected}) => {
   });
 
   const toggleDrawer = (side, open) => (event) => {
-    if (
-      event &&
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
-    ) {
+    const isTabOrShift = (evt) => {
+      if (
+        evt &&
+        evt.type === 'keydown' &&
+        (evt.key === 'Tab' || evt.key === 'Shift')
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    if (isTabOrShift(event)) {
       return;
     }
 
     setState({...state, [side]: open});
   };
 
-  const onListClick = (e) => {
-    const name = e.target.textContent;
-    onDrawerSelected(name);
-  };
-
-  const list = (side) => {
-    if (loading) {
-      return 'loading';
-    }
-    return (
-      <div
-        className={classes.fullList}
-        role='presentation'
-        onClick={toggleDrawer(side, false)}
-        onKeyDown={toggleDrawer(side, false)}
-      >
-        <List>
-          {data.map((text) => (
-            <ListItem button key={text} onClick={onListClick}>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </div>
-    );
-  };
   return (
     <>
       <div onClick={toggleDrawer('bottom', true)} className={classes.field}>
@@ -75,7 +52,13 @@ const Drawer = ({name, data, loading, onDrawerSelected}) => {
         onClose={toggleDrawer('bottom', false)}
         onOpen={toggleDrawer('bottom', true)}
       >
-        {list('bottom')}
+        <DrawerList
+          loading={loading}
+          side='bottom'
+          data={data}
+          onDrawerSelected={onDrawerSelected}
+          toggleDrawer={toggleDrawer}
+        />
       </SwipeableDrawer>
     </>
   );

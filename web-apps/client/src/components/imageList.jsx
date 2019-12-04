@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {ImageContext} from '../contexts/imageStore';
 import Loading from './loading';
 import ProductImage from './productImage';
@@ -7,48 +7,58 @@ import {makeStyles} from '@material-ui/core';
 const useStyle = makeStyles(() => ({
   container: {
     width: '13rem',
-    height: '3.5rem',
+    height: '4.2rem',
     display: 'flex',
     alignItems: 'center',
     overflowX: 'scroll',
     overflowY: 'hidden',
-    margin: '0.4rem 0 0.1rem 0',
+    marginTop: '0.3rem',
   },
 }));
 
 const ImageList = () => {
   const classes = useStyle();
-  const {images} = useContext(ImageContext);
+  const {images, fileDelimiter, mobileDesktopDelimiter} = useContext(
+    ImageContext,
+  );
+  const [imageList, setImageList] = useState('');
 
-  let imageList = '';
-  const storageData = window.localStorage.getItem('images');
+  const buildImageList = (images, storage) => {
+    let result = '';
 
-  if (images.length) {
-    if (images[0].loading) {
-      imageList = <Loading />;
-    } else if (!images[0].loading) {
-      imageList = images.map((image, index) => (
-        <ProductImage
-          key={index}
-          mobile={image.mobile}
-          name={image.name}
-          deskTop={image.deskTop}
-        />
-      ));
+    if (images.length) {
+      if (images[0].loading) {
+        result = <Loading />;
+      } else if (!images[0].loading) {
+        result = images.map((image, index) => (
+          <ProductImage
+            key={index}
+            mobile={image.mobile}
+            name={image.name}
+            deskTop={image.deskTop}
+          />
+        ));
+      }
+    } else if (storage !== null) {
+      const storageImage = storage.split(fileDelimiter).slice(0, -1);
+      if (storageImage[0] === 'loading') {
+        result = <Loading />;
+      } else {
+        result = storageImage.map((image, index) => {
+          const [mobile, deskTop] = image.split(mobileDesktopDelimiter);
+          return <ProductImage key={index} mobile={mobile} deskTop={deskTop} />;
+        });
+      }
     }
-  } else if (storageData !== null) {
-    const storageImage = storageData.split(' ').slice(0, -1);
-    if (storageImage[0] === 'loading') {
-      imageList = <Loading />;
-    } else {
-      imageList = storageImage.map((image, index) => {
-        const uris = image.split('$$');
-        const mobile = uris[0];
-        const deskTop = uris[1];
-        return <ProductImage key={index} mobile={mobile} deskTop={deskTop} />;
-      });
-    }
-  }
+
+    return result;
+  };
+
+  useEffect(() => {
+    const storageData = window.localStorage.getItem('images');
+    const newImageList = buildImageList(images, storageData);
+    setImageList(newImageList);
+  }, [images]);
 
   return <div className={classes.container}>{imageList}</div>;
 };

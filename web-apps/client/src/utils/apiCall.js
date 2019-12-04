@@ -1,9 +1,9 @@
 import axios from 'axios';
+import {imageHandleURI, productHandleURI} from '../common/uris';
 
 const deletePicture = async (mobileKey, deskTopKey) => {
   try {
-    const url = 'http://localhost:5000/products/picture';
-    await axios.delete(url, {data: {key: mobileKey}});
+    await axios.delete(imageHandleURI, {data: {key: mobileKey}});
     if (mobileKey !== deskTopKey) {
       await axios.delete(url, {data: {key: deskTopKey}});
     }
@@ -14,8 +14,7 @@ const deletePicture = async (mobileKey, deskTopKey) => {
 
 const uploadImages = async (formData) => {
   try {
-    const url = 'http://localhost:5000/products/picture';
-    const response = await axios.post(url, formData);
+    const response = await axios.post(imageHandleURI, formData);
     return response;
   } catch (err) {
     throw new Error(err);
@@ -24,8 +23,7 @@ const uploadImages = async (formData) => {
 
 const uploadProduct = async (product) => {
   try {
-    const url = 'http://localhost:5000/products';
-    const response = await axios.post(url, product);
+    const response = await axios.post(productHandleURI, product);
     return response;
   } catch (err) {
     throw new Error(err);

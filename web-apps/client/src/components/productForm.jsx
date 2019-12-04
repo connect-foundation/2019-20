@@ -12,7 +12,7 @@ import DealType from './dealType';
 import ImageList from './imageList';
 import PriceField from './priceField';
 import {uploadProduct} from '../utils/apiCall';
-import {getCurrentPosition} from '../utils/util';
+import getCurrentGeoLocation from '../utils/util';
 
 const useStyles = makeStyles(() => ({
   formContainer: {
@@ -65,10 +65,16 @@ const ProductForm = () => {
   const [negotiable, setNegotiable] = useState(false);
   const [contents, setContents] = useState('');
 
-  const {setAlertMessage} = useContext(ImageContext);
+  const {setAlertMessage, fileDelimiter, mobileDesktopDelimiter} = useContext(
+    ImageContext,
+  );
 
   const categoryAPI = 'category';
   const statusTypeListAPI = 'statusType';
+  const emptyErrorMessage = '비어있는 항목이 있습니다. 확인해 주세요 :D';
+  const submitErrorMessage =
+    '상품 등록에 실패했습니다. 잠시후 다시 시도해 주세요. :D';
+  const gpsErrorMessage = '위치 등록에 실패했습니다. 다시 시도해 주세요 :D';
 
   const loadCategory = useFetch(categoryAPI, setCategoryList);
   const loadStatusType = useFetch(statusTypeListAPI, setStatusTypeList);
@@ -84,17 +90,19 @@ const ProductForm = () => {
       category,
     } = product;
 
-    if (!title || !userId || !price || !pictures || !contents) {
-      return false;
-    } else if (
-      !title.length ||
-      !userId.length ||
-      !price.length ||
-      !pictures.length ||
-      !contents.length ||
-      productStatus === '제품상태' ||
-      category === '카테고리'
-    ) {
+    try {
+      if (
+        !title.length ||
+        !userId.length ||
+        !price.length ||
+        !pictures.length ||
+        !contents.length ||
+        productStatus === '제품상태' ||
+        category === '카테고리'
+      ) {
+        return false;
+      }
+    } catch (e) {
       return false;
     }
     return true;
@@ -104,46 +112,44 @@ const ProductForm = () => {
     evt.preventDefault();
 
     const images = window.localStorage.getItem('images');
-    const imageList = images.split(' ').slice(0, -1);
+    const imageList = images.split(fileDelimiter).slice(0, -1);
     const enrolledImages = imageList.map((image) => {
-      const split = image.split('$$');
-      const mobile = split[0];
-      const deskTop = split[1];
+      const [mobile, deskTop] = image.split(mobileDesktopDelimiter);
       return {mobile, deskTop};
     });
 
+    let position;
     try {
-      const position = await getCurrentPosition();
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      const product = {
-        title,
-        userId: 'Johnie',
-        location: {type: 'Point', coordinates: [`${latitude}`, `${longitude}`]},
-        zipCode: '12345',
-        price,
-        pictures: enrolledImages,
-        contents,
-        negotiable,
-        productStatus: status,
-        deliverAvailable: dealType === '택배거래',
-        category,
-      };
+      position = await getCurrentGeoLocation();
+    } catch {
+      setAlertMessage(gpsErrorMessage);
+      return;
+    }
+    const {latitude, longitude} = position.coords;
 
-      if (!checkAllInfoFilled(product)) {
-        setAlertMessage('비어있는 항목이 있습니다. 확인해 주세요 :D');
-        return;
-      }
+    const product = {
+      title,
+      userId: 'Johnie',
+      location: {type: 'Point', coordinates: [latitude, longitude]},
+      zipCode: '12345',
+      price,
+      pictures: enrolledImages,
+      contents,
+      negotiable,
+      productStatus: status,
+      deliverAvailable: dealType === '택배거래',
+      category,
+    };
 
-      try {
-        await uploadProduct(product);
-      } catch (err) {
-        setAlertMessage(
-          '상품 등록에 실패했습니다. 잠시후 다시 시도해 주세요. :D',
-        );
-      }
+    if (!checkAllInfoFilled(product)) {
+      setAlertMessage(emptyErrorMessage);
+      return;
+    }
+
+    try {
+      await uploadProduct(product);
     } catch (err) {
-      setAlertMessage('위치 등록에 실패했습니다. 다시 시도해 주세요 :D');
+      setAlertMessage(submitErrorMessage);
     }
   };
 
