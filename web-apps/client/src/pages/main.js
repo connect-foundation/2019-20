@@ -91,12 +91,11 @@ const Main = ({ location = {} }) => {
       />
       <GridList spacing={0} cols={1} className={classes.list}>
         {CardList}
+
         {loading && (
-          <>
-            <GridListTile className={classes.loading}>
-              <CircularProgress />
-            </GridListTile>
-          </>
+          <GridListTile className={classes.loading}>
+            <CircularProgress />
+          </GridListTile>
         )}
       </GridList>
     </>

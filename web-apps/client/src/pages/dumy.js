@@ -7,5 +7,5 @@ export default (from, size, category) => new Promise((resolve) => {
     .slice(from, from + size);
   setTimeout(() => {
     resolve(result);
-  }, 1000)
+  }, 100000000)
 });

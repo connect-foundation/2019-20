@@ -26,6 +26,12 @@ export default makeStyles({
     justifyContent: 'space-between',
     padding: '0 0 0 1rem',
   },
+  titleSection: {
+    '-webkit-line-clamp': 2,
+    '-webkit-box-orient': 'vertical',
+    overflow: 'hidden',
+    display: '-webkit-box',
+  },
   subDescriptionSection: {
     color: color.subDescription,
     fontSize: '0.9rem',

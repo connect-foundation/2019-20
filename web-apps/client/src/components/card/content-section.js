@@ -14,19 +14,21 @@ const ContentSection = ({ title, area, date, price, chat, interests }) => {
   const minutesAgoString = calculateHourMinuteAndSeconds(date, Date.now());
   const moneyWithDigitString = takeDigitFromNumber(price);
   return (
-    <Grid container xs={8} className={classes.contentSection}>
-      <Grid container direction='column'>
-        <Grid item>{title}</Grid>
-        <Grid item className={classes.subDescriptionSection}>
-          {area} · {minutesAgoString}
+    <Grid item xs={8}>
+      <Grid container className={classes.contentSection}>
+        <Grid container direction='column'>
+          <Grid item className={classes.titleSection}>{title}</Grid>
+          <Grid item className={classes.subDescriptionSection}>
+            {area} · {minutesAgoString}
+          </Grid>
+          <Grid item>
+            <strong>{moneyWithDigitString}원</strong>
+          </Grid>
         </Grid>
-        <Grid item>
-          <strong>{moneyWithDigitString}원</strong>
+        <Grid container className={classes.chatHitsSection}>
+          <ChatIcon />{chat} &nbsp;
+          <InterestIcon />{interests}
         </Grid>
-      </Grid>
-      <Grid container className={classes.chatHitsSection}>
-        <ChatIcon />{chat} &nbsp;
-        <InterestIcon />{interests}
       </Grid>
     </Grid>
   )
