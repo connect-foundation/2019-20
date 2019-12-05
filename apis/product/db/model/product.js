@@ -201,12 +201,6 @@ Product.createMapping({
       },
     },
   },
-}, (err, mapping) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(mapping);
-  }
-});
+}, () => { });
 
 module.exports = Product;

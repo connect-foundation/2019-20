@@ -6,6 +6,7 @@ import model from '../db/model';
 import mockData from '../db/seeds/20191129.json';
 import message from '../core/message';
 import * as Core from '../core';
+import CODE from '../core/code';
 
 const Product = model.product;
 
@@ -70,15 +71,15 @@ describe('core: removeProduct method', () => {
   });
   test('존재하지 않는 데이터 삭제 테스트', async () => {
     const result = await Core.removeProduct('aaaa', userId);
-    expect(result).toBe(0);
+    expect(result).toBe(CODE.ERASERDATAFAIL);
   });
   test('존재하는 데이터 삭제 검사', async () => {
     const result = await Core.removeProduct(product._id, userId);
-    expect(result).toBe(1);
+    expect(result).toBe(CODE.ERASERDATASUCCESS);
   });
   test('존재하는 데이터이지만 유저정보가 일치하지 않는 경우 삭제 검사', async () => {
-    const result = await Core.removeProduct(product._id, userId);
-    expect(result).toBe(1);
+    const result = await Core.removeProduct(product._id, 'aaa');
+    expect(result).toBe(CODE.ERASERDATAFAIL);
   });
 });
 

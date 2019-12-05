@@ -1,5 +1,6 @@
 import model from '../db/model';
 import message from './message';
+import CODE from './code';
 
 const Product = model.product;
 
@@ -91,12 +92,12 @@ const Core = {
     try {
       const product = await Product.findById({ _id });
       if (product.userId !== userId) {
-        return 0;
+        return CODE.ERASERDATAFAIL;
       }
       await product.remove();
-      return 1;
+      return CODE.ERASERDATASUCCESS;
     } catch (e) {
-      return 0;
+      return CODE.ERASERDATAFAIL;
     }
   },
 
@@ -124,7 +125,7 @@ const Core = {
       const result = respone.hits.hits;
       return result;
     } catch (e) {
-      throw new Error(e);
+      throw new Error(message.errorProcessingElasticSearch);
     }
   },
   getProductSchemaByKey(key) {
