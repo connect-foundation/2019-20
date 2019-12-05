@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
+import { Link } from 'react-router-dom';
 import SearchIcon from '@material-ui/icons/Search';
 import FilterIcon from '@material-ui/icons/Tune';
 import NotifyIcon from '@material-ui/icons/NotificationsNoneOutlined';
@@ -29,12 +30,21 @@ const useStyles = makeStyles({
   }
 });
 
+const getAreaInfo = (area) => {
+  if (!area || !(area.split(',')[0])) {
+    return { name: '전체' };
+  }
+  const [name, lat, lng] = area.split(',');
+  return { name, lat, lng };
+}
+
 const Main = ({ location = {} }) => {
   const TITLE = PAGETITLE.main;
   const classes = useStyles({});
   const query = queryString.parse(location.search);
   const categories =
-    (Object.keys(query).length === 0) ? [...CATEGORYLABELS] : String(query.category).split(',');
+    (!query.category) ? [...CATEGORYLABELS] : String(query.category).split(',');
+  const area = getAreaInfo(query.area);
   const link = (categories.length > 0) ? `/category?category=${categories.join(',')}` : '/category';
   const buttons = [
     getButtons('검색', '/', <SearchIcon />),
@@ -53,29 +63,36 @@ const Main = ({ location = {} }) => {
   const temp =
     'https://user-images.githubusercontent.com/38881005/69973260-8f1b4d00-1566-11ea-8d55-be1da311aef8.jpg';
   const date = Date.now() - 1000 * 60 * 24;
-  const CardList = list.map(({ title, price }, i) => (
-    <GridListTile key={i} className={classes.list}>
-      <Card title={title} image={temp} area='삼성동' date={date} price={price} chat={10} interests={11} />
-    </GridListTile>
-  ));
-  const loadData = async () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    const result = await dumy(settings.from, settings.size, settings.category);
-    setList([...list, ...result]);
-    setLoading(false);
+  const CardList = list.map(({ title, price }, i) => {
+    const id = title + i;
+    return (
+      <GridListTile key={id} className={classes.list}>
+        <Card title={title} image={temp} area='삼성동' date={date} price={price} chat={10} interests={11} />
+      </GridListTile>
+    )
+  });
+
+  const findProductsBySettings = () => {
+    const loadData = async () => {
+      if (loading) {
+        return;
+      }
+      setLoading(true);
+      const result = await dumy(settings.from, settings.size, settings.category);
+      setList((state) => [...state, ...result]);
+      setLoading(false);
+    };
+    loadData();
   }
 
-  const checkScrollAndUpdateData = () => {
-    if (isScrollBottom()) {
-      setSettings({ ...settings, from: settings.from + 1 });
-    }
-  };
+  useEffect(findProductsBySettings, [settings]);
 
-  useEffect(() => { loadData(); }, [settings]);
   useEffect(() => {
+    const checkScrollAndUpdateData = () => {
+      if (isScrollBottom()) {
+        setSettings((state) => ({ ...state, from: state.from + 1 }));
+      }
+    };
     window.addEventListener('scroll', checkScrollAndUpdateData);
     return () => {
       window.removeEventListener('scroll', checkScrollAndUpdateData);
@@ -86,7 +103,7 @@ const Main = ({ location = {} }) => {
     <>
       <ActionBar
         contents={
-          <DefaultToolBar leftArea={<Typography>역삼동</Typography>} title={TITLE} buttons={buttons} />
+          <DefaultToolBar leftArea={<Link to='/findMyLocation'><Typography>{area.name}</Typography></Link>} title={TITLE} buttons={buttons} />
         }
       />
       <GridList spacing={0} cols={1} className={classes.list}>
