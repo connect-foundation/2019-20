@@ -1,4 +1,3 @@
-
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Users', {
     id: {
@@ -21,9 +20,13 @@ module.exports = {
       type: Sequelize.ENUM,
       values: ['황제', '관리자', '손님'],
     },
-    location: {
+    latitude: {
       allowNull: false,
-      type: Sequelize.GEOMETRY('POINT'),
+      type: Sequelize.DOUBLE,
+    },
+    longitude: {
+      allowNull: false,
+      type: Sequelize.DOUBLE,
     },
     createdAt: {
       allowNull: false,

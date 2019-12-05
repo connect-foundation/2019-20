@@ -1,5 +1,6 @@
 import axios from 'axios';
 import uri from '../../assets/uris';
+import db from '../../models';
 
 const getAccessToken = async (req, res, next) => {
   const { NAVER_CLIENT_ID, NAVER_CLIENT_SECRET } = process.env;
@@ -45,4 +46,57 @@ const fetchUserInfo = async (req, res, next) => {
   }
 };
 
-export { getAccessToken, fetchUserInfo };
+const checkExistMember = async (req, res, next) => {
+  const { name, email } = res.locals;
+  const { User } = db;
+  try {
+    const member = await User.findOne({
+      where: { email },
+    });
+    if (member !== null) {
+      const {
+        id, authority, latitude, longitude,
+      } = member.dataValues;
+      res.locals = {
+        id, name, email, authority, latitude, longitude,
+      };
+      next();
+    } else {
+      res.locals = { name, email };
+      next();
+    }
+  } catch (e) {
+    res.redirect(uri.client500ErrorPage);
+  }
+};
+
+
+const getUserInfoFromResourceServer = async (req, res, next) => {
+  const { token } = req.body;
+  const options = {
+    method: 'get',
+    url: uri.naverMemberProfileAccess,
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  try {
+    const { status, data } = await axios(options);
+    if (status === 200) {
+      res.locals = { data };
+      next();
+    } else {
+      next({
+        status: 500,
+        message: '프로필 조회 실패',
+      });
+    }
+  } catch (err) {
+    next({
+      status: 500,
+      message: 'err.message',
+    });
+  }
+};
+export {
+  getAccessToken, fetchUserInfo, checkExistMember, getUserInfoFromResourceServer,
+};

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import uri from '../../assets/uris';
 
@@ -11,36 +10,33 @@ const redirectToNaverLoginForm = (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { name, email } = res.locals;
-  const token = jwt.sign({ name, email }, process.env.JWT_PRIVATE_KEY);
-  res.append('Set-Cookie', `jwt=${token}; HttpOnly`);
-  res.redirect(uri.clientMainPage);
-};
-
-const getUserInfoFromResourceServer = async (req, res, next) => {
-  const { token } = req.body;
-  const options = {
-    method: 'get',
-    url: uri.naverMemberProfileAccess,
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  try {
-    const { status, data } = await axios(options);
-    if (status === 200) {
-      res.json(data);
-    } else {
-      next({
-        status: 500,
-        message: '프로필 조회 실패',
-      });
-    }
-  } catch (err) {
-    next({
-      status: 500,
-      message: 'err.message',
-    });
+  const {
+    id, name, email, authority, latitude, longitude,
+  } = res.locals;
+  if (id) {
+    const token = jwt.sign(
+      {
+        id,
+        name,
+        email,
+        authority,
+        latitude,
+        longitude,
+      },
+      process.env.JWT_PRIVATE_KEY,
+    );
+    res.cookie('jwt', token, { path: '/', httpOnly: true });
+    res.redirect(uri.clientMainPage);
+  } else {
+    const token = jwt.sign({ name, email }, process.env.JWT_PRIVATE_KEY);
+    res.cookie('jwt', token, { path: '/enrollLocation', httpOnly: true });
+    res.redirect(uri.enrollLocationPage);
   }
 };
 
-export { redirectToNaverLoginForm, login, getUserInfoFromResourceServer };
+const sendUserInfo = (req, res) => {
+  const { data } = res.locals;
+  res.json(data);
+};
+
+export { redirectToNaverLoginForm, login, sendUserInfo };

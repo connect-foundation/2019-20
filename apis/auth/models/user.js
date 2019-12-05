@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       email: DataTypes.STRING,
       authority: DataTypes.ENUM('황제', '관리자', '손님'),
-      location: DataTypes.GEOMETRY('POINT'),
+      latitude: DataTypes.DOUBLE,
+      longitude: DataTypes.DOUBLE,
     },
     {},
   );
