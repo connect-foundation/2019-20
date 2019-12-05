@@ -3,7 +3,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import model from '../db/model';
-import mockData from '../db/seeds/20191127.json';
+import mockData from '../db/seeds/20191129.json';
 import message from '../core/message';
 import * as Core from '../core';
 
@@ -17,6 +17,7 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+  await Product.remove({});
 });
 
 afterAll(async () => {

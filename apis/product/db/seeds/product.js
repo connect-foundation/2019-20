@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import model from '../model';
-import mock from './20191127.json';
+import mock from './20191129.json';
 
 const { product } = model;
 

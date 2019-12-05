@@ -5,11 +5,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const { Schema } = mongoose;
-const Product = new Schema({
+const productSchema = new Schema({
   title: {
     type: String,
     required: true,
     es_indexed: true,
+    es_analyzer: 'korean',
+    es_type: 'text',
   },
   userId: {
     type: String,
@@ -22,20 +24,6 @@ const Product = new Schema({
     required: true,
     es_type: 'date',
     es_indexed: true,
-  },
-  location: {
-    type: {
-      type: String,
-      enum: ['Point'],
-      required: true,
-    },
-    coordinates: {
-      type: [Number],
-      required: true,
-      es_type: 'geo_point',
-      es_indexed: true,
-      es_include_in_parent: false,
-    },
   },
   zipCode: {
     type: String,
@@ -71,6 +59,16 @@ const Product = new Schema({
       message: '10장 이하의 사진만 등록 가능합니다.',
     },
     required: true,
+  },
+  geo_with_lat_lon: {
+    geo_point: {
+      type: String,
+      es_type: 'geo_point',
+      es_lat_lon: true,
+      es_indexed: true,
+    },
+    lat: { type: Number },
+    lon: { type: Number },
   },
   contents: {
     type: String,
@@ -137,7 +135,7 @@ const Product = new Schema({
   timestamps: { createdAt: true, updatedAt: true },
 });
 
-Product.plugin(mongoosastic, {
+productSchema.plugin(mongoosastic, {
   hosts: [
     `${process.env.ELASTICSEARCH}`,
   ],
@@ -146,6 +144,7 @@ Product.plugin(mongoosastic, {
     delay: 1000,
   },
   filter: (doc) => doc.currentStatus === '비공개',
+  type: '_doc',
 });
 
 function customSearch(query, options) {
@@ -160,8 +159,54 @@ function customSearch(query, options) {
   });
 }
 
-Product.static('search', customSearch);
+productSchema.static('search', customSearch);
 
-const productSchema = mongoose.model('Product', Product);
+const Product = mongoose.model('Product', productSchema);
 
-module.exports = productSchema;
+Product.createMapping({
+  settings: {
+    index: {
+      analysis: {
+        tokenizer: {
+          nori_user_dict: {
+            type: 'nori_tokenizer',
+            decompound_mode: 'mixed',
+            user_dictionary: 'userdict_ko.txt',
+          },
+        },
+        analyzer: {
+          korean: {
+            type: 'custom',
+            tokenizer: 'nori_user_dict',
+            filter: [
+              'nori_readingform', 'lowercase',
+              'nori_part_of_speech_basic',
+            ],
+          },
+        },
+        filter: {
+          nori_part_of_speech_basic: {
+            type: 'nori_part_of_speech',
+            stoptags: [
+              'E',
+              'IC',
+              'J',
+              'MAG', 'MAJ', 'MM',
+              'SP', 'SSC', 'SSO', 'SC', 'SE',
+              'XPN', 'XSA', 'XSN', 'XSV',
+              'UNA', 'NA', 'VSV',
+            ],
+          },
+        },
+      },
+    },
+  },
+}, (err, mapping) => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(mapping);
+  }
+});
+
+module.exports = Product;
