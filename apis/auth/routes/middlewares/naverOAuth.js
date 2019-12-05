@@ -1,6 +1,5 @@
 import axios from 'axios';
 import uri from '../../assets/uris';
-import db from '../../models';
 
 const getAccessToken = async (req, res, next) => {
   const { NAVER_CLIENT_ID, NAVER_CLIENT_SECRET } = process.env;
@@ -46,31 +45,6 @@ const fetchUserInfo = async (req, res, next) => {
   }
 };
 
-const checkExistMember = async (req, res, next) => {
-  const { name, email } = res.locals;
-  const { User } = db;
-  try {
-    const member = await User.findOne({
-      where: { email },
-    });
-    if (member !== null) {
-      const {
-        id, authority, latitude, longitude,
-      } = member.dataValues;
-      res.locals = {
-        id, name, email, authority, latitude, longitude,
-      };
-      next();
-    } else {
-      res.locals = { name, email };
-      next();
-    }
-  } catch (e) {
-    res.redirect(uri.client500ErrorPage);
-  }
-};
-
-
 const getUserInfoFromResourceServer = async (req, res, next) => {
   const { token } = req.body;
   const options = {
@@ -97,6 +71,4 @@ const getUserInfoFromResourceServer = async (req, res, next) => {
     });
   }
 };
-export {
-  getAccessToken, fetchUserInfo, checkExistMember, getUserInfoFromResourceServer,
-};
+export { getAccessToken, fetchUserInfo, getUserInfoFromResourceServer };

@@ -1,15 +1,12 @@
 import express from 'express';
-import {
-  redirectToNaverLoginForm,
-  login,
-  sendUserInfo,
-} from './controller/naverOAuth';
+import { redirectToNaverLoginForm, sendUserInfo } from './controller/naverOAuth';
 import {
   getAccessToken,
   fetchUserInfo,
-  checkExistMember,
   getUserInfoFromResourceServer,
 } from './middlewares/naverOAuth';
+import { checkExistMember } from './middlewares/userManagement';
+import { login } from './controller/loginControl';
 
 const router = express.Router();
 
