@@ -25,7 +25,7 @@ const Card = ({ title, image, area, date, price, chat, interests }) => {
 };
 
 Card.propTypes = {
-  ...ContentSection,
+  ...(ContentSection.propTypes),
   image: PropTypes.string.isRequired,
 };
 
