@@ -6,6 +6,7 @@ import cors from 'cors';
 import db from './db';
 import indexRouter from './routes/index';
 import productRouter from './routes/product';
+import infoRouter from './routes/info';
 import etagGenerator from './routes/middleware/etag-generator';
 
 dotenv.config();
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.get('*', etagGenerator);
 
 app.use('/', indexRouter);
+app.use('/info', infoRouter);
 app.use('/products', productRouter);
 
 // eslint-disable-next-line no-unused-vars
