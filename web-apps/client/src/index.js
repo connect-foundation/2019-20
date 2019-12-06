@@ -1,14 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// style
+import {ThemeProvider} from '@material-ui/core/styles';
+import './index.css';
+// redux
 import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
-import './index.css';
 import {createLogger} from 'redux-logger';
 import ReduxThunk from 'redux-thunk';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+import App from './App';
 import rootReducer from './modules';
+import muiTheme from './theme/muiTheme';
 
 const logger = createLogger();
 const store = createStore(
@@ -18,7 +22,9 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <ThemeProvider theme={muiTheme}>
+      <App />
+    </ThemeProvider>
   </Provider>,
   document.getElementById('root'),
 );
