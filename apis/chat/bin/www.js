@@ -31,17 +31,6 @@ io.use(function(socket, next) {
   next();
 });
 
-io.use(function(socket, next) {
-  var handshakeData = socket.request;
-  // check JSON token for AuthZ
-  // get userID from AuthZ
-  // get accessing roomId
-  // Chat.findById(roomId)
-  // if(seller ===userID||buyer||userID)
-  // next()
-  // else next('err')
-  next();
-});
 const chatIO = io.of('/chat');
 chatIO.on('connection', (socket) => {
   console.log('chat방 입장1');

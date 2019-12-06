@@ -2,10 +2,10 @@ import React from 'react';
 import {arrayOf} from 'prop-types';
 // material ui
 import {makeStyles} from '@material-ui/core/styles';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
 // components
 import ChatList from './ChatList';
-import SectionHeader from './SectionHeader';
 
 // utils
 import {getKoKRFormatFullDate} from '../utils';
@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   liHeader: {
     textAlign: 'center',
   },
+  header: {
+    textAlign: 'center',
+  },
 }));
 
 // component
@@ -44,7 +47,7 @@ const ChatSection = ({messagesByDate, currentUser}) => {
   return messagesByDate.map(({baseDate, messages}) => (
     <li key={`section-${baseDate}`} className={classes.listSection}>
       <ul className={classes.ul}>
-        <SectionHeader content={getKoKRFormatFullDate(baseDate)} />
+        <ListSubheader className={classes.header}>{getKoKRFormatFullDate(baseDate)}</ListSubheader>
         <ChatList messages={messages} currentUser={currentUser} />
       </ul>
     </li>
