@@ -16,17 +16,11 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ChatInputField from '../components/ChatInputField';
 import ChatSection from '../components/ChatSection';
 
-// hooks
-import useIntersect from '../hooks/useIntersect';
-
 // context
 import {ChatSocketContext} from '../contexts/socket';
 
 // utils
 import {isInSameDay, isEmptyArr, setBaseDate, formatChat} from '../utils';
-
-// fake datas
-import getConversations from '../dummy/chat';
 
 // material ui style
 const useStyles = makeStyles((theme) => ({
@@ -61,8 +55,6 @@ export default function Chat() {
   const classes = useStyles({});
   const {chatSocket} = useContext(ChatSocketContext);
 
-  const [formattedChat, setFormattedChat] = useState([]);
-  const [prevHeight, setPreveHeight] = useState(0);
   const [newChat, setNewChat] = useState([]);
   const chatInputRef = useRef(null);
   const bottomEl = useRef(null);
@@ -131,61 +123,9 @@ export default function Chat() {
     chatInputRef.current.value = '';
   };
 
-  const mockFetch = useCallback(
-    () =>
-      new Promise((res) => {
-        setTimeout(() => {
-          if (formattedChat[0]) {
-            res(getConversations(formattedChat[0].baseDate));
-          } else {
-            res(getConversations());
-          }
-        }, 500);
-      }),
-    [formattedChat],
-  );
-
-  const fetchAndUpdateData = useCallback(async () => {
-    let result;
-    try {
-      result = await mockFetch();
-    } catch (error) {
-      console.log(error);
-    }
-
-    const formattedResult = formatChat(result.reverse());
-    setFormattedChat([...formattedResult, ...formattedChat]);
-  }, [formattedChat, mockFetch]);
-
-  const fetchOnIntersect = useCallback(
-    async (E, O) => {
-      O.unobserve(E.target);
-      await fetchAndUpdateData();
-      O.observe(E.target);
-    },
-    [fetchAndUpdateData],
-  );
-
-  const [reloadRef] = useIntersect(fetchOnIntersect, {threshold: 1});
-
-  useEffect(() => {
-    if (outerBoxRef.current) {
-      const currentHeight = outerBoxRef.current.scrollHeight;
-
-      if (currentHeight > prevHeight) {
-        window.scrollTo(0, currentHeight - prevHeight);
-        setPreveHeight(currentHeight);
-      }
-    }
-  }, [formattedChat, prevHeight]);
-
   return (
     <>
       <List className={classes.root} subheader={<li />} ref={outerBoxRef}>
-        <span ref={reloadRef} />
-
-        <ChatSection messagesByDate={formattedChat} currentUser={currentUser} />
-
         <ChatSection messagesByDate={newChat} currentUser={currentUser} />
 
         <IconButton
