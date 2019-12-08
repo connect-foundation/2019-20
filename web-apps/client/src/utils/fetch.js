@@ -1,17 +1,36 @@
-// TODO CATEGORY 불러오기
-const CATEGORY = [
-  '디지털/가전',
-  '가구/인테리어',
-  '유아동/유아도서',
-  '생활/가공식품',
-  '여성의류',
-  '여성잡화',
-  '뷰티/미용',
-  '남성패션/잡화',
-  '스포츠/레저',
-  '게임/취미',
-  '도서/티켓/음반',
-  '반려동물용품',
-  '기타 중고물품'];
+import Axios from 'axios';
+import { PRODUCT_API } from './config';
 
-export default CATEGORY;
+const URI = PRODUCT_API;
+
+export const getCategoryList = async () => {
+  try {
+    const response = await Axios.get(`${URI}/info/category`);
+    return response.data;
+  } catch (err) {
+    if (err.response) {
+      throw Error(err.response.status);
+    }
+    throw Error(err.errno);
+  }
+};
+
+export const getProductList = async (options) => {
+  try {
+    const query = Object.entries(options).reduce((str, cur) => {
+      const [key, value] = cur;
+      if (value !== undefined) {
+        return str.concat(`${str.length > 1 ? '&' : ''}${key}=${value}`);
+      }
+      return str;
+    }, '?');
+    const requestUri = `${URI}/products${query}`;
+    const response = await Axios.get(requestUri);
+    const result = response.data.map(({ _id, _source }) => {
+      return { id: _id, ..._source, title: `[${options.from}]${_source.title}`, order: Date.parse(_source.order) };
+    });
+    return result;
+  } catch (err) {
+    throw Error(err.response);
+  }
+};

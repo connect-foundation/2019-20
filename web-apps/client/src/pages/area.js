@@ -1,23 +1,37 @@
 /* eslint-disable camelcase */
-import React, { useState, useRef } from 'react';
-import dotenv from 'dotenv';
+import React, { useState, useRef, useEffect } from 'react';
 import { Grid, GridList, GridListTile, InputBase, Button } from '@material-ui/core';
+import { KAKAO_API } from '../utils/config';
 import ActionBar from '../components/action-bar';
 import ToolBar from '../components/action-bar/types/activity-layor';
-import PAGETITLE from './page-title';
 import KakakoMap from '../components/kakao-map';
 import MAPTYPE from '../components/kakao-map/type';
 
-dotenv.config();
-
 const AreaPage = () => {
-  const TITLE = PAGETITLE.findMyLocation;
+  const TITLE = '내 동네 찾기';
   const addressRef = useRef(null);
   const [mapInfo, setMapInfo] = useState({ latitude: 0, longitude: 0, keyword: '' });
   const [list, setList] = useState([]);
+  const [cols, setCols] = useState(2);
   const [coords, setCoords] = useState({ depth3: '전체', lat: 0, lng: 0 });
   const setMap = ({ latitude = 0, longitude = 0, keyword = '' }) =>
     ({ latitude, longitude, keyword });
+
+  useEffect(() => {
+    const reszieWindowEvent = () => {
+      if (window.innerWidth < 500) {
+        setCols(1);
+      } else {
+        setCols(2);
+      }
+    };
+    reszieWindowEvent();
+    window.addEventListener('resize', reszieWindowEvent);
+    return () => {
+      window.removeEventListener('resize', reszieWindowEvent);
+    }
+  }, []);
+
   const setCurrentCoordsEvent = (event) => {
     event.preventDefault();
     navigator.geolocation.getCurrentPosition((point) => {
@@ -73,30 +87,34 @@ const AreaPage = () => {
         direction='column'
         spacing={0}
       >
-        <Grid item>
-          <InputBase fullWidth placeholder="동명(읍,면)으로 검색 (ex. 서초동)" inputRef={addressRef} onChange={onChangeEvent} />
-        </Grid>
-        <Grid item>
-          <Button fullWidth variant="contained" style={({ backgroundColor: '#f4690b', color: 'white' })} onClick={setCurrentCoordsEvent}>
-            현재위치로 찾기
-          </Button>
-        </Grid>
-        <Grid item>
-          <KakakoMap
-            appKey='b2218ef4e073c62de967c750f9824054'
-            width='100%'
-            height='50vh'
-            latitude={mapInfo.latitude}
-            longitude={mapInfo.longitude}
-            keyword={mapInfo.keyword}
-            callback={callback}
-          />
-        </Grid>
-        <Grid item>
-          <GridList cellHeight='auto' cols={1}>
-            {area}
-          </GridList>
-        </Grid>
+        <GridList cols={cols} cellHeight='auto'>
+          <GridListTile>
+            <Grid item>
+              <InputBase fullWidth placeholder="동명(읍,면)으로 검색 (ex. 서초동)" inputRef={addressRef} onChange={onChangeEvent} />
+            </Grid>
+            <Grid item>
+              <Button fullWidth variant="contained" style={({ backgroundColor: '#f4690b', color: 'white' })} onClick={setCurrentCoordsEvent}>
+                현재위치로 찾기
+              </Button>
+            </Grid>
+            <Grid item>
+              <KakakoMap
+                appKey={KAKAO_API}
+                width='100%'
+                height='50vh'
+                latitude={mapInfo.latitude}
+                longitude={mapInfo.longitude}
+                keyword={mapInfo.keyword}
+                callback={callback}
+              />
+            </Grid>
+          </GridListTile>
+          <GridListTile>
+            <GridList cellHeight='auto' cols={1}>
+              {area}
+            </GridList>
+          </GridListTile>
+        </GridList>
       </Grid>
     </>
   )

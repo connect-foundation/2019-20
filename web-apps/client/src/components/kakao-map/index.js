@@ -18,9 +18,11 @@ const KakaoMap = ({
   const [timer, setTimer] = useState(null);
   const kakaoMapArea = useRef(null);
   const SEARCHDELAY = 500;
+
   const actions = (containerRef) => () => {
     // @ts-ignore
     const { kakao } = window;
+
     kakao.maps.load(() => {
       setScriptLoading(true);
       let marker;
