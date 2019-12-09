@@ -1,10 +1,30 @@
 import React, {useState, useEffect, createContext} from 'react';
 
-export const ImageContext = createContext();
+import useCredentialFetch from '../hooks/useCredentialFetch';
 
-const ImageStore = ({children}) => {
+import {loginStatusHandleURI} from '../assets/uris';
+
+export const ProductContext = createContext();
+
+const ProductStore = ({children}) => {
   const [images, setImages] = useState([]);
   const [alertMessage, setAlertMessage] = useState('');
+  const [user, setUser] = useState(null);
+
+  const jwtErrorMessage = '잘못된 유저 정보로 인해 로그아웃 됩니다.';
+  const serverErrorMessage =
+    '서버 장애가 있습니다. 잠시 후 다시 시도해 주세요.';
+
+  useCredentialFetch(loginStatusHandleURI, setUser, (err) => {
+    if (err) {
+      if (err.message === 'Network Error') {
+        setAlertMessage(serverErrorMessage);
+      } else {
+        setAlertMessage(jwtErrorMessage);
+      }
+    }
+  });
+
   const fileDelimiter = ' ';
   const mobileDesktopDelimiter = '$$';
 
@@ -42,7 +62,7 @@ const ImageStore = ({children}) => {
   }, [images]);
 
   return (
-    <ImageContext.Provider
+    <ProductContext.Provider
       value={{
         images,
         setImages,
@@ -50,11 +70,12 @@ const ImageStore = ({children}) => {
         setAlertMessage,
         fileDelimiter,
         mobileDesktopDelimiter,
+        user,
       }}
     >
       {children}
-    </ImageContext.Provider>
+    </ProductContext.Provider>
   );
 };
 
-export default ImageStore;
+export default ProductStore;

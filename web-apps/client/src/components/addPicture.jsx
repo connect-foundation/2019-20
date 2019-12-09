@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {ImageContext} from '../contexts/imageStore';
+import {ProductContext} from '../contexts/productStore';
 import getFormData from '../utils/resizeProcess';
 import {uploadImages} from '../utils/apiCall';
 
@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 const AddPicture = () => {
   const classes = useStyles();
   const inputRef = useRef(false);
-  const {setImages, setAlertMessage} = useContext(ImageContext);
+  const {setImages, setAlertMessage} = useContext(ProductContext);
 
   const ImageUploadErrorMessage =
     '이미지를 업로드하는데 실패했습니다. 다시 시도해주세요.';

@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../components/header';
 import ProductForm from '../components/productForm';
-import ImageStore from '../contexts/imageStore';
+import ProductStore from '../contexts/productStore';
 import {makeStyles} from '@material-ui/core/styles';
 import AlertDialog from '../components/alertDialog';
 
@@ -16,11 +16,11 @@ const NewProduct = () => {
   const classes = useStyles();
 
   return (
-    <ImageStore>
+    <ProductStore>
       <Header />
       <ProductForm className={classes.productForm} />
       <AlertDialog />
-    </ImageStore>
+    </ProductStore>
   );
 };
 

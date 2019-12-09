@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import useFetch from '../hooks/useFetch';
-import {ImageContext} from '../contexts/imageStore';
+import {ProductContext} from '../contexts/productStore';
 
 import Drawer from './drawer';
 import DealType from './dealType';
@@ -65,9 +65,12 @@ const ProductForm = () => {
   const [negotiable, setNegotiable] = useState(false);
   const [contents, setContents] = useState('');
 
-  const {setAlertMessage, fileDelimiter, mobileDesktopDelimiter} = useContext(
-    ImageContext,
-  );
+  const {
+    setAlertMessage,
+    fileDelimiter,
+    mobileDesktopDelimiter,
+    user,
+  } = useContext(ProductContext);
 
   const categoryAPI = 'category';
   const statusTypeListAPI = 'statusType';
@@ -118,20 +121,10 @@ const ProductForm = () => {
       return {mobile, deskTop};
     });
 
-    let position;
-    try {
-      position = await getCurrentGeoLocation();
-    } catch {
-      setAlertMessage(gpsErrorMessage);
-      return;
-    }
-    const {latitude, longitude} = position.coords;
-
     const product = {
       title,
-      userId: 'Johnie',
-      location: {type: 'Point', coordinates: [latitude, longitude]},
-      zipCode: '12345',
+      userId: user.id,
+      location: {type: 'Point', coordinates: [user.latitude, user.longitude]},
       price,
       pictures: enrolledImages,
       contents,

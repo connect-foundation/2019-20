@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {ImageContext} from '../contexts/imageStore';
+import {ProductContext} from '../contexts/productStore';
 import Loading from './loading';
 import ProductImage from './productImage';
 import {makeStyles} from '@material-ui/core';
@@ -19,7 +19,7 @@ const useStyle = makeStyles(() => ({
 const ImageList = () => {
   const classes = useStyle();
   const {images, fileDelimiter, mobileDesktopDelimiter} = useContext(
-    ImageContext,
+    ProductContext,
   );
   const [imageList, setImageList] = useState('');
 
