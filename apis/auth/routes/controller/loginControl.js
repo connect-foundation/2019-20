@@ -4,8 +4,15 @@ import msg from '../../assets/errorMessages';
 
 const getUserInfoByJWT = (req, res, next) => {
   const { info } = res.locals;
+  if (info === null) {
+    res.json(info);
+    return;
+  }
   if (!info) {
-    next({ status: 500, message: msg.internalError });
+    next({
+      status: 500,
+      message: msg.internalError,
+    });
   }
   const {
     id,
