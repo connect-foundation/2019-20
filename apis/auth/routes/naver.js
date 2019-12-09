@@ -1,10 +1,6 @@
 import express from 'express';
-import { redirectToNaverLoginForm, sendUserInfo } from './controller/naverOAuth';
-import {
-  getAccessToken,
-  fetchUserInfo,
-  getUserInfoFromResourceServer,
-} from './middlewares/naverOAuth';
+import redirectToNaverLoginForm from './controller/naverOAuth';
+import { getAccessToken, fetchUserInfo } from './middlewares/naverOAuth';
 import { checkExistMember } from './middlewares/userManagement';
 import { login } from './controller/loginControl';
 
@@ -16,6 +12,5 @@ router.get('/', (req, res) => {
 
 router.get('/login', redirectToNaverLoginForm);
 router.get('/callback', getAccessToken, fetchUserInfo, checkExistMember, login);
-router.get('/member', getUserInfoFromResourceServer, sendUserInfo);
 
 module.exports = router;

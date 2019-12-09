@@ -29,10 +29,15 @@ const getAccessToken = async (req, res, next) => {
 
 const fetchUserInfo = async (req, res, next) => {
   const token = res.locals.access_token;
+
+  const options = {
+    method: 'get',
+    url: uri.naverMemberProfileAccess,
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
   try {
-    const { status, data } = await axios.get(uri.memberInfoAPI, {
-      data: { token },
-    });
+    const { status, data } = await axios(options);
     if (status === 200) {
       const { name, email } = data.response;
       res.locals = { name, email };
@@ -45,30 +50,4 @@ const fetchUserInfo = async (req, res, next) => {
   }
 };
 
-const getUserInfoFromResourceServer = async (req, res, next) => {
-  const { token } = req.body;
-  const options = {
-    method: 'get',
-    url: uri.naverMemberProfileAccess,
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  try {
-    const { status, data } = await axios(options);
-    if (status === 200) {
-      res.locals = { data };
-      next();
-    } else {
-      next({
-        status: 500,
-        message: '프로필 조회 실패',
-      });
-    }
-  } catch (err) {
-    next({
-      status: 500,
-      message: 'err.message',
-    });
-  }
-};
-export { getAccessToken, fetchUserInfo, getUserInfoFromResourceServer };
+export { getAccessToken, fetchUserInfo };
