@@ -6,7 +6,7 @@ import {
 } from '../../core/string-conveter';
 
 const addFilter = (filter = [], query) => {
-  if ('range' in query) {
+  if ('range' in query || 'term' in query) {
     return [...filter, query];
   }
   return [...filter, { bool: query }];
@@ -106,12 +106,13 @@ const addOrderToOption = ({ query: { sort } }, res, next) => {
   next();
 };
 
-// TODO 키워드 검색(토크나이저...)
+// TODO 키워드 검색
 const addKeywordTofilter = ({ query: { keyword } }, res, next) => {
   if (keyword) {
-    res.locals.keyword = {
+    const query = {
       term: { title: keyword },
     };
+    res.locals.filter = addFilter(res.locals.filter, query);
   }
   next();
 };

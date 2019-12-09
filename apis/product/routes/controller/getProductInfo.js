@@ -9,13 +9,6 @@ const getProductListController = async (req, res, next) => {
     };
     delete res.locals.filter;
   }
-  if (res.locals.keyword) {
-    res.locals.query = {
-      ...res.locals.query,
-      ...res.locals.keyword,
-    };
-    delete res.locals.keyword;
-  }
   try {
     const list = await getElasticSearchResults(res.locals);
     res.json(list);
