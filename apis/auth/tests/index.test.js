@@ -27,7 +27,14 @@ it('get current user info test', async () => {
   };
   const {
     data: {
-      id, name, email, authority, latitude, longitude, reputation, numberOfRater,
+      id,
+      name,
+      email,
+      authority,
+      latitude,
+      longitude,
+      reputation,
+      numberOfRater,
     },
   } = await axios(options);
   const result = {
