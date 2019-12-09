@@ -3,9 +3,9 @@ import uri from '../../assets/uris';
 import msg from '../../assets/errorMessages';
 
 const getUserInfoByJWT = (req, res, next) => {
-  const {info} = res.locals;
+  const { info } = res.locals;
   if (!info) {
-    next({status: 500, message: msg.internalError});
+    next({ status: 500, message: msg.internalError });
   }
   const {
     id,
@@ -17,17 +17,17 @@ const getUserInfoByJWT = (req, res, next) => {
     numberOfRater,
   } = info;
   if (
-    id &&
-    name.length &&
-    email.length &&
-    latitude &&
-    longitude &&
-    reputation &&
-    numberOfRater
+    id
+    && name.length
+    && email.length
+    && latitude
+    && longitude
+    && reputation >= 0
+    && numberOfRater >= 0
   ) {
     res.json(info);
   } else {
-    next({status: 500, message: msg.invalidJwtToken});
+    next({ status: 500, message: msg.invalidJwtToken });
   }
 };
 
@@ -61,13 +61,13 @@ const login = async (req, res) => {
       },
       process.env.JWT_PRIVATE_KEY,
     );
-    res.cookie('jwt', token, {path: '/', httpOnly: true});
+    res.cookie('jwt', token, { path: '/', httpOnly: true });
     res.redirect(uri.clientMainPage);
   } else {
-    const token = jwt.sign({name, email}, process.env.JWT_PRIVATE_KEY);
-    res.cookie('jwt', token, {path: '/enrollLocation', httpOnly: true});
+    const token = jwt.sign({ name, email }, process.env.JWT_PRIVATE_KEY);
+    res.cookie('jwt', token, { path: '/enrollLocation', httpOnly: true });
     res.redirect(uri.enrollLocationPage);
   }
 };
 
-export {getUserInfoByJWT, logOutProcess, login};
+export { getUserInfoByJWT, logOutProcess, login };
