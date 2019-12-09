@@ -25,17 +25,6 @@ const productSchema = new Schema({
     es_type: 'date',
     es_indexed: true,
   },
-  zipCode: {
-    type: String,
-    validate: {
-      validator(value) {
-        return value.length === 5;
-      },
-      message: '5자리의 올바른 우편번호가 아닙니다.',
-    },
-    required: true,
-    es_boost: 2.0,
-  },
   areaRange: {
     type: String,
     enum: ['1', '2', '3'],
@@ -60,12 +49,11 @@ const productSchema = new Schema({
     },
     required: true,
   },
-  geo_with_lat_lon: {
+  location: {
     geo_point: {
       type: String,
-      es_type: 'geo_point',
-      es_lat_lon: true,
       es_indexed: true,
+      es_type: 'geo_point',
     },
     lat: { type: Number },
     lon: { type: Number },

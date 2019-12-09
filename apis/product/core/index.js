@@ -104,11 +104,13 @@ const Core = {
   /**
    * 일래스틱 서치 검색
    * @description 일래스틱 서치 검색결과를 조회합니다.
-   * @param {Object.<from, size, filter, query, sort>} esquery 일래스틱 서치 쿼리
+   * @param {Object.<from, size, filter, query, sort, script_fields>}
+   * esquery 일래스틱 서치 쿼리
    * @param esquery.from 시작 지점(페이지 네이션)
    * @param esquery.size 한번에 보여줄 페이지의 수
    * @param esquery.query 일래스틱 서치 쿼리
    * @param esquery.sort 일래스틱 서치 정렬
+   * @param esquery.script_fields 일래스틱 서치 스크립트
    */
   async getElasticSearchResults(esquery) {
     let sort = esquery.sort || [];
@@ -119,7 +121,7 @@ const Core = {
         { order: 'desc' },
       ];
     }
-    const query = { ...esquery, sort };
+    const query = { _source: true, ...esquery, sort };
     try {
       const respone = await Product.search(query, {});
       const result = respone.hits.hits;

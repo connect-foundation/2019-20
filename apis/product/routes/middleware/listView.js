@@ -43,12 +43,26 @@ const addCategoryToFilter = ({ query: { category } }, res, next) => {
   next();
 };
 
-// TODO Elastic Search에 맞는 위키 기반 쿼리
-const addZipCodeToFilter = ({ query: { zipCode } }, res, next) => {
-  if (zipCode) {
-    res.locals.filter = {
-      ...res.locals.filter,
-      zipCode,
+const addGeoDistanceFilter = ({ query: { coordinates, distance } }, res, next) => {
+  if (coordinates && distance) {
+    const [lat, lon] = coordinates.split(',').map((xy) => +xy);
+    const query = {
+      filter: {
+        geo_distance: {
+          distance: `${distance}km`,
+          location: { lat, lon },
+        },
+      },
+    };
+    res.locals.filter = addFilter(res.locals.filter, query);
+    res.locals.script_fields = {
+      distance: {
+        script: {
+          lang: 'expression',
+          source: 'haversin(lat, lon, doc["location"].lat, doc["location"].lon)',
+          params: { lat, lon },
+        },
+      },
     };
   }
   next();
@@ -107,7 +121,7 @@ const queryAnalysisMiddleware = [
   addFromToOption,
   addNumberOfListToOption,
   addCategoryToFilter,
-  addZipCodeToFilter,
+  addGeoDistanceFilter,
   addPriceToFilter,
   addDealStatusToFilter,
   addOrderToOption,
