@@ -22,7 +22,7 @@ const Navigator = () => {
     </Link>
   ));
   return (
-    <AppBar position='absolute' color='inherit' style={({ bottom: 0, top: 'auto' })}>
+    <AppBar position='fixed' color='inherit' style={({ bottom: 0, top: 'auto' })}>
       <Toolbar>
         <Grid container justify='space-between'>
           {menu}

@@ -5,14 +5,13 @@ import useStyles from './style';
 
 const SlideUpSnackbar = ({ open, message, duration, bottom }) => {
   const classes = useStyles({ bottom });
+
   return (
-    <>
-      <Slide direction="up" in={open} timeout={duration}>
-        <Paper elevation={24} square className={classes.root}>
-          <div>{message}</div>
-        </Paper>
-      </Slide>
-    </>
+    <Slide direction="up" in={open} timeout={duration}>
+      <Paper elevation={24} square className={classes.root}>
+        <div>{message}</div>
+      </Paper>
+    </Slide>
   )
 };
 

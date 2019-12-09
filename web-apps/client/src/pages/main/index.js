@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@material-ui/icons/Search';
 import FilterIcon from '@material-ui/icons/Tune';
 import NotifyIcon from '@material-ui/icons/NotificationsNoneOutlined';
 import { Typography, GridList, GridListTile, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import ActionBar from '../components/action-bar';
-import DefaultToolBar from '../components/action-bar/types/default';
-import getButtons from '../components/action-bar/get-buttons';
-import Card from '../components/card';
-import { getProductList } from '../utils/fetch';
+import ActionBar from '../../components/action-bar';
+import DefaultToolBar from '../../components/action-bar/types/default';
+import getButtons from '../../components/action-bar/get-buttons';
+import Card from '../../components/card';
+import { getProductList } from '../../utils/fetch';
+import { filterContext } from '../../contexts/filters';
 
 const isScrollBottom = () =>
   window.innerHeight + window.scrollY >= document.body.offsetHeight;
@@ -36,14 +37,13 @@ const Main = () => {
     getButtons('필터', '/category', <FilterIcon />),
     getButtons('알림', '/', <NotifyIcon />)
   ];
-
+  const filterConsumer = useContext(filterContext);
   const [loading, setLoading] = useState(false);
   const [cols, setCols] = useState(1);
   const [list, setList] = useState([]);
   const [settings, setSettings] = useState({
-    // category: categories,
     from: 0,
-    size: 10,
+    limits: 10,
   });
 
   const temp =
@@ -63,7 +63,8 @@ const Main = () => {
       }
       setLoading(true);
       try {
-        const result = await getProductList(settings);
+        const { filter } = filterConsumer;
+        const result = await getProductList({ ...filter, ...settings });
         setList((state) => [...state, ...result]);
       } catch (e) {
         console.log(JSON.stringify(e));
@@ -82,7 +83,7 @@ const Main = () => {
       if (isScrollBottom()) {
         if (!timer) {
           timer = setTimeout(() => {
-            setSettings((state) => ({ ...state, from: state.from + state.size }));
+            setSettings((state) => ({ ...state, from: state.from + state.limits }));
             timer = null;
           }, SCROLLEVENTDELAY);
         }

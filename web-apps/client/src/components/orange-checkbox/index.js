@@ -6,18 +6,18 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import checkBoxStyles from './style';
 
-const ColoredCheckBox = ({ label, onChange = (() => { }), checked = false }) => {
+const ColoredCheckBox = ({ label, onChange, checked }) => {
   const OrangeCheckbox = withStyles(checkBoxStyles)(Checkbox);
+
   return (
     <>
       <FormControlLabel
-        onChange={onChange}
+        onChangeCapture={onChange}
         control={(
           <OrangeCheckbox
             checked={checked}
             icon={<UnCheckedIcon />}
             checkedIcon={<CheckIcon />}
-            label={label}
           />
         )}
         label={label}

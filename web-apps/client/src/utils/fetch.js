@@ -15,19 +15,46 @@ export const getCategoryList = async () => {
   }
 };
 
+const makeQuery = ({
+  price: {
+    start,
+    end,
+  },
+  categories,
+  coordinates,
+  distance,
+  from,
+  limits, }) => {
+  const queries = [];
+  if (from) {
+    queries.push(['from', from]);
+  }
+  if (limits) {
+    queries.push(['limits', limits]);
+  }
+  if (categories && categories.length >= 1) {
+    queries.push(['category', categories.join(',')]);
+  }
+  if (coordinates) {
+    queries.push(['coordinates', coordinates]);
+    if (distance) {
+      queries.push(['distance', distance]);
+    }
+  }
+  if (end || start) {
+    queries.push(['price', `${start}${end ? `,${end}` : ''}`]);
+  }
+  const query = queries.map((q) => q.join('=')).join('&');
+  return query;
+};
+
 export const getProductList = async (options) => {
   try {
-    const query = Object.entries(options).reduce((str, cur) => {
-      const [key, value] = cur;
-      if (value !== undefined) {
-        return str.concat(`${str.length > 1 ? '&' : ''}${key}=${value}`);
-      }
-      return str;
-    }, '?');
-    const requestUri = `${URI}/products${query}`;
+    const query = makeQuery(options);
+    const requestUri = `${URI}/products?${query}`;
     const response = await Axios.get(requestUri);
     const result = response.data.map(({ _id, _source }) => {
-      return { id: _id, ..._source, title: `[${options.from}]${_source.title}`, order: Date.parse(_source.order) };
+      return { id: _id, ..._source, order: Date.parse(_source.order) };
     });
     return result;
   } catch (err) {
