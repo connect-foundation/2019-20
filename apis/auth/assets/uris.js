@@ -1,5 +1,6 @@
 export default {
   client500ErrorPage: 'http://localhost:3000/server_error',
+  badRequestPage: 'http://localhost:3000/bad_request',
   naverMemberProfileAccess: 'https://openapi.naver.com/v1/nid/me',
   naverTokenControl: 'https://nid.naver.com/oauth2.0/token',
   naverAuthRequest: 'https://nid.naver.com/oauth2.0/authorize',

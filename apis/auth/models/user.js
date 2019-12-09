@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       authority: DataTypes.ENUM('황제', '관리자', '손님'),
       latitude: DataTypes.DOUBLE,
       longitude: DataTypes.DOUBLE,
+      reputation: DataTypes.INTEGER,
+      numberOfRater: DataTypes.INTEGER,
     },
     {},
   );

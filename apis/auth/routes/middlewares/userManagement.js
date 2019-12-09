@@ -1,50 +1,34 @@
-import db from '../../models';
-import uri from '../../assets/uris';
+import user from '../../core/userManagement';
+import msg from '../../assets/errorMessages';
 
 const addUser = async (req, res, next) => {
-  const {User} = db;
-  const {email, name} = res.locals.info;
-  const {latitude, longitude} = req.body;
+  const { email, name } = res.locals.info;
+  const { latitude, longitude } = req.body;
+  const info = {
+    email, name, latitude, longitude,
+  };
   try {
-    const newUser = await User.create({
-      name,
-      email,
-      latitude,
-      longitude,
-      authority: '손님',
-    });
-    res.locals = {newUser};
+    const newUser = await user.addUser(info);
+    res.locals = { newUser };
     next();
-  } catch (e) {
-    next({status: 500, message: e.message});
+  } catch (err) {
+    if (err.message === msg.badRequest) {
+      next({ status: 400, message: err.message });
+    } else {
+      next({ status: 500, message: err.message });
+    }
   }
 };
 
 const checkExistMember = async (req, res, next) => {
-  const {name, email} = res.locals;
-  const {User} = db;
+  const { name, email } = res.locals;
   try {
-    const member = await User.findOne({
-      where: {email},
-    });
-    if (member !== null) {
-      const {id, authority, latitude, longitude} = member.dataValues;
-      res.locals = {
-        id,
-        name,
-        email,
-        authority,
-        latitude,
-        longitude,
-      };
-      next();
-    } else {
-      res.locals = {name, email};
-      next();
-    }
+    const info = await user.checkExistMember({ name, email });
+    res.locals = { info };
+    next();
   } catch (e) {
-    res.redirect(uri.client500ErrorPage);
+    next({ status: 500, message: e.message });
   }
 };
 
-export {addUser, checkExistMember};
+export { addUser, checkExistMember };

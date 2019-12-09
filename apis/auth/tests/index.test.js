@@ -6,12 +6,14 @@ dotenv.config();
 
 it('get current user info test', async () => {
   const tester = {
-    id: 'test',
+    id: 2,
     name: 'tester',
     email: 'test@jest.com',
     authority: '손님',
-    latitude: '123.1234',
-    longitude: '76.1234',
+    latitude: 123.1234,
+    longitude: 76.1234,
+    reputation: 10,
+    numberOfRater: 3,
   };
   const key = process.env.JWT_PRIVATE_KEY;
   const token = jwt.sign(tester, key);
@@ -25,7 +27,7 @@ it('get current user info test', async () => {
   };
   const {
     data: {
-      id, name, email, authority, latitude, longitude,
+      id, name, email, authority, latitude, longitude, reputation, numberOfRater,
     },
   } = await axios(options);
   const result = {
@@ -35,17 +37,21 @@ it('get current user info test', async () => {
     authority,
     latitude,
     longitude,
+    reputation,
+    numberOfRater,
   };
   expect(result).toEqual(tester);
 });
 it('log out test', async () => {
   const tester = {
-    id: 'test',
+    id: 2,
     name: 'tester',
     email: 'test@jest.com',
     authority: '손님',
-    latitude: '123.1234',
-    longitude: '76.1234',
+    latitude: 123.1234,
+    longitude: 76.1234,
+    reputation: 10,
+    numberOfRater: 3,
   };
   const key = process.env.JWT_PRIVATE_KEY;
   const token = jwt.sign(tester, key);

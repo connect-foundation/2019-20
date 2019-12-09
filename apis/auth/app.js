@@ -1,11 +1,14 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import 'core-js';
 
 import cors from 'cors';
 import indexRouter from './routes/index';
 import naverRouter from './routes/naver';
+import {
+  serverErrorHandler,
+  clientErrorHandler,
+} from './routes/controller/errorHandler';
 
 const app = express();
 
@@ -17,5 +20,8 @@ app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/naver', naverRouter);
+
+app.use(serverErrorHandler);
+app.use(clientErrorHandler);
 
 module.exports = app;

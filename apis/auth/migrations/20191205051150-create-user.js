@@ -16,9 +16,10 @@ module.exports = {
       unique: true,
     },
     authority: {
-      allowNull: false,
       type: Sequelize.ENUM,
       values: ['황제', '관리자', '손님'],
+      allowNull: false,
+      defaultValue: '손님',
     },
     latitude: {
       allowNull: false,
@@ -27,6 +28,16 @@ module.exports = {
     longitude: {
       allowNull: false,
       type: Sequelize.DOUBLE,
+    },
+    reputation: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+      allowNull: false,
+    },
+    numberOfRater: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+      allowNull: false,
     },
     createdAt: {
       allowNull: false,
