@@ -28,8 +28,5 @@ fi
 PM2INSTALL=$(npm ls -g --depth=0 | grep -w -o pm2)
 if [ "pm2" != "$PM2INSTALL" ]; then
     npm install -g pm2
+    pm2 start ./build/bin/www --name server
 fi
-
-yarn build
-cd ./build
-pm2 start ./bin/www --name server

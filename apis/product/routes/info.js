@@ -1,11 +1,8 @@
 import express from 'express';
-import { getProductSchemaByKey } from '../core';
+import getProductSchemaController from './controller/info';
 
 const router = express.Router();
 
-router.get('/category', (req, res) => {
-  const list = getProductSchemaByKey('category').enumValues;
-  res.json(list);
-});
+router.get('/category', getProductSchemaController);
 
 export default router;

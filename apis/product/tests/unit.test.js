@@ -1,16 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 // https://www.mockaroo.com/
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import model from '../db/model';
-import mockData from '../db/seeds/20191129.json';
+import mockData from '../db/seeds/20191209.json';
 import message from '../core/message';
 import * as Core from '../core';
 import CODE from '../core/code';
 
 const Product = model.product;
 
-dotenv.config();
 jest.setTimeout(10000);
 
 beforeAll(async () => {

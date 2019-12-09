@@ -1,10 +1,13 @@
 import express from 'express';
-import modifyProductController from './controller/modifyProduct';
-import deleteProductController from './controller/deleteProduct';
-import writeProductCotroller from './controller/writeProduct';
 import isLoggedInUser from '../services/user';
-import { getProductListController, findProductByIdController } from './controller/getProductInfo';
 import queryAnalysisMiddleware from './middleware/listView';
+import {
+  modifyProductController,
+  deleteProductController,
+  writeProductCotroller,
+  getProductListController,
+  findProductByIdController,
+} from './controller/products';
 
 const router = express.Router();
 

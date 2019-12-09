@@ -123,6 +123,7 @@ const productSchema = new Schema({
   timestamps: { createdAt: true, updatedAt: true },
 });
 
+
 productSchema.plugin(mongoosastic, {
   hosts: [
     `${process.env.ELASTICSEARCH}`,

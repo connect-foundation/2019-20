@@ -4,8 +4,6 @@ import mock from './20191209.json';
 
 const { product } = model;
 
-require('dotenv').config();
-
 mongoose.connect(`${process.env.MONGO_URL}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
