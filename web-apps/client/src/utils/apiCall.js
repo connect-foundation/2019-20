@@ -1,11 +1,11 @@
 import axios from 'axios';
-import {imageHandleURI, productHandleURI} from '../common/uris';
+import {imageHandleURI, productHandleURI} from '../assets/uris';
 
 const deletePicture = async (mobileKey, deskTopKey) => {
   try {
     await axios.delete(imageHandleURI, {data: {key: mobileKey}});
     if (mobileKey !== deskTopKey) {
-      await axios.delete(url, {data: {key: deskTopKey}});
+      await axios.delete(imageHandleURI, {data: {key: deskTopKey}});
     }
   } catch (err) {
     throw new Error(err);
