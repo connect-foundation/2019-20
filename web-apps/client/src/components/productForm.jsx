@@ -76,6 +76,7 @@ const ProductForm = () => {
   const loadStatusType = useFetch(statusTypeListAPI, setStatusTypeList);
 
   const checkAllInfoFilled = (product) => {
+    let result = '';
     const {
       title,
       userId,
@@ -86,22 +87,30 @@ const ProductForm = () => {
       category,
     } = product;
 
-    try {
-      if (
-        !title.length ||
-        !userId.length ||
-        !price.length ||
-        !pictures.length ||
-        !contents.length ||
-        productStatus === '제품상태' ||
-        category === '카테고리'
-      ) {
-        return false;
-      }
-    } catch (e) {
-      return false;
+    if (!title || !title.length) {
+      result += '제목 ';
     }
-    return true;
+    if (!userId || !userId.length) {
+      result = '로그인 하셨나요?';
+      return result;
+    }
+    if (!price || price <= 0) {
+      result += '가격 ';
+    }
+    if (!pictures || !pictures.length) {
+      result += '사진';
+    }
+    if (!contents || !contents.length) {
+      result += '본문';
+    }
+    if (productStatus === '제품상태') {
+      result += '제품상태 ';
+    }
+    if (category === '카테고리') {
+      result += '카테고리 ';
+    }
+
+    return result;
   };
 
   const submitListener = async (evt) => {
@@ -116,7 +125,7 @@ const ProductForm = () => {
       title,
       userId: user.id,
       location: {type: 'Point', coordinates: [user.latitude, user.longitude]},
-      price,
+      price: Number(price),
       pictures: enrolledImages,
       contents,
       negotiable,
@@ -125,8 +134,9 @@ const ProductForm = () => {
       category,
     };
 
-    if (!checkAllInfoFilled(product)) {
-      setAlertMessage(emptyErrorMessage);
+    const emptyElement = checkAllInfoFilled(product);
+    if (emptyElement.length) {
+      setAlertMessage(emptyErrorMessage + `(${emptyElement})`);
       return;
     }
 
