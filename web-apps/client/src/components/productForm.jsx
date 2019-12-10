@@ -12,7 +12,6 @@ import DealType from './dealType';
 import ImageList from './imageList';
 import PriceField from './priceField';
 import {uploadProduct} from '../utils/apiCall';
-import getCurrentGeoLocation from '../utils/util';
 
 const useStyles = makeStyles(() => ({
   formContainer: {
@@ -77,7 +76,6 @@ const ProductForm = () => {
   const emptyErrorMessage = '비어있는 항목이 있습니다. 확인해 주세요 :D';
   const submitErrorMessage =
     '상품 등록에 실패했습니다. 잠시후 다시 시도해 주세요. :D';
-  const gpsErrorMessage = '위치 등록에 실패했습니다. 다시 시도해 주세요 :D';
 
   const loadCategory = useFetch(categoryAPI, setCategoryList);
   const loadStatusType = useFetch(statusTypeListAPI, setStatusTypeList);
@@ -175,6 +173,7 @@ const ProductForm = () => {
   return (
     <div className={classes.formContainer}>
       <form>
+        <ImageList />
         <TextField
           id='standard-basic'
           label='제품명'
@@ -199,7 +198,6 @@ const ProductForm = () => {
           negotiable={negotiable}
           setNegotiable={onNegotiableChange}
         />
-        <ImageList />
         <textarea
           className={classes.contents}
           placeholder='물품에 대해 소개해 주세요'

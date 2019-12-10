@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import {ProductContext} from '../contexts/productStore';
 
 const AlertDialog = () => {
-  const {alertMessage, setAlertMessage} = useContext(ProductContext);
+  const {alertMessage} = useContext(ProductContext);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
