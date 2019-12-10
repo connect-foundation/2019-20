@@ -31,47 +31,23 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductImage = ({mobile, name, deskTop}) => {
   const classes = useStyles();
-  const {setImages, fileDelimiter, mobileDesktopDelimiter} = useContext(
-    ProductContext,
-  );
+  const {images, setImages, setAlertMessage} = useContext(ProductContext);
 
   const onDelete = async () => {
     const mobileKey = mobile.split('/').slice(-1)[0];
     const deskTopKey = deskTop.split('/').slice(-1)[0];
 
-    const storageData = window.localStorage.getItem('images');
-    const storageImage = storageData.split(fileDelimiter).slice(0, -1);
+    const deleteImageErrorMessage =
+      '사진을 삭제할 수 없습니다. 잠시후 다시 시도해 주세요.';
 
     try {
       await deletePicture(mobileKey, deskTopKey);
 
-      if (storageImage[0].length && storageImage[0] !== 'loading') {
-        const deleted = storageImage.filter((image) => {
-          const mobileImg = image.split(mobileDesktopDelimiter)[0];
-          if (mobileImg !== mobile) {
-            return image;
-          }
-        });
-
-        const result = deleted.reduce((acc, cur) => {
-          return acc + cur + ' ';
-        }, '');
-        window.localStorage.setItem('images', result);
-
-        const filteredImage = deleted.map((img) => {
-          const split = img.split('$$');
-          const mobileImg = split[0];
-          const deskTopImg = split[1];
-          return {
-            mobile: mobileImg,
-            deskTop: deskTopImg,
-            loading: false,
-          };
-        });
-
-        setImages(filteredImage);
-      }
-    } catch (err) {}
+      const imageList = images.filter((image) => image.mobile !== mobile);
+      setImages(imageList);
+    } catch (err) {
+      setAlertMessage(deleteImageErrorMessage);
+    }
   };
 
   return (

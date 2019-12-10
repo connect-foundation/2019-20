@@ -9,6 +9,11 @@ const useStyles = makeStyles(() => ({
   headerButtons: {
     display: 'flex',
     justifyContent: 'space-between',
+    background: 'white',
+    color: '#555',
+  },
+  exit: {
+    color: '#555',
   },
 }));
 
@@ -18,7 +23,8 @@ const Header = () => {
     <div className={classes.root}>
       <AppBar position='static'>
         <Toolbar variant='dense' className={classes.headerButtons}>
-          <ExitToAppIcon />
+          <ExitToAppIcon className={classes.exit} />
+          중고거래 글쓰기
           <AddPicture />
         </Toolbar>
       </AppBar>

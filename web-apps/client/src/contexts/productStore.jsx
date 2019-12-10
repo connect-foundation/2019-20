@@ -14,8 +14,10 @@ const ProductStore = ({children}) => {
   const jwtErrorMessage = '잘못된 유저 정보로 인해 로그아웃 됩니다.';
   const serverErrorMessage =
     '서버 장애가 있습니다. 잠시 후 다시 시도해 주세요.';
+  const fileDelimiter = ' ';
+  const mobileDesktopDelimiter = '$$';
 
-  useCredentialFetch(loginStatusHandleURI, setUser, (err) => {
+  const detectUserErrorHandler = (err) => {
     if (err) {
       if (err.message === 'Network Error') {
         setAlertMessage(serverErrorMessage);
@@ -23,10 +25,7 @@ const ProductStore = ({children}) => {
         setAlertMessage(jwtErrorMessage);
       }
     }
-  });
-
-  const fileDelimiter = ' ';
-  const mobileDesktopDelimiter = '$$';
+  };
 
   const listToString = (list) => {
     return list.reduce((acc, cur) => {
@@ -40,22 +39,33 @@ const ProductStore = ({children}) => {
     return images[0].loading;
   };
 
+  useCredentialFetch(loginStatusHandleURI, setUser, detectUserErrorHandler);
+
+  useEffect(() => {
+    const storage = window.localStorage.getItem('images');
+    window.localStorage.setItem('images', '');
+    if (storage === null) {
+      return;
+    }
+    const preSeparated = storage.split(fileDelimiter).slice(0, -1);
+    const imageInStorage = preSeparated.map((image, index) => {
+      const [mobile, deskTop] = image.split(mobileDesktopDelimiter);
+      return {mobile, deskTop, name: index, loading: false};
+    });
+    setImages(imageInStorage);
+  }, []);
+
   useEffect(() => {
     if (images.length) {
-      if (isOnLoading(images)) {
-        window.localStorage.setItem('images', 'loading');
-      } else if (isOnLoading(images) === false) {
+      if (isOnLoading(images) === false) {
         const imageListToString = listToString(images);
 
         window.localStorage.setItem('images', imageListToString);
-      } else {
+      } else if (!isOnLoading(images)) {
         throw new Error('image loading is not boolean type.');
       }
     } else if (images.length === 0) {
-      const storageData = window.localStorage.getItem('images');
-      if (storageData === null || storageData.length === 0) {
-        window.localStorage.setItem('images', '');
-      }
+      window.localStorage.setItem('images', '');
     } else {
       throw new Error('images context is not array!!!');
     }
@@ -68,8 +78,6 @@ const ProductStore = ({children}) => {
         setImages,
         alertMessage,
         setAlertMessage,
-        fileDelimiter,
-        mobileDesktopDelimiter,
         user,
       }}
     >

@@ -10,53 +10,47 @@ const useStyle = makeStyles(() => ({
     height: '4.2rem',
     display: 'flex',
     alignItems: 'center',
-    overflowX: 'scroll',
+    overflowX: 'auto',
     overflowY: 'hidden',
     marginTop: '0.3rem',
+    color: '#555',
   },
 }));
 
 const ImageList = () => {
   const classes = useStyle();
-  const {images, fileDelimiter, mobileDesktopDelimiter} = useContext(
-    ProductContext,
-  );
+  const {images} = useContext(ProductContext);
   const [imageList, setImageList] = useState('');
 
-  const buildImageList = (images, storage) => {
+  const buildImageList = (images) => {
     let result = '';
 
     if (images.length) {
-      if (images[0].loading) {
-        result = <Loading />;
-      } else if (!images[0].loading) {
-        result = images.map((image, index) => (
-          <ProductImage
-            key={index}
-            mobile={image.mobile}
-            name={image.name}
-            deskTop={image.deskTop}
-          />
-        ));
-      }
-    } else if (storage !== null) {
-      const storageImage = storage.split(fileDelimiter).slice(0, -1);
-      if (storageImage[0] === 'loading') {
-        result = <Loading />;
-      } else {
-        result = storageImage.map((image, index) => {
-          const [mobile, deskTop] = image.split(mobileDesktopDelimiter);
-          return <ProductImage key={index} mobile={mobile} deskTop={deskTop} />;
-        });
-      }
+      result = images.map((image, index) => {
+        if (!image.loading) {
+          return (
+            <ProductImage
+              key={index}
+              mobile={image.mobile}
+              name={image.name}
+              deskTop={image.deskTop}
+            />
+          );
+        } else {
+          return <Loading key={index} />;
+        }
+      });
+    } else if (images.length === 0) {
+      result = '사진을 등록해 주세요';
+    } else {
+      throw new Error('image context is not an array!!!');
     }
 
     return result;
   };
 
   useEffect(() => {
-    const storageData = window.localStorage.getItem('images');
-    const newImageList = buildImageList(images, storageData);
+    const newImageList = buildImageList(images);
     setImageList(newImageList);
   }, [images]);
 

@@ -1,64 +1,42 @@
-import React, {useContext, useRef} from 'react';
+import React, {useState, useContext, useRef} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {ProductContext} from '../contexts/productStore';
-import getFormData from '../utils/resizeProcess';
-import {uploadImages} from '../utils/apiCall';
+
+import useImageUpload from '../hooks/useImageUpload';
 
 const useStyles = makeStyles(() => ({
   input: {display: 'none'},
-  camera: {color: 'white'},
 }));
 const AddPicture = () => {
   const classes = useStyles();
+  const fileMaximumUploadErrorMessage = '사진은 10장까지만 입력 가능합니다.';
+  const [file, setFile] = useState([]);
   const inputRef = useRef(false);
-  const {setImages, setAlertMessage} = useContext(ProductContext);
+  const {images, setImages, setAlertMessage} = useContext(ProductContext);
 
-  const ImageUploadErrorMessage =
-    '이미지를 업로드하는데 실패했습니다. 다시 시도해주세요.';
-
-  const resetFileInputs = (image) => {
-    setImages(image);
-    inputRef.current.value = '';
-  };
-
-  const uploadProcess = async (dataList) => {
-    const imageCDN = [];
-
-    for (let data of dataList) {
-      try {
-        const {form, name} = data;
-        const result = await uploadImages(form);
-        imageCDN.push({result, name});
-      } catch (err) {
-        throw new Error(ImageUploadErrorMessage);
-      }
-    }
-
-    const loadImage = imageCDN.map((image) => ({
-      mobile: image.result.data.mobile,
-      deskTop: image.result.data.deskTop,
-      name: image.name,
-      loading: false,
-    }));
-
-    resetFileInputs(loadImage);
-  };
+  useImageUpload(images, file, inputRef, setImages, setAlertMessage);
 
   const imageUploadListener = async (evt) => {
-    const files = Array.from(evt.target.files);
-    const preResized = files.map((_) => ({loading: true}));
-    setImages(preResized);
+    const selectedFiles = Array.from(evt.target.files);
 
-    const dataList = await getFormData(files);
-    try {
-      await uploadProcess(dataList);
-    } catch (err) {
-      setAlertMessage(err.message);
-      resetFileInputs([]);
+    const numberOfCurrentUploadedImage = images.length;
+    const allowToUpload = 10 - numberOfCurrentUploadedImage;
+    const numberOfSelectedFile = selectedFiles.length;
+
+    if (numberOfSelectedFile > allowToUpload) {
+      const allowed = selectedFiles.filter((file, index) => {
+        if (index < allowToUpload) {
+          return file;
+        }
+      });
+      setFile(allowed);
+      setAlertMessage(fileMaximumUploadErrorMessage);
+      return;
     }
+    setFile(selectedFiles);
   };
 
   return (
@@ -74,7 +52,7 @@ const AddPicture = () => {
       />
       <label htmlFor='icon-button-file'>
         <IconButton aria-label='upload picture' component='span'>
-          <PhotoCamera className={classes.camera} />
+          <PhotoCamera />
         </IconButton>
       </label>
     </>

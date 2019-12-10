@@ -64,12 +64,7 @@ const ProductForm = () => {
   const [negotiable, setNegotiable] = useState(false);
   const [contents, setContents] = useState('');
 
-  const {
-    setAlertMessage,
-    fileDelimiter,
-    mobileDesktopDelimiter,
-    user,
-  } = useContext(ProductContext);
+  const {setAlertMessage, user, images} = useContext(ProductContext);
 
   const categoryAPI = 'category';
   const statusTypeListAPI = 'statusType';
@@ -112,10 +107,8 @@ const ProductForm = () => {
   const submitListener = async (evt) => {
     evt.preventDefault();
 
-    const images = window.localStorage.getItem('images');
-    const imageList = images.split(fileDelimiter).slice(0, -1);
-    const enrolledImages = imageList.map((image) => {
-      const [mobile, deskTop] = image.split(mobileDesktopDelimiter);
+    const enrolledImages = images.map((image) => {
+      const {mobile, deskTop} = image;
       return {mobile, deskTop};
     });
 
