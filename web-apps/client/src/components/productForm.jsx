@@ -17,6 +17,8 @@ const useStyles = makeStyles(() => ({
   formContainer: {
     display: 'flex',
     justifyContent: 'center',
+    overflowY: 'auto',
+    paddingBottom: '2rem',
   },
   list: {
     width: 250,
@@ -39,7 +41,7 @@ const useStyles = makeStyles(() => ({
     resize: 'none',
   },
   submitButton: {
-    position: 'absolute',
+    position: 'fixed',
     bottom: '0',
     left: '0',
     width: '100%',

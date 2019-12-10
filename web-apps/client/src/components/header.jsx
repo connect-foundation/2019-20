@@ -6,6 +6,9 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AddPicture from './addPicture';
 
 const useStyles = makeStyles(() => ({
+  root: {
+    height: '2.5rem',
+  },
   headerButtons: {
     display: 'flex',
     justifyContent: 'space-between',
