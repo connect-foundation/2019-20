@@ -1,5 +1,5 @@
-export default (name, href, icon) => {
+export default (name, href, icon, onClick) => {
   return {
-    name, href, icon
+    name, href, icon, onClick
   };
 };

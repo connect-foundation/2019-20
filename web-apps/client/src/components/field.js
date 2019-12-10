@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   root: {
@@ -13,14 +14,14 @@ const useStyles = makeStyles({
   description: {
     textAlign: 'center',
   },
-  subDescription: {
+  subDescription: ({ palette }) => ({
     textAlign: 'center',
-    color: '#97989a',
-  },
+    color: palette.secondary.main,
+  }),
 });
 
 const Field = ({ description, subscription, field }) => {
-  const classes = useStyles({});
+  const classes = useStyles(useTheme());
   return (
     <Grid
       container

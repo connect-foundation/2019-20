@@ -3,19 +3,21 @@ import SlideUpSnackbar from '../components/snack-bar';
 import { SnackbarContext } from '../contexts/snackbar';
 
 export default () => {
-  const CLOSEDURATION = 3000;
   const { notice, setNotice } = useContext(SnackbarContext);
-  const closePopupLayer = () => {
-    if (!notice.open) {
-      return;
+
+  useEffect(() => {
+    let timerId;
+    if (notice.open) {
+      timerId = setTimeout(() => {
+        setNotice('');
+      }, 3000);
     }
-    setTimeout(() => {
-      setNotice();
-    }, CLOSEDURATION);
-  };
-  useEffect(closePopupLayer, [notice, setNotice]);
+    return () => {
+      clearTimeout(timerId);
+    }
+  }, [notice, setNotice]);
 
   return (
-    <SlideUpSnackbar bottom='3.5rem' open={notice.open} duration={300} message={notice.message} />
+    <SlideUpSnackbar bottom='3.5rem' open={notice.open} message={notice.message} />
   );
 };

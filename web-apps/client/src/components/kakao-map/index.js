@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
+
 import { CircularProgress } from '@material-ui/core';
 import loadAPIScript from './load-api-script';
 import TYPE from './type';

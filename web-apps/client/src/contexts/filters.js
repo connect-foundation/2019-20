@@ -10,6 +10,7 @@ const filterInfo = {
   categories: [],
   coordinates: '',
   distance: 0,
+  localname: '전체',
   CATEGORYLABEL: [],
 };
 
@@ -17,35 +18,47 @@ const TYPE = {
   INITIAL: 0,
   CATEGORYINITIAL: 1,
   PRICE: 2,
-  CATEGORYADD: 3,
-  CATEGORYREMOVE: 4,
-  AREA: 5,
-  AREARANGE: 6,
+  CATEGORY_ADD: 3,
+  CATEGORY_REMOVE: 4,
+  LOCALNAME: 5,
+  COORDINATE: 6,
+  DISTANCE: 7,
 };
 
 const filterReducer = (state, { type, payload }) => {
   switch (type) {
+
     case TYPE.INITIAL:
       return JSON.parse(JSON.stringify(filterInfo));
+
     case TYPE.PRICE:
       return { ...state, price: { ...payload } };
-    case TYPE.CATEGORYADD:
+
+    case TYPE.CATEGORY_ADD:
       return { ...state, categories: [...state.categories, payload] };
-    case TYPE.CATEGORYREMOVE: {
-      if (state.categories.length <= 1) {
-        return state;
-      }
-      const updatedCategory = state.categories.filter((name) => name !== payload);
+
+    case TYPE.CATEGORY_REMOVE: {
+      const updatedCategory =
+        state.categories.filter((name) => name !== payload);
       return { ...state, categories: updatedCategory };
     }
-    case TYPE.AREA:
-      return { ...state, area: payload };
-    case TYPE.AREARANGE:
-      return { ...state, areaRange: +payload };
+
+    case TYPE.COORDINATE: {
+      const { coordinates, localname } = payload;
+      return { ...state, coordinates, localname, distance: 1 };
+    }
+
     case TYPE.CATEGORYINITIAL:
       filterInfo.CATEGORYLABEL = payload;
       filterInfo.categories = payload;
       return { ...state, categories: payload, CATEGORYLABEL: payload };
+
+    case TYPE.DISTANCE:
+      if (+payload === 0) {
+        return { ...state, distance: +payload, localname: '전체' }
+      }
+      return { ...state, distance: +payload };
+
     default:
       return state;
   }
