@@ -35,11 +35,9 @@ const makeQuery = ({
   if (categories && categories.length >= 1) {
     queries.push(['category', categories.join(',')]);
   }
-  if (coordinates) {
+  if (distance) {
     queries.push(['coordinates', coordinates]);
-    if (distance) {
-      queries.push(['distance', distance]);
-    }
+    queries.push(['distance', distance]);
   }
   if (end || start) {
     queries.push(['price', `${start}${end ? `,${end}` : ''}`]);
@@ -53,8 +51,19 @@ export const getProductList = async (options) => {
     const query = makeQuery(options);
     const requestUri = `${URI}/products?${query}`;
     const response = await Axios.get(requestUri);
-    const result = response.data.map(({ _id, _source }) => {
-      return { id: _id, ..._source, order: Date.parse(_source.order) };
+    const result = response.data.map(({ _id, _source, fields }) => {
+      const data = {
+        id: _id,
+        ..._source,
+        order: Date.parse(_source.order),
+      };
+      if (fields) {
+        return {
+          ...data,
+          distance: +fields.distance,
+        };
+      }
+      return data;
     });
     return result;
   } catch (err) {

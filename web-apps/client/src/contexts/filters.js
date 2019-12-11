@@ -16,11 +16,11 @@ const filterInfo = {
 
 const TYPE = {
   INITIAL: 0,
-  CATEGORYINITIAL: 1,
+  CATEGORY_INITIAL: 1,
   PRICE: 2,
   CATEGORY_ADD: 3,
   CATEGORY_REMOVE: 4,
-  LOCALNAME: 5,
+  LOCAL_NAME: 5,
   COORDINATE: 6,
   DISTANCE: 7,
 };
@@ -45,10 +45,11 @@ const filterReducer = (state, { type, payload }) => {
 
     case TYPE.COORDINATE: {
       const { coordinates, localname } = payload;
-      return { ...state, coordinates, localname, distance: 1 };
+      const distance = state.distance || 1;
+      return { ...state, coordinates, localname, distance };
     }
 
-    case TYPE.CATEGORYINITIAL:
+    case TYPE.CATEGORY_INITIAL:
       filterInfo.CATEGORYLABEL = payload;
       filterInfo.categories = payload;
       return { ...state, categories: payload, CATEGORYLABEL: payload };
@@ -72,7 +73,7 @@ export const FilterProvider = ({ children }) => {
     const getCategoryFromServer = async () => {
       try {
         const list = await getCategoryList();
-        dispatch({ type: TYPE.CATEGORYINITIAL, payload: list });
+        dispatch({ type: TYPE.CATEGORY_INITIAL, payload: list });
       } catch (err) {
         alert('카테고리 정보를 불러 올 수 없습니다.');
       }
