@@ -11,7 +11,7 @@ export const deleteProductController = async ({ params: { id } }, res, next) => 
     const result = await removeProduct(id, res.locals.userId);
     res.json(result);
   } catch (e) {
-    next(e);
+    next({ status: 500, message: e.toString() });
   }
 };
 

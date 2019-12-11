@@ -69,15 +69,15 @@ describe('core: removeProduct method', () => {
   });
   test('존재하지 않는 데이터 삭제 테스트', async () => {
     const result = await Core.removeProduct('aaaa', userId);
-    expect(result).toBe(CODE.ERASERDATAFAIL);
+    expect(result).toBe(CODE.ERASERDATA_FAIL);
   });
   test('존재하는 데이터 삭제 검사', async () => {
     const result = await Core.removeProduct(product._id, userId);
-    expect(result).toBe(CODE.ERASERDATASUCCESS);
+    expect(result).toBe(CODE.ERASERDATA_SUCCESS);
   });
   test('존재하는 데이터이지만 유저정보가 일치하지 않는 경우 삭제 검사', async () => {
     const result = await Core.removeProduct(product._id, 'aaa');
-    expect(result).toBe(CODE.ERASERDATAFAIL);
+    expect(result).toBe(CODE.ERASERDATA_FAIL);
   });
 });
 

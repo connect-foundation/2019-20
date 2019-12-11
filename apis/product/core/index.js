@@ -92,12 +92,12 @@ const Core = {
     try {
       const product = await Product.findById({ _id });
       if (product.userId !== userId) {
-        return CODE.ERASERDATAFAIL;
+        return CODE.ERASERDATA_FAIL;
       }
       await product.remove();
-      return CODE.ERASERDATASUCCESS;
+      return CODE.ERASERDATA_SUCCESS;
     } catch (e) {
-      return CODE.ERASERDATAFAIL;
+      return CODE.ERASERDATA_FAIL;
     }
   },
 
