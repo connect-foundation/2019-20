@@ -9,7 +9,7 @@
     ]
   },
   "scripts": {
-    "test": "jest",
+    "test": "NODE_ENV=test jest --forceExit",
     "precommit": "lint-staged && yarn test",
     "dev:start": "nodemon --exec babel-node bin/www.js",
     "build": "babel ./ -d build",
@@ -39,6 +39,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jest": "^23.0.4",
     "jest": "^24.9.0",
-    "lint-staged": "^9.4.3"
+    "lint-staged": "^9.4.3",
+    "supertest": "^4.0.2"
   }
 }

@@ -11,8 +11,8 @@ const addUser = async (req, res, next) => {
     longitude,
   };
   try {
-    const newUser = await user.addUser(info);
-    res.locals = { newUser };
+    const { dataValues } = await user.addUser(info);
+    res.locals = { ...dataValues };
     next();
   } catch (err) {
     if (err.message === msg.badRequest) {

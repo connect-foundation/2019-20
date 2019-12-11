@@ -13,7 +13,7 @@ const jwtValidator = (req, res, next) => {
     res.locals.info = data;
     next();
   } catch (error) {
-    next({ status: 500, message: msg.invalidJwtToken });
+    next({ status: 400, message: msg.invalidJwtToken });
   }
 };
 

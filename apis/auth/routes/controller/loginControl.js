@@ -18,6 +18,7 @@ const getUserInfoByJWT = (req, res, next) => {
     id,
     name,
     email,
+    authority,
     latitude,
     longitude,
     reputation,
@@ -27,12 +28,22 @@ const getUserInfoByJWT = (req, res, next) => {
     id
     && name.length
     && email.length
+    && authority.length
     && latitude
     && longitude
     && reputation >= 0
     && numberOfRater >= 0
   ) {
-    res.json(info);
+    res.json({
+      id,
+      name,
+      email,
+      authority,
+      latitude,
+      longitude,
+      reputation,
+      numberOfRater,
+    });
   } else {
     next({ status: 500, message: msg.invalidJwtToken });
   }

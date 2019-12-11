@@ -1,12 +1,8 @@
 import db from '../models';
 import msg from '../assets/errorMessages';
-import emailValidator from '../utils/index';
 
 const addUser = async (info) => {
   const { User } = db;
-  if (!emailValidator(info.email)) {
-    throw new Error(msg.badRequest);
-  }
   try {
     const newUser = await User.create(info);
     return newUser;
