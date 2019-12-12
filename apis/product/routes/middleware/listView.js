@@ -129,6 +129,26 @@ const removePrivatePost = (req, res, next) => {
   next();
 };
 
+const addInterestFilter = ({ query: { interest } }, res, next) => {
+  if (interest) {
+    const query = {
+      match: { interests: interest },
+    };
+    res.locals.filter = addFilter(res.locals.filter, query);
+  }
+  next();
+};
+
+const addBuyerFilter = ({ query: { buyer } }, res, next) => {
+  if (buyer) {
+    const query = {
+      match: { buyer },
+    };
+    res.locals.filter = addFilter(res.locals.filter, query);
+  }
+  next();
+};
+
 const queryAnalysisMiddleware = [
   addKeywordTofilter,
   addFromToOption,
@@ -139,6 +159,8 @@ const queryAnalysisMiddleware = [
   addDealStatusToFilter,
   removePrivatePost,
   addOrderToOption,
+  addInterestFilter,
+  addBuyerFilter,
 ];
 
 export default queryAnalysisMiddleware;

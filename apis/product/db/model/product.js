@@ -47,7 +47,9 @@ const productSchema = new Schema({
       },
       message: '10장 이하의 사진만 등록 가능합니다.',
     },
+    es_type: 'string',
     required: true,
+    es_indexed: true,
   },
   location: {
     geo_point: {
@@ -75,10 +77,9 @@ const productSchema = new Schema({
     es_indexed: true,
   },
   interests: {
-    type: Number,
-    default: 0,
-    required: true,
-    es_type: 'integer',
+    type: Array,
+    required: false,
+    es_type: 'string',
     es_indexed: true,
   },
   currentStatus: {
@@ -86,6 +87,12 @@ const productSchema = new Schema({
     enum: ['대기', '거래중', '거래완료', '비공개'],
     default: '대기',
     required: true,
+    es_type: 'string',
+    es_indexed: true,
+  },
+  buyer: {
+    type: String,
+    default: '',
     es_type: 'string',
     es_indexed: true,
   },
