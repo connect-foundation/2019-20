@@ -1,8 +1,8 @@
-import React, {createContext} from 'react';
+import React, { createContext } from 'react';
 import socketIOClient from 'socket.io-client';
 
 // types
-import {childrenType} from '../types';
+import { childrenType } from '../types';
 
 const HOST = 'http://10.180.171.184:5000';
 const NAME_SPACE = '/chat';
@@ -26,9 +26,9 @@ export const ChatSocketContext = createContext({
   chatSocket: socket,
 });
 
-export const ChatSocketProvider = ({children}) => {
+export const ChatSocketProvider = ({ children }) => {
   return (
-    <ChatSocketContext.Provider value={{chatSocket: socket}}>
+    <ChatSocketContext.Provider value={{ chatSocket: socket }}>
       {children}
     </ChatSocketContext.Provider>
   );

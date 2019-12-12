@@ -23,7 +23,7 @@ jobs:
     - name: yarn install, build, test
       run: |
         path=$(echo ${GITHUB_BASE_REF%-web/master})
-        cd ./webapps/$path
+        cd ./web-apps/$path
         yarn
         yarn build
         yarn test
