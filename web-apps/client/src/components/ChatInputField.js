@@ -43,7 +43,6 @@ const ChatInputField = ({onMessageSubmit, chatInputRef}) => {
       <InputBase
         className={classes.input}
         placeholder='메세지를 입력하세요.'
-        inputProps={{'aria-label': 'search google maps'}}
         inputRef={chatInputRef}
       />
       <IconButton

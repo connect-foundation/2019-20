@@ -29,10 +29,7 @@ export const formatChat = (rowChat = []) => {
   rowChat.forEach((chat) => {
     const chatTime = new Date(chat.timestamp);
     const lastChat = result[result.length - 1];
-    if (
-      result.length < 1 ||
-      new Date(lastChat.baseDate).toDateString() !== chatTime.toDateString()
-    ) {
+    if (result.length < 1 || isInSameDay(lastChat.baseDate, chatTime)) {
       result.push({
         baseDate: chatTime.setHours(0, 0, 0, 0),
         messages: [chat],

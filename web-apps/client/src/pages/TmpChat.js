@@ -5,6 +5,9 @@ import axios from 'axios';
 // context
 import {ChatSocketProvider, ChatSocketContext} from '../contexts/socket';
 
+const HOST = 'http://10.180.171.184:5000';
+const NAME_SPACE = '/chat';
+
 export default function Chat() {
   const history = useHistory();
   const {chatSocket} = useContext(ChatSocketContext);
@@ -32,7 +35,7 @@ export default function Chat() {
     try {
       const {
         data: {_id},
-      } = await axios.post('http://10.180.171.184:5000/chat', options);
+      } = await axios.post(HOST + NAME_SPACE, options);
       return _id;
     } catch (error) {
       return null;

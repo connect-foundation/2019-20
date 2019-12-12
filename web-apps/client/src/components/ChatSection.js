@@ -15,9 +15,6 @@ import {uIdType, messagesByDateShape} from '../types';
 
 // material ui style
 const useStyles = makeStyles((theme) => ({
-  bottomFix: {
-    position: 'absolute',
-  },
   root: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,

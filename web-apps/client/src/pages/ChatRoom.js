@@ -24,14 +24,10 @@ import {isInSameDay, isEmptyArr, setBaseDate, formatChat} from '../utils';
 
 // material ui style
 const useStyles = makeStyles((theme) => ({
-  bottomFix: {
-    position: 'absolute',
-  },
   root: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
     position: 'relative',
-
     paddingBottom: '10rem',
   },
   listSection: {
