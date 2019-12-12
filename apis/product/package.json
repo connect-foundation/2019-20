@@ -9,19 +9,22 @@
     ]
   },
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --setupFiles dotenv/config --forceExit",
     "precommit": "lint-staged && yarn test",
-    "dev:start": "babel-node bin/www.js",
-    "build": "babel ./ -d build",
+    "dev:start": "nodemon --exec babel-node bin/www.js",
+    "build": "babel ./ -d build --copy-files '*.json'",
     "start": "node ./build/bin/www.js",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "seed": "babel-node ./db/seeds/product.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
-    "core-js": "3",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
+    "etag": "^1.8.1",
     "express": "~4.16.1",
+    "mongoosastic": "https://github.com/kgpyo/mongoosastic",
     "mongoose": "^5.7.12",
     "morgan": "~1.9.1"
   },

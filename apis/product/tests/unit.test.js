@@ -1,17 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 // https://www.mockaroo.com/
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import model from '../db/model';
-import mock from './mock-data';
-import mockData from './mock-datas';
+import mockData from '../db/seeds/20191209.json';
 import message from '../core/message';
 import * as Core from '../core';
-import 'core-js';
+import CODE from '../core/code';
 
 const Product = model.product;
 
-dotenv.config();
 jest.setTimeout(10000);
 
 beforeAll(async () => {
@@ -19,6 +16,7 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+  await Product.remove({});
 });
 
 afterAll(async () => {
@@ -27,9 +25,9 @@ afterAll(async () => {
 
 describe('core: productUpate method', () => {
   let product;
-  const { userId } = mock;
+  const { userId } = mockData[0];
   beforeEach(async () => {
-    product = await Product.create(mock);
+    product = await Product.create(mockData[0]);
   });
   afterEach(async () => {
     await product.deleteOne({ _id: product._id });
@@ -62,24 +60,24 @@ describe('core: productUpate method', () => {
 
 describe('core: removeProduct method', () => {
   let product;
-  const { userId } = mock;
+  const { userId } = mockData[0];
   beforeEach(async () => {
-    product = await Product.create(mock);
+    product = await Product.create(mockData[0]);
   });
   afterEach(async () => {
     await product.deleteOne({ _id: product._id });
   });
   test('존재하지 않는 데이터 삭제 테스트', async () => {
     const result = await Core.removeProduct('aaaa', userId);
-    expect(result).toBe(0);
+    expect(result).toBe(CODE.ERASERDATA_FAIL);
   });
   test('존재하는 데이터 삭제 검사', async () => {
     const result = await Core.removeProduct(product._id, userId);
-    expect(result).toBe(1);
+    expect(result).toBe(CODE.ERASERDATA_SUCCESS);
   });
   test('존재하는 데이터이지만 유저정보가 일치하지 않는 경우 삭제 검사', async () => {
-    const result = await Core.removeProduct(product._id, userId);
-    expect(result).toBe(1);
+    const result = await Core.removeProduct(product._id, 'aaa');
+    expect(result).toBe(CODE.ERASERDATA_FAIL);
   });
 });
 

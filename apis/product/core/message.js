@@ -5,4 +5,5 @@ export default {
   errorProcessing: '처리중 오류가 발생하였습니다',
   enterAllRequiredFields: '필수 항목을 모두 올바르게 입력하세요',
   doNotHavePermission: '권한이 없습니다.',
+  errorProcessingElasticSearch: '일래스틱 서치 검색중 오류가 발생하였습니다.',
 };
