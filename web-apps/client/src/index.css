@@ -1,11 +1,9 @@
 html {
   box-sizing: border-box;
+  font-size: calc(10px + 3.5vmin);
 }
 *, *:before, *:after {
   box-sizing: inherit;
-}
-
-  font-size: calc(10px + 3.5vmin);
 }
 
 body {
