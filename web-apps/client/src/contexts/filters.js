@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { getCategoryList } from '../utils/fetch';
+import { getCategoryList } from '../pages/main/fetch';
 
 const filterInfo = {
   price: {

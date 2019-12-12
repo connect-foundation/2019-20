@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   }),
 });
 
-const Field = ({ description, subscription, field }) => {
+const Field = ({ description, subdescription, field }) => {
   const classes = useStyles(useTheme());
   return (
     <Grid
@@ -34,7 +34,7 @@ const Field = ({ description, subscription, field }) => {
         {description}
       </Grid>
       <Grid item className={classes.subDescription}>
-        {subscription}
+        {subdescription}
       </Grid>
       <Grid item>
         {field}
@@ -45,12 +45,12 @@ const Field = ({ description, subscription, field }) => {
 
 Field.propTypes = {
   description: PropTypes.string.isRequired,
-  subscription: PropTypes.string,
+  subdescription: PropTypes.string,
   field: PropTypes.element.isRequired,
 };
 
 Field.defaultProps = {
-  subscription: '',
+  subdescription: '',
 };
 
 export default Field;

@@ -7,13 +7,12 @@ import SearchIcon from '@material-ui/icons/Search';
 import FilterIcon from '@material-ui/icons/Tune';
 import NotifyIcon from '@material-ui/icons/NotificationsNoneOutlined';
 
-import ActionBar from '../components/action-bar';
-import DefaultToolBar from '../components/action-bar/types/default';
-import getButtons from '../components/action-bar/get-buttons';
-import Card from '../components/card';
+import ActionBar from '../../components/action-bar';
+import Card from '../../components/card';
 
-import { getProductList } from '../utils/fetch';
-import { filterContext } from '../contexts/filters';
+import getButtons from '../../utils/action-bar';
+import { getProductList } from './fetch';
+import { filterContext } from '../../contexts/filters';
 
 const isScrollBottom = () =>
   window.innerHeight + window.scrollY >= document.body.offsetHeight;
@@ -121,24 +120,20 @@ const Main = () => {
   return (
     <>
       <ActionBar
-        contents={(
-          <DefaultToolBar
-            leftArea={(
-              <Link to='/location' underline='none'>
-                <Typography color='primary' variant='subtitle1'>
-                  {name}
-                </Typography>
-              </Link>
-            )}
-            title={(
-              <>
-                {TITLE}
-                {localname === '전체' ? '' : ` ~ ${distance}km 까지`}
-              </>
-            )}
-            buttons={buttons}
-          />
+        leftArea={(
+          <Link to='/location' underline='none'>
+            <Typography color='primary' variant='subtitle1'>
+              {name}
+            </Typography>
+          </Link>
         )}
+        title={(
+          <>
+            {TITLE}
+            {localname === '전체' ? '' : ` ~ ${distance}km 까지`}
+          </>
+        )}
+        buttons={buttons}
       />
       <GridList spacing={0} cols={cols} className={classes.list}>
         {cardListElements}

@@ -6,13 +6,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppyLicon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 
-import ActionBar from '../../components/action-bar';
-import getButtons from '../../components/action-bar/get-buttons';
-import ToolBar from '../../components/action-bar/types/activity-layor';
+import ToolBar from '../../components/tool-bar';
 import Field from '../../components/field';
 import InputForm from '../../components/two-number-input';
 
 import Category from './category';
+import getButtons from '../../utils/action-bar';
 
 import { filterContext } from '../../contexts/filters';
 import { SnackbarContext } from '../../contexts/snackbar';
@@ -73,11 +72,7 @@ export default () => {
 
   return (
     <>
-      <ActionBar
-        contents={
-          <ToolBar title={TITLE} buttons={buttons} />
-        }
-      />
+      <ToolBar title={TITLE} buttons={buttons} />
       <Grid
         container
         direction='column'

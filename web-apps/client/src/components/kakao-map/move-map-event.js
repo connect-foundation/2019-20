@@ -20,6 +20,7 @@ const getCurrentAddressByCoordinates = (maps, lat, lng, kakao, callback) => {
  * @param {Object} maps.geocoder gecoder
  * @param {Object} maps.map map
  * @param {Object} maps.marker marker
+ * @param {Object} maps.circle circle
  * @param {Object} maps.timer timer 디바운싱을 위함
  * @param {Function} cb 현재 위치정보를 전달받을 함수
  */
@@ -28,12 +29,10 @@ const centerChangedEvent = (SEARCH_DELAY, kakao, maps, cb) => {
   const lat = center.getLat();
   const lng = center.getLng();
 
-  // 마커 위치 현재 지도 중심 위치로 재조정
-  if (maps.marker) {
-    maps.marker.setMap(null);
-  }
-  maps.marker = new kakao.maps.Marker({ position: center });
-  maps.marker.setMap(maps.map);
+  // 마커 위치, 원 현재 지도 중심 위치로 재조정
+  maps.marker.setPosition(center);
+  maps.circle.setPosition(center);
+
   // 위치 검색
   clearTimeout(maps.timer);
   maps.timer = setTimeout(() => {

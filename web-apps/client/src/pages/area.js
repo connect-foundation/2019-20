@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, { useContext, useState, useRef, useMemo } from 'react';
+import React, { useContext, useState, useRef, useMemo, useEffect } from 'react';
 
 import {
   Grid,
@@ -11,9 +11,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import ClearIcon from '@material-ui/icons/Clear';
 
-import ActionBar from '../components/action-bar';
-import ToolBar from '../components/action-bar/types/activity-layor';
-import getButtons from '../components/action-bar/get-buttons';
+import ToolBar from '../components/tool-bar';
+import getButtons from '../utils/action-bar';
 import KakakoMap from '../components/kakao-map';
 
 import { filterContext } from '../contexts/filters';
@@ -34,7 +33,7 @@ const useStyles = makeStyles({
     bottom: 10,
     right: 10,
     zIndex: 10,
-    backgroundColor: '#f4690bcc',
+    backgroundColor: '#1db000cc',
     padding: '0.5rem 1rem',
     fontWeight: 'bold',
     color: 'white',
@@ -49,8 +48,26 @@ const AreaPage = () => {
   const mapRef = useRef(null);
 
   const [addressList, setAddressList] = useState([]);
-  const { TYPE, dispatch, filter: { distance } } = useContext(filterContext);
+  const {
+    TYPE,
+    dispatch,
+    filter: {
+      distance,
+      coordinates,
+      localname,
+    },
+  } = useContext(filterContext);
   const { setNotice } = useContext(SnackbarContext);
+  const [initialStatus] = useState({
+    coordinates: coordinates.split(','),
+    radius: distance,
+  });
+
+  useEffect(() => {
+    if (localname !== '전체') {
+      addressRef.current.value = localname;
+    }
+  }, [localname]);
 
   const clearArea = (event) => {
     event.preventDefault();
@@ -91,9 +108,6 @@ const AreaPage = () => {
         localname: name,
       };
       dispatch({ type: TYPE.COORDINATE, payload });
-      if (addressRef) {
-        addressRef.current.value = name;
-      }
     };
 
     return (
@@ -101,11 +115,13 @@ const AreaPage = () => {
         appKey={KAKAO_API}
         width='100%'
         height='65vh'
+        coordinates={initialStatus.coordinates}
         callback={updateCurrentPoisiton}
+        radius={initialStatus.radius}
         ref={mapRef}
       />
     );
-  }, [TYPE.COORDINATE, dispatch]);
+  }, [TYPE.COORDINATE, dispatch, initialStatus]);
 
   const onChangeEvent = (e, value) => {
     e.preventDefault();
@@ -115,11 +131,7 @@ const AreaPage = () => {
 
   return (
     <>
-      <ActionBar
-        contents={
-          <ToolBar title={TITLE} buttons={buttons} />
-        }
-      />
+      <ToolBar title={TITLE} buttons={buttons} />
       <Grid
         container
         direction='column'

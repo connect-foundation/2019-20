@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useHistory } from 'react-router-dom';
+
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { IconButton } from '@material-ui/core';
-import DefaultToolbar from './default';
+
+import Actionbar from './action-bar';
 
 const ActivityLayorToolbar = ({ title, buttons = [] }) => {
   const history = useHistory();
@@ -16,15 +18,18 @@ const ActivityLayorToolbar = ({ title, buttons = [] }) => {
     </IconButton>
   );
   return (
-    <>
-      <DefaultToolbar leftArea={BackButtons} title={title} buttons={buttons} />
-    </>
+    <Actionbar leftArea={BackButtons} title={title} buttons={buttons} />
   )
 };
 
 ActivityLayorToolbar.propTypes = {
   title: PropTypes.node.isRequired,
-  buttons: PropTypes.arrayOf(PropTypes.object),
+  buttons: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    href: PropTypes.string,
+    icon: PropTypes.node,
+    onClick: PropTypes.func,
+  })),
 };
 
 ActivityLayorToolbar.defaultProps = {

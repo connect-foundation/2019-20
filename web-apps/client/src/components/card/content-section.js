@@ -6,7 +6,7 @@ import { Grid } from '@material-ui/core';
 import {
   calculateHourMinuteAndSeconds,
   takeDigitFromNumber,
-} from './time-function';
+} from '../../utils/time';
 import useStyle from './style';
 
 const ContentSection = ({ title, area, date, price, chat, interests }) => {

@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { PRODUCT_API } from './config';
+import { PRODUCT_API } from '../../utils/config';
 
 const URI = PRODUCT_API;
 
