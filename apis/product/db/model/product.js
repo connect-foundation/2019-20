@@ -132,7 +132,6 @@ productSchema.plugin(mongoosastic, {
     size: 100,
     delay: 1000,
   },
-  filter: (doc) => doc.currentStatus === '비공개',
   type: '_doc',
 });
 

@@ -7,6 +7,7 @@ import db from './db';
 import indexRouter from './routes/index';
 import productRouter from './routes/product';
 import infoRouter from './routes/info';
+import secretRouter from './routes/secret';
 import etagGenerator from './routes/middleware/etag-generator';
 
 dotenv.config();
@@ -27,6 +28,7 @@ app.get('*', etagGenerator);
 app.use('/', indexRouter);
 app.use('/info', infoRouter);
 app.use('/products', productRouter);
+app.use('/secrets', secretRouter);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

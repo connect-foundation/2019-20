@@ -117,6 +117,18 @@ const addKeywordTofilter = ({ query: { keyword } }, res, next) => {
   next();
 };
 
+const removePrivatePost = (req, res, next) => {
+  const query = {
+    must_not: {
+      match: {
+        currentStatus: '비공개',
+      },
+    },
+  };
+  res.locals.filter = addFilter(res.locals.filter, query);
+  next();
+};
+
 const queryAnalysisMiddleware = [
   addKeywordTofilter,
   addFromToOption,
@@ -125,6 +137,7 @@ const queryAnalysisMiddleware = [
   addGeoDistanceFilter,
   addPriceToFilter,
   addDealStatusToFilter,
+  removePrivatePost,
   addOrderToOption,
 ];
 

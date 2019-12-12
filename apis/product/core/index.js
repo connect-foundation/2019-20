@@ -53,14 +53,12 @@ const Core = {
   /**
    * 등록된 중고상품 정보 수정
    * @description 유저 아이디와 실제 document를 등록한 사용자가 일치할 경우에만 해당 정보를 수정합니다.
-   * 상태값이 '비공개'일 경우 일래스틱 서치에서 인덱스 목록에 제거합니다.
    * @param {String} _id 기본키(Object_ID)
    * @param {String} userId 유저정보(사용자)
    * @param {Object} contents 업데이트할 내용(product 모델 참조)
    * @return {Promise<Object>} Object(Product object)
    */
   async updateProduct(_id, userId, contents) {
-    const isCurrentStatusPrivate = (document) => document.currentStatus === '비공개';
     Core.refreshLastModified();
     try {
       const product = await Product.findById(_id);
@@ -70,9 +68,6 @@ const Core = {
       Object.keys(contents).forEach((key) => {
         product[key] = contents[key];
       });
-      if (isCurrentStatusPrivate(product)) {
-        await product.unIndex();
-      }
       const result = await product.save();
       return result;
     } catch (e) {
