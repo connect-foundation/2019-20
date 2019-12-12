@@ -1,6 +1,11 @@
 html {
+  box-sizing: border-box;
   font-size: calc(10px + 3.5vmin);
 }
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
