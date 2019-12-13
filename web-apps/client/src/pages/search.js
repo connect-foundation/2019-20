@@ -1,6 +1,8 @@
 import axios from 'axios';
-import React, { useRef, useState } from 'react';
+import Inko from 'inko';
+import React, { useRef, useState, useEffect } from 'react';
 
+import { List, ListItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Test from '../components/search';
@@ -22,11 +24,15 @@ const getKeywordList = async (keyword) => {
   return response.data;
 }
 
+const isEnglishOnly = (keyword) => !(/[가-힣]/.test(keyword));
+const isKoreanOnly = (keyword) => !(/[a-zA-Z]/.test(keyword));
+
 export default () => {
   const SEARCH_DELAY = 500;
   const classes = useStyles({});
   const inputRef = useRef({ current: '' });
   const [list, setList] = useState([]);
+  const [recommend, setRecommned] = useState('');
   const timer = { current: '' };
 
   const inputKeyword = () => {
@@ -40,16 +46,44 @@ export default () => {
     }, SEARCH_DELAY);
   }
 
-  const view = list.map(({ _id, _source: { title } }) => <li key={_id}>{title}</li>);
+  useEffect(() => {
+    const keyword = inputRef.current.get();
+    let recommendKeyword = '';
+    if (list.length > 1 || keyword.length <= 1) {
+      setRecommned('');
+      return;
+    }
+    if (isEnglishOnly(keyword)) {
+      recommendKeyword = new Inko().en2ko(keyword);
+    }
+    if (isKoreanOnly(keyword)) {
+      recommendKeyword = new Inko().ko2en(keyword);
+    }
+    if (recommendKeyword.length > 1) {
+      setRecommned(recommendKeyword);
+    };
+  }, [list]);
+
+  const onTransferKeyword = () => {
+    inputRef.current.set(recommend);
+    inputKeyword();
+  };
+
+  const view = list.map(({ _id, _source: { title } }) => (
+    <ListItem divider button key={_id}>{title}</ListItem>
+  ));
 
   return (
     <>
       <div className={classes.root}>
         <ToolBar title={<Test ref={inputRef} onChange={inputKeyword} />} />
       </div>
-      <ul>
+      <List>
+        {recommend.length > 0 &&
+          (<ListItem onClick={onTransferKeyword}>{recommend}를 입력하려 하셨나요?</ListItem>)
+        }
         {view}
-      </ul>
+      </List>
     </>
   );
 };
