@@ -13,6 +13,7 @@ const insertProduct = async (contents) => {
     const result = await Product.create(contents);
     return result;
   } catch (e) {
+    console.log(e);
     throw Error(message.errorProcessing);
   }
 };
@@ -26,16 +27,20 @@ const insertProduct = async (contents) => {
  * @param {Object} sort 정렬 방법 (default { order:-1, createdAt: -1})
  * @returns {Promise<(Object|Array)>} Array(조회 결과)
  */
-const getProducts = async (page = 1, limits = 10,
-  options = {}, sort = { order: -1, createdAt: -1 }) => {
+const getProducts = async (
+  page = 1,
+  limits = 10,
+  options = {},
+  sort = { order: -1, createdAt: -1 },
+) => {
   try {
-    const result = await Product
-      .find(options || {})
+    const result = await Product.find(options || {})
       .sort(sort)
       .skip((page - 1) * limits)
       .limit(limits);
     return result;
   } catch (e) {
+    console.log(e);
     throw Error(message.errorProcessing);
   }
 };
@@ -104,10 +109,7 @@ const isNotDefaultSetSortOption = (sort) => !sort || !sort.includes((info) => 'o
 const getElasticSearchResults = async (esquery) => {
   let sort = esquery.sort || [];
   if (isNotDefaultSetSortOption(sort)) {
-    sort = [
-      ...sort,
-      { order: 'desc' },
-    ];
+    sort = [...sort, { order: 'desc' }];
   }
   const query = { ...esquery, sort };
   try {
