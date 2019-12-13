@@ -1,10 +1,8 @@
 import mongoose from 'mongoose';
 import model from '../model';
-import mock from './20191127.json';
+import mock from './20191209.json';
 
 const { product } = model;
-
-require('dotenv').config();
 
 mongoose.connect(`${process.env.MONGO_URL}`, {
   useNewUrlParser: true,

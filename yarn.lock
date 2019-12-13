@@ -4856,10 +4856,10 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-elasticsearch@16.1.1:
-  version "16.1.1"
-  resolved "https://registry.yarnpkg.com/elasticsearch/-/elasticsearch-16.1.1.tgz#1eb657e4ffe6fa2a4b3107b6f24a4118fc3e8393"
-  integrity sha512-OF2fIjcTPfq/4Tj6k4/SZr2IIlfWlBBQoy/em225mfevYFW1abN3nyXKWldXGV+eWI6LWNqB8lb3hAP4d6Rh/Q==
+elasticsearch@16.3.0:
+  version "16.3.0"
+  resolved "https://registry.yarnpkg.com/elasticsearch/-/elasticsearch-16.3.0.tgz#d8268e5dcb0d01e76b705bac8f8665cc557d5163"
+  integrity sha512-Xy4vma+YJD2I3vudoV5RIgcMFnc/69SVef/BGOtmicvgUdzYs5mLY66FIANb5KnVS60i+zsnhvf/bYJYJklBsg==
   dependencies:
     agentkeepalive "^3.4.1"
     chalk "^1.0.0"
@@ -5272,7 +5272,7 @@ esutils@^2.0.0, esutils@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
 
-etag@~1.8.1:
+etag@^1.8.1, etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
 
@@ -8491,12 +8491,11 @@ mongodb@3.3.4:
   optionalDependencies:
     saslprep "^1.0.0"
 
-mongoosastic@^4.5.1:
+"mongoosastic@https://github.com/kgpyo/mongoosastic":
   version "4.5.1"
-  resolved "https://registry.yarnpkg.com/mongoosastic/-/mongoosastic-4.5.1.tgz#bdb4fc516b1418772ceb52133901eba60bffc828"
-  integrity sha512-DZcGAj2apCTGwtzVYHQerCMrTY9X+layQ6yGIsct/JIEgRGROPJVtiivUrv0hFFU2sApmt8ZSHKvTifjM3LJrA==
+  resolved "https://github.com/kgpyo/mongoosastic#f359d02dfbb6d30825370a320c98204e52d29a80"
   dependencies:
-    elasticsearch "16.1.1"
+    elasticsearch "16.3.0"
     lodash.clonedeep "4.5.0"
 
 mongoose-legacy-pluralize@1.0.2:

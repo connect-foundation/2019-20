@@ -5,12 +5,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const { Schema } = mongoose;
-const Product = new Schema(
+const productSchema = new Schema(
   {
     title: {
       type: String,
       required: true,
       es_indexed: true,
+      es_analyzer: 'korean',
+      es_type: 'text',
     },
     userId: {
       type: String,
@@ -23,20 +25,6 @@ const Product = new Schema(
       required: true,
       es_type: 'date',
       es_indexed: true,
-    },
-    location: {
-      type: {
-        type: String,
-        enum: ['Point'],
-        required: true,
-      },
-      coordinates: {
-        type: [Number],
-        required: true,
-        es_type: 'geo_point',
-        es_indexed: true,
-        es_include_in_parent: false,
-      },
     },
     areaRange: {
       type: String,
@@ -61,6 +49,15 @@ const Product = new Schema(
         message: '10장 이하의 사진만 등록 가능합니다.',
       },
       required: true,
+    },
+    location: {
+      geo_point: {
+        type: String,
+        es_indexed: true,
+        es_type: 'geo_point',
+      },
+      lat: { type: Number },
+      lon: { type: Number },
     },
     contents: {
       type: String,
@@ -129,13 +126,14 @@ const Product = new Schema(
   },
 );
 
-Product.plugin(mongoosastic, {
+productSchema.plugin(mongoosastic, {
   hosts: [`${process.env.ELASTICSEARCH}`],
   bulk: {
     size: 100,
     delay: 1000,
   },
   filter: (doc) => doc.currentStatus === '비공개',
+  type: '_doc',
 });
 
 function customSearch(query, options) {
@@ -150,37 +148,63 @@ function customSearch(query, options) {
   });
 }
 
-Product.static('search', customSearch);
+productSchema.static('search', customSearch);
 
-const productSchema = mongoose.model('Product', Product);
+const Product = mongoose.model('Product', productSchema);
 
-productSchema.createMapping(
+Product.createMapping(
   {
-    analysis: {
-      analyzer: {
-        my_nori: {
-          tokenizer: 'johnie_nori',
-          filter: 'my_shingle',
-        },
-      },
-      tokenizer: {
-        johnie_nori: {
-          type: 'nori_tokenizer',
-          decompound_mode: 'mixed',
-        },
-      },
-      filter: {
-        my_shingle: {
-          type: 'shingle',
-          token_separator: '',
-          max_shingle_size: 3,
+    settings: {
+      index: {
+        analysis: {
+          tokenizer: {
+            nori_user_dict: {
+              type: 'nori_tokenizer',
+              decompound_mode: 'mixed',
+              user_dictionary: 'userdict_ko.txt',
+            },
+          },
+          analyzer: {
+            korean: {
+              type: 'custom',
+              tokenizer: 'nori_user_dict',
+              filter: [
+                'nori_readingform',
+                'lowercase',
+                'nori_part_of_speech_basic',
+              ],
+            },
+          },
+          filter: {
+            nori_part_of_speech_basic: {
+              type: 'nori_part_of_speech',
+              stoptags: [
+                'E',
+                'IC',
+                'J',
+                'MAG',
+                'MAJ',
+                'MM',
+                'SP',
+                'SSC',
+                'SSO',
+                'SC',
+                'SE',
+                'XPN',
+                'XSA',
+                'XSN',
+                'XSV',
+                'UNA',
+                'NA',
+                'VSV',
+              ],
+            },
+          },
         },
       },
     },
   },
-  (err, mapping) => {
-    console.log(1, mapping);
-  },
+  () => {},
 );
 
-module.exports = productSchema;
+module.exports = Product;

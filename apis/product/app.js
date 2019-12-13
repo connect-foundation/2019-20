@@ -4,9 +4,10 @@ import logger from 'morgan';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import db from './db';
-
 import indexRouter from './routes/index';
 import productRouter from './routes/product';
+import infoRouter from './routes/info';
+import etagGenerator from './routes/middleware/etag-generator';
 
 dotenv.config();
 db().catch(() => {
@@ -15,13 +16,17 @@ db().catch(() => {
 
 const app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
+app.get('*', etagGenerator);
+
 app.use('/', indexRouter);
+app.use('/info', infoRouter);
 app.use('/products', productRouter);
 
 // eslint-disable-next-line no-unused-vars

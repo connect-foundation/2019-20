@@ -6,7 +6,7 @@ import {
 } from '../../core/string-conveter';
 
 const addFilter = (filter = [], query) => {
-  if ('range' in query) {
+  if ('range' in query || 'term' in query) {
     return [...filter, query];
   }
   return [...filter, { bool: query }];
@@ -43,12 +43,26 @@ const addCategoryToFilter = ({ query: { category } }, res, next) => {
   next();
 };
 
-// TODO Elastic Search에 맞는 위키 기반 쿼리
-const addZipCodeToFilter = ({ query: { zipCode } }, res, next) => {
-  if (zipCode) {
-    res.locals.filter = {
-      ...res.locals.filter,
-      zipCode,
+const addGeoDistanceFilter = ({ query: { coordinates, distance } }, res, next) => {
+  if (coordinates && distance) {
+    const [lat, lon] = coordinates.split(',').map((xy) => +xy);
+    const query = {
+      filter: {
+        geo_distance: {
+          distance: `${distance}km`,
+          location: { lat, lon },
+        },
+      },
+    };
+    res.locals.filter = addFilter(res.locals.filter, query);
+    res.locals.script_fields = {
+      distance: {
+        script: {
+          lang: 'expression',
+          source: 'haversin(lat, lon, doc["location"].lat, doc["location"].lon)',
+          params: { lat, lon },
+        },
+      },
     };
   }
   next();
@@ -92,10 +106,13 @@ const addOrderToOption = ({ query: { sort } }, res, next) => {
   next();
 };
 
-// TODO 키워드 검색(토크나이저...)
+// TODO 키워드 검색
 const addKeywordTofilter = ({ query: { keyword } }, res, next) => {
   if (keyword) {
-    res.locals.filter = { ...res.locals.filter, title: { $regex: new RegExp(keyword) } };
+    const query = {
+      term: { title: keyword },
+    };
+    res.locals.filter = addFilter(res.locals.filter, query);
   }
   next();
 };
@@ -105,7 +122,7 @@ const queryAnalysisMiddleware = [
   addFromToOption,
   addNumberOfListToOption,
   addCategoryToFilter,
-  addZipCodeToFilter,
+  addGeoDistanceFilter,
   addPriceToFilter,
   addDealStatusToFilter,
   addOrderToOption,
