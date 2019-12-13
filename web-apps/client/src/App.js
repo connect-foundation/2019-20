@@ -11,6 +11,7 @@ import Home from './pages/main';
 import Filters from './pages/filters';
 import Location from './pages/area';
 import NewProduct from './pages/newProduct';
+import Test from './pages/search';
 
 import { FilterProvider } from './contexts/filters';
 import { SnackbarProvider } from './contexts/snackbar';
@@ -41,6 +42,7 @@ export default () => {
                 <Route exact path='/' component={Home} />
                 <Route exact path='/category' component={Filters} />
                 <Route exact path='/location' component={Location} />
+                <Route exact path='/search' component={Test} />
               </ThemeProvider>
               <ThemeProvider theme={muiTheme}>
                 <Route exact path='/chat' component={TmpChat} />

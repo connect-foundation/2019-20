@@ -40,7 +40,7 @@ export default () => {
     }, SEARCH_DELAY);
   }
 
-  const view = list.map(({ _id, _source: { _title } }) => <li key={_id}>{_title}</li>);
+  const view = list.map(({ _id, _source: { title } }) => <li key={_id}>{title}</li>);
 
   return (
     <>

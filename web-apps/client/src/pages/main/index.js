@@ -43,7 +43,7 @@ const Main = () => {
   const [settings, setSettings] = useState({ from: 0, limits: 10 });
 
   const buttons = [
-    getButtons('검색', '/', <SearchIcon />),
+    getButtons('검색', '/search', <SearchIcon />),
     getButtons('필터', '/category', <FilterIcon />),
     getButtons('알림', '/', <NotifyIcon />)
   ];
