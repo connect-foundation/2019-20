@@ -6,7 +6,7 @@ import {
 } from '../../core/string-conveter';
 
 const addFilter = (filter = [], query) => {
-  if ('range' in query || 'term' in query) {
+  if ('range' in query || 'term' in query || 'match' in query) {
     return [...filter, query];
   }
   return [...filter, { bool: query }];
@@ -110,7 +110,12 @@ const addOrderToOption = ({ query: { sort } }, res, next) => {
 const addKeywordTofilter = ({ query: { keyword } }, res, next) => {
   if (keyword) {
     const query = {
-      term: { title: keyword },
+      match: {
+        title: {
+          query: keyword,
+          fuzziness: 'auto',
+        },
+      },
     };
     res.locals.filter = addFilter(res.locals.filter, query);
   }
