@@ -15,7 +15,7 @@ const Wrapper = styled.div`
     height: 100vmax;
   }
 `;
-const Enterance = () => {
+const Entrance = () => {
   return (
     <Wrapper>
       <Logo />
@@ -25,4 +25,4 @@ const Enterance = () => {
   );
 };
 
-export default Enterance;
+export default Entrance;
