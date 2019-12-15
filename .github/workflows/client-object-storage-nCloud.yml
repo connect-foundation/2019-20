@@ -18,11 +18,11 @@ jobs:
     - name: react-build 
       run: |
         path=$(echo ${GITHUB_BASE_REF%-web/master})
-        cd ./webapps/$path
+        cd ./web-apps/$path
         yarn
         yarn build
     - name: react-build-dir
-      run: echo "##[set-output name=dir]./webapps/$(echo $GITHUB_BASE_REF%-web/master})/build/"
+      run: echo "##[set-output name=dir]./web-apps/$(echo $GITHUB_BASE_REF%-web/master})/build/"
       id: Dir
     - uses: jakejarvis/s3-sync-action@master
       with:
