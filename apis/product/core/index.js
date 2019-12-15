@@ -113,7 +113,7 @@ const Core = {
     if (isNotDefaultSetSortOption(sort)) {
       sort = [
         ...sort,
-        { order: 'desc' },
+        { _score: 'desc', order: 'desc' },
       ];
     }
     const query = { _source: true, ...esquery, sort };
