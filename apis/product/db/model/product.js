@@ -1,10 +1,15 @@
 import mongoose from 'mongoose';
 import mongoosastic from 'mongoosastic';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import Keyword from './keyword';
+import promiseSearch from '../common/statics';
+import { mongoosasticSettings } from '../../config';
 
 const { Schema } = mongoose;
+
+const KEYWORD_ANALYSIS_CYCLE = 5000;
+
+const documentsToAnalyze = { title: [] };
+
 const productSchema = new Schema({
   title: {
     type: String,
@@ -130,31 +135,18 @@ const productSchema = new Schema({
   timestamps: { createdAt: true, updatedAt: true },
 });
 
+productSchema.plugin(mongoosastic, mongoosasticSettings);
 
-productSchema.plugin(mongoosastic, {
-  hosts: [
-    `${process.env.ELASTICSEARCH}`,
-  ],
-  bulk: {
-    size: 100,
-    delay: 1000,
-  },
-  type: '_doc',
+productSchema.static('search', promiseSearch.bind(productSchema));
+
+const pushKeywordForTokenization = (doc) => {
+  documentsToAnalyze.title = [...documentsToAnalyze.title, doc.title];
+};
+
+productSchema.post('save', pushKeywordForTokenization);
+productSchema.post('insertMany', (error, docs) => {
+  docs.forEach(pushKeywordForTokenization);
 });
-
-function customSearch(query, options) {
-  return new Promise((resolve, reject) => {
-    this.esSearch(query, options, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
-}
-
-productSchema.static('search', customSearch);
 
 const Product = mongoose.model('Product', productSchema);
 
@@ -197,5 +189,33 @@ Product.createMapping({
     },
   },
 }, () => { });
+
+const timer = setInterval(() => {
+  const title = documentsToAnalyze.title.join(' ');
+  documentsToAnalyze.title = [];
+  if (!title.length) {
+    if (process.env.NODE_ENV === 'development') {
+      clearInterval(timer);
+      console.log('finish');
+    }
+    return;
+  }
+  const insertKeyword = (err, { tokens }) => {
+    const words = tokens
+      .filter(({ token }) => token.length >= 2)
+      .map(({ token }) => ({ word: token }));
+    const wordSet = new Set();
+    words.forEach((word) => (wordSet.add(word)));
+    wordSet.forEach(async (word) => {
+      await Keyword.findOneAndUpdate(word, word, { upsert: true });
+    });
+  };
+  Product.esClient.indices.analyze({
+    body: {
+      text: title,
+      analyzer: 'nori',
+    },
+  }, insertKeyword);
+}, KEYWORD_ANALYSIS_CYCLE);
 
 module.exports = Product;

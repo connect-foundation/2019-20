@@ -15,7 +15,7 @@
     "build": "babel ./ -d build --copy-files '*.json'",
     "start": "node ./build/bin/www.js",
     "lint:fix": "eslint . --fix",
-    "seed": "babel-node ./db/seeds/product.js"
+    "seed": "NODE_ENV=development babel-node ./db/seeds/product.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
