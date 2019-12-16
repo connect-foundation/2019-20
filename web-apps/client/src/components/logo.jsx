@@ -8,11 +8,12 @@ const useStyles = makeStyles((theme) => ({
     height: 180,
   },
   logo: {
-    width: '5rem',
-    marginBottom: '2rem',
+    width: '8rem',
+    marginBottom: '3rem',
   },
   wrapper: {
-    width: 100 + theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
 

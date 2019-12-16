@@ -8,17 +8,19 @@ import InfoIcon from '@material-ui/icons/PersonOutlineOutlined';
 
 const Navigator = () => {
   const makeMenuInfo = (uri, icon, label) => ({uri, icon, label});
+
   const bottomMenu = [
-    makeMenuInfo('/main', <MainIcon />, 'main'),
+    makeMenuInfo('/service/main', <MainIcon />, 'main'),
     makeMenuInfo('/write', <WriteIcon />, 'write'),
-    makeMenuInfo('/chat', <ChatIcon />, 'chat'),
-    makeMenuInfo('/info', <InfoIcon />, 'icon'),
+    makeMenuInfo('/service/chat', <ChatIcon />, 'chat'),
+    makeMenuInfo('/service/info', <InfoIcon />, 'icon'),
   ];
   const menu = bottomMenu.map((info) => (
     <Link to={info.uri} key={info.label}>
       <IconButton aria-label={info.label}>{info.icon}</IconButton>
     </Link>
   ));
+
   return (
     <AppBar position='fixed' color='inherit' style={{bottom: 0, top: 'auto'}}>
       <Toolbar>

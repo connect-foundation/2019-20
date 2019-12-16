@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   skipButton: {
-    width: '10rem',
+    width: '12rem',
     color: '#1db000',
     background: '#98FB98',
   },
@@ -24,7 +24,7 @@ const SkipLogInButton = () => {
 
   return (
     <div className={classes.root}>
-      <Link to='/main' className={classes.link}>
+      <Link to='/service/main' className={classes.link}>
         <Button className={classes.skipButton} variant='contained'>
           구경만 할래요
         </Button>

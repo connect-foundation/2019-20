@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import {naverLoginURI} from '../assets/uris';
 
 const NaverButton = styled.img`
-  width: 10rem;
+  width: 12rem;
 `;
 const NaverLogInButton = () => {
   return (

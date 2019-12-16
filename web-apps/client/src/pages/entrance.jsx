@@ -11,8 +11,10 @@ const Wrapper = styled.div`
   justify-content: center;
 
   height: 100vmin;
+  width: 100vmax;
   @media all and (orientation: portrait) {
     height: 100vmax;
+    width: 100vmin;
   }
 `;
 const Entrance = () => {
