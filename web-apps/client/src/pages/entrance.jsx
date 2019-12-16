@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useEffect, useContext} from 'react';
+import {Redirect} from 'react-router-dom';
 import styled from 'styled-components';
 import NaverLogInButton from '../components/naverLogInButton';
 import SkipLogInButton from '../components/skipLogInButton';
 import Logo from '../components/logo';
+import {UserContext} from '../contexts/user';
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,11 +20,17 @@ const Wrapper = styled.div`
   }
 `;
 const Entrance = () => {
+  const {user} = useContext(UserContext);
+
+  const isLogInned = () => {
+    return !!(user && user.id && user.id >= 0);
+  };
   return (
     <Wrapper>
       <Logo />
       <NaverLogInButton />
       <SkipLogInButton />
+      {isLogInned() && <Redirect to='/service/main' />}
     </Wrapper>
   );
 };
