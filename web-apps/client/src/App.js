@@ -12,6 +12,7 @@ import Entrance from './pages/entrance';
 import Filters from './pages/filters';
 import Location from './pages/area';
 import NewProduct from './pages/newProduct';
+import SetMyArea from './pages/setMyArea';
 
 import {FilterProvider} from './contexts/filters';
 import {SnackbarProvider} from './contexts/snackbar';
@@ -26,33 +27,41 @@ import './style.css';
 
 const useStyles = makeStyles({
   root: {
-    margin: '0 0 5rem 0',
+    margin: '0',
   },
 });
 
 export default () => {
   const classes = useStyles({});
+
   return (
     <SnackbarProvider>
       <FilterProvider>
         <Router>
           <Switch>
-            <Route exact path='/' component={Entrance} />
             <Grid container className={classes.root}>
-              <ThemeProvider theme={theme}>
-                <Route exact path='/main' component={Main} />
-                <Route exact path='/category' component={Filters} />
-                <Route exact path='/location' component={Location} />
-              </ThemeProvider>
-              <ThemeProvider theme={muiTheme}>
-                <Route exact path='/chat' component={TmpChat} />
-                <Route path='/chat/room/:id' Component={ChatRoom} />
-              </ThemeProvider>
+              <Route exact path='/' component={Entrance} />
+              <Route exact path='/enrollLocation' component={SetMyArea} />
               <Route exact path='/write' component={NewProduct} />
-              <ThemeProvider theme={theme}>
-                <Navigator />
-                <NoticeBar />
-              </ThemeProvider>
+              <Route path='/service'>
+                <ThemeProvider theme={theme}>
+                  <Route exact path='/service/main' component={Main} />
+                  <Route exact path='/service/category' component={Filters} />
+                  <Route exact path='/service/location' component={Location} />
+                </ThemeProvider>
+                <ThemeProvider theme={muiTheme}>
+                  <Route exact path='/service/chat' component={TmpChat} />
+                  <Route
+                    exact
+                    path='/service/chat/room/:id'
+                    Component={ChatRoom}
+                  />
+                </ThemeProvider>
+                <ThemeProvider theme={theme}>
+                  <Navigator />
+                  <NoticeBar />
+                </ThemeProvider>
+              </Route>
             </Grid>
           </Switch>
         </Router>
