@@ -4,6 +4,7 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {ProductContext} from '../contexts/productStore';
+import {AlertMessageContext} from '../contexts/alertMessage';
 
 import useImageUpload from '../hooks/useImageUpload';
 
@@ -15,7 +16,8 @@ const AddPicture = () => {
   const fileMaximumUploadErrorMessage = '사진은 10장까지만 입력 가능합니다.';
   const [file, setFile] = useState([]);
   const inputRef = useRef(false);
-  const {images, setImages, setAlertMessage} = useContext(ProductContext);
+  const {images, setImages} = useContext(ProductContext);
+  const {setAlertMessage} = useContext(AlertMessageContext);
 
   useImageUpload(images, file, inputRef, setImages, setAlertMessage);
 

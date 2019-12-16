@@ -3,7 +3,6 @@ import Header from '../components/header';
 import ProductForm from '../components/productForm';
 import ProductStore from '../contexts/productStore';
 import {makeStyles} from '@material-ui/core/styles';
-import AlertDialog from '../components/alertDialog';
 
 const useStyles = makeStyles(() => ({
   productForm: {
@@ -50,7 +49,6 @@ const NewProduct = () => {
     <ProductStore>
       <Header />
       <ProductForm className={classes.productForm} />
-      <AlertDialog />
     </ProductStore>
   );
 };

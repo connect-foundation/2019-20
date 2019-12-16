@@ -1,9 +1,12 @@
-import React, {useState, useRef, useMemo} from 'react';
+import React, {useState, useRef, useMemo, useContext} from 'react';
 
 import {Link} from 'react-router-dom';
 
 import {ListItem, TextField, List, Button} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
+
+import {AlertMessageContext} from '../contexts/alertMessage';
+import {UserContext} from '../contexts/user';
 
 import ToolBar from '../components/tool-bar';
 import KakakoMap from '../components/kakao-map';
@@ -37,6 +40,9 @@ const AreaPage = () => {
   const addressRef = useRef(null);
   const mapRef = useRef(null);
 
+  const {setUser} = useContext(UserContext);
+  const {setAlertMessage} = useContext(AlertMessageContext);
+
   const [addressList, setAddressList] = useState([]);
 
   const [location, setLocation] = useState({
@@ -48,12 +54,12 @@ const AreaPage = () => {
     const [latitude, longitude] = location.coordinates;
     try {
       const user = await addUser({latitude, longitude});
-      //setUser(user);
+      setUser(user);
     } catch (err) {
       if (err.message === 400) {
-        alert('이미 가입한 회원입니다. 다시 로그인 해 주세요.');
+        setAlertMessage('이미 가입한 회원입니다. 다시 로그인 해 주세요.');
       } else if (err.message === 500) {
-        alert('서버 에러입니다. 잠시 후 다시 시도 해 주세요.');
+        setAlertMessage('서버 에러입니다. 잠시 후 다시 시도 해 주세요.');
       }
     }
   };

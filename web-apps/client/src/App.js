@@ -16,6 +16,8 @@ import SetMyArea from './pages/setMyArea';
 
 import {FilterProvider} from './contexts/filters';
 import {SnackbarProvider} from './contexts/snackbar';
+import AlertMessageStore from './contexts/alertMessage';
+import UserStore from './contexts/user';
 
 import Navigator from './pages/navigator';
 import NoticeBar from './pages/notice';
@@ -24,6 +26,7 @@ import muiTheme from './theme/muiTheme';
 import theme from './theme';
 
 import './style.css';
+import AlertDialog from './components/alertDialog';
 
 const useStyles = makeStyles({
   root: {
@@ -35,37 +38,50 @@ export default () => {
   const classes = useStyles({});
 
   return (
-    <SnackbarProvider>
-      <FilterProvider>
-        <Router>
-          <Switch>
-            <Grid container className={classes.root}>
-              <Route exact path='/' component={Entrance} />
-              <Route exact path='/enrollLocation' component={SetMyArea} />
-              <Route exact path='/write' component={NewProduct} />
-              <Route path='/service'>
-                <ThemeProvider theme={theme}>
-                  <Route exact path='/service/main' component={Main} />
-                  <Route exact path='/service/category' component={Filters} />
-                  <Route exact path='/service/location' component={Location} />
-                </ThemeProvider>
-                <ThemeProvider theme={muiTheme}>
-                  <Route exact path='/service/chat' component={TmpChat} />
-                  <Route
-                    exact
-                    path='/service/chat/room/:id'
-                    Component={ChatRoom}
-                  />
-                </ThemeProvider>
-                <ThemeProvider theme={theme}>
-                  <Navigator />
-                  <NoticeBar />
-                </ThemeProvider>
-              </Route>
-            </Grid>
-          </Switch>
-        </Router>
-      </FilterProvider>
-    </SnackbarProvider>
+    <AlertMessageStore>
+      <UserStore>
+        <SnackbarProvider>
+          <FilterProvider>
+            <Router>
+              <Switch>
+                <Grid container className={classes.root}>
+                  <Route exact path='/' component={Entrance} />
+                  <Route exact path='/enrollLocation' component={SetMyArea} />
+                  <Route exact path='/write' component={NewProduct} />
+                  <Route path='/service'>
+                    <ThemeProvider theme={theme}>
+                      <Route exact path='/service/main' component={Main} />
+                      <Route
+                        exact
+                        path='/service/category'
+                        component={Filters}
+                      />
+                      <Route
+                        exact
+                        path='/service/location'
+                        component={Location}
+                      />
+                    </ThemeProvider>
+                    <ThemeProvider theme={muiTheme}>
+                      <Route exact path='/service/chat' component={TmpChat} />
+                      <Route
+                        exact
+                        path='/service/chat/room/:id'
+                        Component={ChatRoom}
+                      />
+                    </ThemeProvider>
+                    <ThemeProvider theme={theme}>
+                      <Navigator />
+                      <NoticeBar />
+                    </ThemeProvider>
+                  </Route>
+                  <AlertDialog />
+                </Grid>
+              </Switch>
+            </Router>
+          </FilterProvider>
+        </SnackbarProvider>
+      </UserStore>
+    </AlertMessageStore>
   );
 };

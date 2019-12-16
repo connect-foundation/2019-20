@@ -5,7 +5,10 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import useFetch from '../hooks/useFetch';
+
 import {ProductContext} from '../contexts/productStore';
+import {AlertMessageContext} from '../contexts/alertMessage';
+import {UserContext} from '../contexts/user';
 
 import Drawer from './drawer';
 import DealType from './dealType';
@@ -65,7 +68,9 @@ const ProductForm = () => {
   const [negotiable, setNegotiable] = useState(false);
   const [contents, setContents] = useState('');
 
-  const {setAlertMessage, user, images} = useContext(ProductContext);
+  const {images} = useContext(ProductContext);
+  const {user} = useContext(UserContext);
+  const {setAlertMessage} = useContext(AlertMessageContext);
 
   const categoryAPI = 'category';
   const statusTypeListAPI = 'statusType';
