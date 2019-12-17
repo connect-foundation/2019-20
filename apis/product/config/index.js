@@ -1,4 +1,4 @@
-export const mongoosasticSettings = {
+export const mongoosasticSettings = (process.env.NODE_ENV === 'test') ? {} : {
   hosts: process.env.ELASTICSEARCH,
   port: process.env.ESPORT,
   bulk: {
