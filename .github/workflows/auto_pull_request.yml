@@ -1,12 +1,10 @@
 name: pull_request
-
 on:
   pull_request: 
     branches:
       - '?*\-api\/master'
     types:
       closed
-
 jobs:
   pull_request:
     runs-on: ubuntu-latest
