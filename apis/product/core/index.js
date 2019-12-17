@@ -47,7 +47,6 @@ const Core = {
         .sort(sort)
         .skip((page - 1) * limits)
         .limit(limits);
-      console.log(result);
       return result;
     } catch (e) {
       throw Error(message.errorProcessing);
