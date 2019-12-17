@@ -1,6 +1,11 @@
 name: pull_request
 
-on: [closed]
+on:
+  pull_request: 
+    branches:
+      - '?*\-api\/master'
+    types:
+      closed
 
 jobs:
   pull_request:
@@ -11,3 +16,4 @@ jobs:
         uses: peter-evans/create-pull-request@v1
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
+          branch: "master"
