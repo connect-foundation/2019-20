@@ -1,12 +1,13 @@
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import uuid from 'uuid/v5';
 import app from '../app';
 
 dotenv.config();
 
 const tester = {
-  id: 2,
+  id: uuid('test@jest.com', uuid.DNS),
   name: 'tester',
   email: 'test@jest.com',
   authority: '손님',
@@ -94,7 +95,7 @@ it('add user fail test', () => new Promise((resolve) => {
   );
 }));
 it('get seller info test', () => new Promise((resolve) => {
-  const sellerID = 52;
+  const sellerID = '3cad91fe-480c-557b-80af-97692131763c';
   request(app)
     .get(`/seller/${sellerID}`)
     .then((res) => resolve(res));

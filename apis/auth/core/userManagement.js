@@ -1,3 +1,4 @@
+import uuid from 'uuid/v5';
 import db from '../models';
 import msg from '../assets/errorMessages';
 
@@ -21,6 +22,7 @@ const addUser = async (info) => {
       authority: '손님',
       reputation: 0,
       numberOfRater: 0,
+      id: uuid(info.email, uuid.DNS),
       ...info,
     };
     const newUser = await User.create(newUserInfo);

@@ -1,9 +1,12 @@
+const uuid = require('uuid/v5');
+
 module.exports = {
   // eslint-disable-next-line no-unused-vars
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert(
     'Users',
     [
       {
+        id: uuid('jae3132@naver.com', uuid.DNS),
         name: '여재환',
         email: 'jae3132@naver.com',
         authority: '황제',

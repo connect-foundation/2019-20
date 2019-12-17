@@ -25,7 +25,7 @@ const getUserInfoByJWT = (req, res, next) => {
     numberOfRater,
   } = info;
   if (
-    id
+    id.length
     && name.length
     && email.length
     && authority.length
@@ -78,34 +78,30 @@ const newAccountLogIn = (req, res) => {
 };
 
 const login = async (req, res) => {
-  const {
-    id,
-    name,
-    email,
-    authority,
-    latitude,
-    longitude,
-    reputation,
-    numberOfRater,
-  } = res.locals;
-  if (id) {
-    const token = jwt.sign(
-      {
-        id,
-        name,
-        email,
-        authority,
-        latitude,
-        longitude,
-        reputation,
-        numberOfRater,
-      },
-      process.env.JWT_PRIVATE_KEY,
-    );
+  const fields = [
+    'id',
+    'name',
+    'email',
+    'authority',
+    'latitude',
+    'longitude',
+    'reputation',
+    'numberOfRater',
+  ];
+
+  const info = Object.keys(res.locals)
+    .filter((key) => fields.includes(key))
+    .reduce((acc, cur) => Object.assign(acc, { [cur]: res.locals[cur] }), {});
+
+  if (info.id && info.id.length) {
+    const token = jwt.sign(info, process.env.JWT_PRIVATE_KEY);
     res.cookie('jwt', token, { httpOnly: true });
     res.redirect(uri.clientMainPage);
   } else {
-    const token = jwt.sign({ name, email }, process.env.JWT_PRIVATE_KEY);
+    const token = jwt.sign(
+      { name: info.name, email: info.email },
+      process.env.JWT_PRIVATE_KEY,
+    );
     res.cookie('jwt', token, { httpOnly: true });
     res.redirect(uri.enrollLocationPage);
   }
