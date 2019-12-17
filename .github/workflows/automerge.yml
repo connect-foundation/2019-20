@@ -4,7 +4,7 @@ on:
     branches:
       - '?*\-api\/master'
     types:
-      - closed
+      - merged
 jobs:
   automerge:
     runs-on: ubuntu-latest
@@ -13,3 +13,5 @@ jobs:
         uses: "pascalgn/automerge-action@2c8e667a3386187418587517e5bfe33470d19b5b"
         env:
           GITHUB_TOKEN: "${{ secrets.ACCESS_TOKEN }}"
+          MERGE_COMMIT_MESSAGE: "auto merge from api/master"
+          MERGE_LABELS: ""
