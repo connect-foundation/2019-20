@@ -3,6 +3,7 @@ import message from './message';
 import CODE from './code';
 
 const Product = model.product;
+const Keyword = model.keyword;
 
 const Core = {
   lastModifed: Date.now(),
@@ -97,6 +98,37 @@ const Core = {
   },
 
   /**
+   * 키워드 검색
+   * @description 입력한 검색어와 유사환 결과를 포함하여 리스트를 반환합니다.
+   * 기본값은 2글자는 최대 1글자 까지 오차를 허용하며, 그 이상은 2글자입니다.
+   * @param {String} keyword 추천받을 검색어
+   * @param {Number|String} fuzzy 유사어 빈도
+   */
+  async getRecommandKeyword(keyword, fuzzy) {
+    try {
+      const fuzziness = fuzzy || Core.getFuzzinessDefault(keyword);
+      const list = await Keyword.search({
+        query: {
+          match: {
+            word: { query: keyword, fuzziness },
+          },
+        },
+      }, {});
+      return list;
+    } catch (e) {
+      console.log(e);
+      throw new Error(message.errorProcessingElasticSearch);
+    }
+  },
+
+  getFuzzinessDefault(keyword) {
+    if (keyword.length === 2) {
+      return 1;
+    }
+    return 'auto';
+  },
+
+  /**
    * 일래스틱 서치 검색
    * @description 일래스틱 서치 검색결과를 조회합니다.
    * @param {Object.<from, size, filter, query, sort, script_fields>}
@@ -138,4 +170,5 @@ export const {
   getProductSchemaByKey,
   getElasticSearchResults,
   getLastModified,
+  getRecommandKeyword,
 } = Core;
