@@ -21,16 +21,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProductFooter = () => {
+const ProductFooter = ({data, addInterest, minusInterest}) => {
   const classes = useStyles();
   return (
     <div className={classes.footerWrapper}>
       <Grid container className={classes.root}>
         <Grid item xs={3}>
-          <Interest />
+          <Interest addInterest={addInterest} minusInterest={minusInterest} />
         </Grid>
         <Grid item xs={4}>
-          <PriceInformation />
+          <PriceInformation data={data} />
         </Grid>
         <Grid item xs={5}>
           <ChatLink />

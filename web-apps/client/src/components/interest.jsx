@@ -26,23 +26,28 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Interest = () => {
+const Interest = ({addInterest, minusInterest}) => {
   const classes = useStyles();
-  const [click, setClick] = useState(false);
+  const [clicked, setClicked] = useState(false);
   const [heart, setHeart] = useState(null);
   const onInterest = () => {
-    setClick(!click);
+    setClicked(!clicked);
+    if (clicked) {
+      minusInterest();
+    } else {
+      addInterest();
+    }
   };
 
   useEffect(() => {
-    if (click) {
+    if (clicked) {
       setHeart(<FavoriteIcon fontSize='large' className={classes.like} />);
     } else {
       setHeart(
         <FavoriteBorderIcon fontSize='large' className={classes.unlike} />,
       );
     }
-  }, [click]);
+  }, [clicked]);
   return (
     <div className={classes.interestWrapper}>
       <div className={classes.interest} onClick={onInterest}>

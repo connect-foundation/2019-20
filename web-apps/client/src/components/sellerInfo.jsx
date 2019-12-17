@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
 import SentimentSatisfiedAltIcon from '@material-ui/icons/SentimentSatisfiedAlt';
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+
+import {getReputation, getDistanceFromCurrentLocation} from '../utils/index';
 
 const Information = styled.div`
   margin: 1rem;
@@ -25,21 +27,24 @@ const NormalPerson = styled.div`
 const Jerk = styled.div`
   color: red;
 `;
-const SellerInfo = () => {
-  const userID = '1';
-  const {name, reputation, numberOfRater, latitude, longitude} = {
-    name: '여재환',
-    reputation: 8,
-    numberOfRater: 10,
-    latitude: 123.5678,
-    longitude: 76.456,
-  }; //getUserInfo(userID)
+const SellerInfo = ({seller, location}) => {
+  const [name, setName] = useState('');
+  const [reputation, setReputation] = useState(5);
+  const [distance, setDistance] = useState(0);
 
-  const getDistanceFromCurrentLocation = (latitude, longitude) => {
-    return '2.34km';
-  };
-
-  const distance = getDistanceFromCurrentLocation(latitude, longitude);
+  useEffect(() => {
+    setName(seller && seller.name);
+    setReputation(
+      seller && getReputation(seller.reputation, seller.numberOfRater),
+    );
+    getDistanceFromCurrentLocation(location)
+      .then((distance) => {
+        setDistance(distance);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, [seller, location]);
 
   const resultOfReputation = (reputation) => {
     if (reputation === 10) {
@@ -71,7 +76,13 @@ const SellerInfo = () => {
     <Information>
       <div>
         <div>{name}</div>
-        <div style={{fontSize: '0.8rem'}}>{distance} 떨어져 있음</div>
+        <div
+          style={{
+            fontSize: '0.8rem',
+          }}
+        >
+          {distance}km 떨어져 있음
+        </div>
       </div>
       <div
         style={{
@@ -83,7 +94,12 @@ const SellerInfo = () => {
       >
         <div>
           <div>{reputation}점</div>
-          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
             {resultOfReputation(reputation)}
           </div>
         </div>

@@ -7,10 +7,10 @@ const Header = styled.div`
   position: relative;
 `;
 
-const ProductProfile = () => {
+const ProductProfile = ({images}) => {
   return (
     <Header>
-      <Carousel />
+      <Carousel images={images}/>
       <HeaderInProduct />
     </Header>
   );

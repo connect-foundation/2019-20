@@ -2,29 +2,24 @@ import React, {useState} from 'react';
 import MyCarousel from 'nuka-carousel';
 import 'mutationobserver-shim';
 
-
-const Carousel = () => {
+const Carousel = ({images}) => {
   const [slideIndex, setSlideIndex] = useState(0);
 
-  const images = [
-    'http://ljwnqpbxeqxy3089560.cdn.ntruss.com/1575986477948',
-    'http://ljwnqpbxeqxy3089560.cdn.ntruss.com/1575986483742',
-    'http://ljwnqpbxeqxy3089560.cdn.ntruss.com/1575986483810',
-  ];
-
-  const imageList = images.map((image, index) => (
-    <a href={image} key={index}>
-      <div
-        style={{
-          backgroundImage: `url(${image})`,
-          height: '250px',
-          width: '100%',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      />
-    </a>
-  ));
+  const imageList =
+    images &&
+    images.map((image, index) => (
+      <a href={image} key={index}>
+        <div
+          style={{
+            backgroundImage: `url(${image})`,
+            height: '250px',
+            width: '100%',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+      </a>
+    ));
 
   const imageSize = 100;
   return (
@@ -34,7 +29,7 @@ const Carousel = () => {
       cellAlign='center'
       slideIndex={slideIndex}
       afterSlide={(slideIndex) => setSlideIndex(slideIndex)}
-      withoutControls
+      withoutControls={false}
     >
       {imageList}
     </MyCarousel>
