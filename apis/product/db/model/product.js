@@ -191,8 +191,8 @@ Product.createMapping({
 }, () => { });
 
 const timer = setInterval(() => {
-  const title = documentsToAnalyze.title.join(' ');
-  documentsToAnalyze.title = [];
+  const title = documentsToAnalyze.title.slice(0, 100).join(' ');
+  documentsToAnalyze.title = documentsToAnalyze.title.slice(100);
   if (!title.length) {
     if (process.env.NODE_ENV === 'development') {
       clearInterval(timer);
@@ -201,6 +201,9 @@ const timer = setInterval(() => {
     return;
   }
   const insertKeyword = (err, { tokens }) => {
+    if (err) {
+      return;
+    }
     const words = tokens
       .filter(({ token }) => token.length >= 2)
       .map(({ token }) => ({ word: token }));
@@ -211,9 +214,10 @@ const timer = setInterval(() => {
     });
   };
   Product.esClient.indices.analyze({
+    index: 'products',
     body: {
       text: title,
-      analyzer: 'nori',
+      analyzer: 'korean',
     },
   }, insertKeyword);
 }, KEYWORD_ANALYSIS_CYCLE);

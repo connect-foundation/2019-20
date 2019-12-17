@@ -11,7 +11,7 @@ export default {
   ) => {
     try {
       const list = await getRecommandKeyword(keyword, fuzzy);
-      res.json(list);
+      res.json(list.hits.hits);
     } catch (e) {
       next({ status: 500, message: e.toString() });
     }
