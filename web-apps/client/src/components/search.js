@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   }
 });
 
-const Search = ({ onChange }, ref) => {
+const Search = ({ onChange, onKeyDown }, ref) => {
   const inputRef = useRef(null);
   const classes = useStyles({});
 
@@ -53,6 +53,7 @@ const Search = ({ onChange }, ref) => {
         placeholder='검색어를 입력하세요.'
         className={classes.input}
         onChange={onChange}
+        onKeyDown={onKeyDown}
       />
       <ClearIcon onClick={onClearInput} className={classes.icon} />
     </Grid>
@@ -61,10 +62,12 @@ const Search = ({ onChange }, ref) => {
 
 Search.propTypes = {
   onChange: PropTypes.func,
+  onKeyDown: PropTypes.func,
 };
 
 Search.defaultProps = {
   onChange: () => { },
+  onKeyDown: () => { },
 }
 
 export default forwardRef(Search);
