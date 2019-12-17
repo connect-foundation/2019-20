@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import uuid from 'uuid/v5';
 import app from '../app';
+import user from '../core/userManagement';
 
 dotenv.config();
 
@@ -80,12 +81,13 @@ it('add user fail test', () => new Promise((resolve) => {
     email: `${new Date().getMilliseconds()
         + new Date().getMilliseconds()}tester@jest.com`,
   };
+  const newUserLocation = { latitude: 123.456, longitude: 76.54 };
   const key = 'invalid wrong key';
   const token = jwt.sign(newUser, key);
 
   request(app)
     .post('/addUser')
-    .send({ latitude: 123.456, longitude: 76.54 })
+    .send(newUserLocation)
     .set('Cookie', [`jwt=${token}`])
     .then((res) => resolve(res));
 }).then((res) => {
@@ -103,3 +105,14 @@ it('get seller info test', () => new Promise((resolve) => {
   expect(res.status).toBe(200);
   expect(res.headers['content-type']).toBe('application/json; charset=utf-8');
 }));
+
+it('check exist member fail test', async () => {
+  const info = { name: 'foo', email: 'foo@jest.com' };
+  let result;
+  try {
+    result = await user.checkExistMember(info);
+  } catch (e) {
+    result = e;
+  }
+  expect(JSON.stringify(result)).toBe(JSON.stringify(info));
+});

@@ -2,8 +2,9 @@ import uuid from 'uuid/v5';
 import db from '../models';
 import msg from '../assets/errorMessages';
 
+const { User } = db;
+
 const findUserById = async (id) => {
-  const { User } = db;
   try {
     const { dataValues } = await User.findOne({
       where: { id },
@@ -16,7 +17,6 @@ const findUserById = async (id) => {
 };
 
 const addUser = async (info) => {
-  const { User } = db;
   try {
     const newUserInfo = {
       authority: '손님',
@@ -33,29 +33,25 @@ const addUser = async (info) => {
 };
 
 const checkExistMember = async ({ name, email }) => {
-  const { User } = db;
-
   try {
     const member = await User.findOne({ where: { email } });
     if (member !== null) {
-      const {
-        id,
-        authority,
-        latitude,
-        longitude,
-        reputation,
-        numberOfRater,
-      } = member.dataValues;
-      return {
-        id,
-        name,
-        email,
-        authority,
-        latitude,
-        longitude,
-        reputation,
-        numberOfRater,
-      };
+      const result = member.dataValues;
+      const fields = [
+        'id',
+        'name',
+        'email',
+        'authority',
+        'latitude',
+        'longitude',
+        'reputation',
+        'numberOfRater',
+      ];
+      const info = Object.keys(result)
+        .filter((key) => fields.includes(key))
+        .reduce((acc, cur) => Object.assign(acc, { [cur]: result[cur] }), {});
+
+      return info;
     }
     return { name, email };
   } catch (e) {
@@ -63,4 +59,13 @@ const checkExistMember = async ({ name, email }) => {
   }
 };
 
-export default { addUser, checkExistMember, findUserById };
+const deleteMember = async (id) => {
+  try {
+    User.destroy({ where: { id } });
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+export default {
+  addUser, checkExistMember, findUserById, deleteMember,
+};

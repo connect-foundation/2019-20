@@ -39,4 +39,18 @@ const checkExistMember = async (req, res, next) => {
   }
 };
 
-export { addUser, checkExistMember };
+const deleteUserInfo = async (req, res, next) => {
+  const { info } = res.locals;
+  if (info === null || !info.id || !info.id.length) {
+    next({ status: 400, message: msg.invalidJwtToken });
+    return;
+  }
+
+  try {
+    await user.deleteMember(info.id);
+    next();
+  } catch (e) {
+    next({ status: e.status, message: e.message });
+  }
+};
+export { addUser, checkExistMember, deleteUserInfo };
