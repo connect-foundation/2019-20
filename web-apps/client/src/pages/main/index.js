@@ -49,7 +49,7 @@ const Main = () => {
 
   const buttons = [
     getButtons('검색', '/', <SearchIcon />),
-    getButtons('필터', '/category', <FilterIcon />),
+    getButtons('필터', '/service/category', <FilterIcon />),
     getButtons('알림', '/', <NotifyIcon />),
   ];
 
@@ -130,19 +130,19 @@ const Main = () => {
   return (
     <>
       <ActionBar
-        leftArea={(
-          <Link to='/location' underline='none'>
+        leftArea={
+          <Link to='/service/location' underline='none'>
             <Typography color='primary' variant='subtitle1'>
               {name}
             </Typography>
           </Link>
-)}
-        title={(
+        }
+        title={
           <>
             {TITLE}
             {localname === '전체' ? '' : ` ~ ${distance}km 까지`}
           </>
-)}
+        }
         buttons={buttons}
       />
       <GridList spacing={0} cols={cols} className={classes.list}>
