@@ -54,6 +54,29 @@ const logOutProcess = (req, res) => {
   res.end();
 };
 
+const newAccountLogIn = (req, res) => {
+  const fields = [
+    'id',
+    'name',
+    'email',
+    'authority',
+    'latitude',
+    'longitude',
+    'reputation',
+    'numberOfRater',
+  ];
+
+  const info = Object.keys(res.locals)
+    .filter((key) => fields.includes(key))
+    .reduce((acc, cur) => Object.assign(acc, { [cur]: res.locals[cur] }), {});
+
+  const token = jwt.sign(info, process.env.JWT_PRIVATE_KEY);
+  res.cookie('jwt', token, {
+    httpOnly: true,
+  });
+  res.json(info);
+};
+
 const login = async (req, res) => {
   const {
     id,
@@ -79,13 +102,15 @@ const login = async (req, res) => {
       },
       process.env.JWT_PRIVATE_KEY,
     );
-    res.cookie('jwt', token, { path: '/', httpOnly: true });
+    res.cookie('jwt', token, { httpOnly: true });
     res.redirect(uri.clientMainPage);
   } else {
     const token = jwt.sign({ name, email }, process.env.JWT_PRIVATE_KEY);
-    res.cookie('jwt', token, { path: '/enrollLocation', httpOnly: true });
+    res.cookie('jwt', token, { httpOnly: true });
     res.redirect(uri.enrollLocationPage);
   }
 };
 
-export { getUserInfoByJWT, logOutProcess, login };
+export {
+  getUserInfoByJWT, logOutProcess, login, newAccountLogIn,
+};

@@ -2,7 +2,6 @@ import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import app from '../app';
-import uri from '../assets/uris';
 
 dotenv.config();
 
@@ -17,26 +16,26 @@ const tester = {
   numberOfRater: 3,
 };
 
-it('get current user info test', () => new Promise((done) => {
+it('get current user info test', () => new Promise((resolve) => {
   const key = process.env.JWT_PRIVATE_KEY;
   const token = jwt.sign(tester, key);
 
   request(app)
     .get('/myInfo')
     .set('Cookie', [`jwt=${token}`])
-    .then((res) => done(res));
+    .then((res) => resolve(res));
 }).then((res) => {
   expect(res.status).toBe(200);
   expect(res.text).toBe(JSON.stringify(tester));
 }));
-it('log out test', () => new Promise((done) => {
+it('log out test', () => new Promise((resolve) => {
   const key = process.env.JWT_PRIVATE_KEY;
   const token = jwt.sign(tester, key);
 
   request(app)
     .get('/logout')
     .set('Cookie', [`jwt=${token}`])
-    .then((res) => done(res));
+    .then((res) => resolve(res));
 }).then((res) => {
   expect(res.status).toBe(200);
   expect(res.headers['set-cookie'][0]).toBe(
@@ -44,19 +43,19 @@ it('log out test', () => new Promise((done) => {
   );
 }));
 
-it('use invalid jwt token test', () => new Promise((done) => {
+it('use invalid jwt token test', () => new Promise((resolve) => {
   const key = 'random Wrong key';
   const token = jwt.sign(tester, key);
 
   request(app)
     .get('/myInfo')
     .set('Cookie', [`jwt=${token}`])
-    .then((res) => done(res));
+    .then((res) => resolve(res));
 }).then((res) => {
   expect(res.status).toBe(400);
 }));
 
-it('add User test', () => new Promise((done) => {
+it('add User test', () => new Promise((resolve) => {
   const newUser = {
     name: 'tester',
     email: `${new Date().getMilliseconds()
@@ -69,13 +68,12 @@ it('add User test', () => new Promise((done) => {
     .post('/addUser')
     .send({ latitude: 123.456, longitude: 76.54 })
     .set('Cookie', [`jwt=${token}`])
-    .then((res) => done(res));
+    .then((res) => resolve(res));
 }).then((res) => {
-  expect(res.status).toBe(302);
-  expect(res.headers.location).toBe(uri.clientMainPage);
+  expect(res.status).toBe(200);
+  expect(res.headers['content-type']).toBe('application/json; charset=utf-8');
 }));
-
-it('add user fail test', () => new Promise((done) => {
+it('add user fail test', () => new Promise((resolve) => {
   const newUser = {
     name: 'tester',
     email: `${new Date().getMilliseconds()
@@ -88,10 +86,19 @@ it('add user fail test', () => new Promise((done) => {
     .post('/addUser')
     .send({ latitude: 123.456, longitude: 76.54 })
     .set('Cookie', [`jwt=${token}`])
-    .then((res) => done(res));
+    .then((res) => resolve(res));
 }).then((res) => {
   expect(res.status).toBe(400);
   expect(res.headers['set-cookie'][0]).toBe(
     'jwt=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
   );
+}));
+it('get seller info test', () => new Promise((resolve) => {
+  const sellerID = 52;
+  request(app)
+    .get(`/seller/${sellerID}`)
+    .then((res) => resolve(res));
+}).then((res) => {
+  expect(res.status).toBe(200);
+  expect(res.headers['content-type']).toBe('application/json; charset=utf-8');
 }));

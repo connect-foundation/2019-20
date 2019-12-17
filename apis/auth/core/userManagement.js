@@ -1,13 +1,32 @@
 import db from '../models';
 import msg from '../assets/errorMessages';
 
+const findUserById = async (id) => {
+  const { User } = db;
+  try {
+    const { dataValues } = await User.findOne({
+      where: { id },
+      attributes: ['name', 'reputation', 'numberOfRater'],
+    });
+    return dataValues;
+  } catch (e) {
+    throw new Error(msg.internalError);
+  }
+};
+
 const addUser = async (info) => {
   const { User } = db;
   try {
-    const newUser = await User.create(info);
+    const newUserInfo = {
+      authority: '손님',
+      reputation: 0,
+      numberOfRater: 0,
+      ...info,
+    };
+    const newUser = await User.create(newUserInfo);
     return newUser;
   } catch (e) {
-    throw new Error(msg.internalError);
+    throw new Error(e.message);
   }
 };
 
@@ -42,4 +61,4 @@ const checkExistMember = async ({ name, email }) => {
   }
 };
 
-export default { addUser, checkExistMember };
+export default { addUser, checkExistMember, findUserById };

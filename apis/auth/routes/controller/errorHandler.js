@@ -24,6 +24,10 @@ const clientErrorHandler = (err, req, res, next) => {
       res.status(err.status);
       res.clearCookie('jwt');
       res.json({ message: err.message });
+    } else if (err.message === msg.validationError) {
+      res.status(err.status);
+      res.clearCookie('jwt');
+      res.json({ message: err.message });
     } else {
       res.status(err.status);
       res.json({ message: err.message });
