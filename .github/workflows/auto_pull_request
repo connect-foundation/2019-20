@@ -3,8 +3,6 @@ on:
   pull_request: 
     branches:
       - '?*\-api\/master'
-    types:
-      - closed
 jobs:
   automerge:
     runs-on: ubuntu-latest
