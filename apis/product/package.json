@@ -9,7 +9,7 @@
     ]
   },
   "scripts": {
-    "test": "jest --runInBand --setupFiles dotenv/config --forceExit",
+    "test": "NODE_ENV=test jest --runInBand --setupFiles dotenv/config --forceExit",
     "precommit": "lint-staged && yarn test",
     "dev:start": "nodemon --exec babel-node bin/www.js",
     "build": "babel ./ -d build --copy-files '*.json'",
