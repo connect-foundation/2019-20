@@ -1,10 +1,9 @@
 name: pull_request
-on:
-  pull_request: 
-    branches:
-      - '?*\-api\/master'
+
+on: [closed]
+
 jobs:
-  automerge:
+  pull_request:
     runs-on: ubuntu-latest
     steps:
       - name: Create Pull Request
