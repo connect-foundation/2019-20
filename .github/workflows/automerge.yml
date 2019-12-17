@@ -4,7 +4,7 @@ on:
     branches:
       - '?*\-api\/master'
     types:
-      - merged
+      - synchronize
 jobs:
   automerge:
     runs-on: ubuntu-latest
