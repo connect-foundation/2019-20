@@ -21,6 +21,8 @@ const router = express.Router();
  * price=1,200 (최소, 최댓값) 혹은 price=1(1이상)
  * status=거래중,거래완료
  * order=order,-userId (order 오름차순, userId 내림차순)
+ * buyer=구매자
+ * interest=사용자
  */
 router.route('/')
   .get(queryAnalysisMiddleware, getProductListController)

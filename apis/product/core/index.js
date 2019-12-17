@@ -3,6 +3,7 @@ import message from './message';
 import CODE from './code';
 
 const Product = model.product;
+const Keyword = model.keyword;
 
 const Core = {
   lastModifed: Date.now(),
@@ -53,14 +54,12 @@ const Core = {
   /**
    * 등록된 중고상품 정보 수정
    * @description 유저 아이디와 실제 document를 등록한 사용자가 일치할 경우에만 해당 정보를 수정합니다.
-   * 상태값이 '비공개'일 경우 일래스틱 서치에서 인덱스 목록에 제거합니다.
    * @param {String} _id 기본키(Object_ID)
    * @param {String} userId 유저정보(사용자)
    * @param {Object} contents 업데이트할 내용(product 모델 참조)
    * @return {Promise<Object>} Object(Product object)
    */
   async updateProduct(_id, userId, contents) {
-    const isCurrentStatusPrivate = (document) => document.currentStatus === '비공개';
     Core.refreshLastModified();
     try {
       const product = await Product.findById(_id);
@@ -70,9 +69,6 @@ const Core = {
       Object.keys(contents).forEach((key) => {
         product[key] = contents[key];
       });
-      if (isCurrentStatusPrivate(product)) {
-        await product.unIndex();
-      }
       const result = await product.save();
       return result;
     } catch (e) {
@@ -102,6 +98,37 @@ const Core = {
   },
 
   /**
+   * 키워드 검색
+   * @description 입력한 검색어와 유사환 결과를 포함하여 리스트를 반환합니다.
+   * 기본값은 2글자는 최대 1글자 까지 오차를 허용하며, 그 이상은 2글자입니다.
+   * @param {String} keyword 추천받을 검색어
+   * @param {Number|String} fuzzy 유사어 빈도
+   */
+  async getRecommandKeyword(keyword, fuzzy) {
+    try {
+      const fuzziness = fuzzy || Core.getFuzzinessDefault(keyword);
+      const list = await Keyword.search({
+        query: {
+          match: {
+            word: { query: keyword, fuzziness },
+          },
+        },
+      }, {});
+      return list;
+    } catch (e) {
+      console.log(e);
+      throw new Error(message.errorProcessingElasticSearch);
+    }
+  },
+
+  getFuzzinessDefault(keyword) {
+    if (keyword.length === 2) {
+      return 1;
+    }
+    return 'auto';
+  },
+
+  /**
    * 일래스틱 서치 검색
    * @description 일래스틱 서치 검색결과를 조회합니다.
    * @param {Object.<from, size, filter, query, sort, script_fields>}
@@ -118,7 +145,7 @@ const Core = {
     if (isNotDefaultSetSortOption(sort)) {
       sort = [
         ...sort,
-        { order: 'desc' },
+        { _score: 'desc', order: 'desc' },
       ];
     }
     const query = { _source: true, ...esquery, sort };
@@ -143,4 +170,5 @@ export const {
   getProductSchemaByKey,
   getElasticSearchResults,
   getLastModified,
+  getRecommandKeyword,
 } = Core;
