@@ -6,7 +6,7 @@ export default {
   naverTokenControl: 'https://nid.naver.com/oauth2.0/token',
   naverAuthRequest: 'https://nid.naver.com/oauth2.0/authorize',
   memberInfoAPI: 'http://localhost:5001/naver/member',
-  clientMainPage: 'http://localhost:3000/',
+  clientMainPage: 'http://localhost:3000/service/main',
   enrollLocationPage: 'http://localhost:3000/enrollLocation',
   clientHost: 'http://localhost:3000',
 };
