@@ -129,8 +129,11 @@ const ProductForm = () => {
 
     const product = {
       title,
-      userId: user.id,
-      location: {type: 'Point', coordinates: [user.latitude, user.longitude]},
+      userId: user !== null && user.id,
+      location: user !== null && {
+        lat: user.latitude,
+        lon: user.longitude,
+      },
       price: Number(price),
       pictures: enrolledImages,
       contents,
