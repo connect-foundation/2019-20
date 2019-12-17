@@ -16,8 +16,8 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const ProductDetail = () => {
-  const productID = '5df31c6672300026b6ef3c85';
+const ProductDetail = ({match}) => {
+  const productID = match.params.id; //'5df31c6672300026b6ef3c85';
 
   const [detail, seDetail] = useState(null);
   const [product, setProduct] = useState(null);
@@ -89,7 +89,11 @@ const ProductDetail = () => {
       <ProductProfile images={images} />
       <SellerInfo seller={seller} location={product && product.location} />
       <ProductDescription description={description} interest={interest} />
-      <ProductFooter data={footerData} addInterest={addInterest} minusInterest={minusInterest}/>
+      <ProductFooter
+        data={footerData}
+        addInterest={addInterest}
+        minusInterest={minusInterest}
+      />
     </Wrapper>
   );
 };

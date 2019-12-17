@@ -71,10 +71,6 @@ const getCurrentLocation = () => {
 };
 function getDistance(lon1, lat1, lon2, lat2) {
   /** Converts numeric degrees to radians */
-
-  // Number.prototype.toRad = function() {
-  //   return (this * Math.PI) / 180;
-  // };
   const toRadian = (num) => {
     return (num * Math.PI) / 180;
   };

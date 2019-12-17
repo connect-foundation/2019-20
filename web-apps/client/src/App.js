@@ -13,6 +13,7 @@ import Filters from './pages/filters';
 import Location from './pages/area';
 import NewProduct from './pages/newProduct';
 import SetMyArea from './pages/setMyArea';
+import ProductDetail from './pages/ProductDetail';
 
 import {FilterProvider} from './contexts/filters';
 import {SnackbarProvider} from './contexts/snackbar';
@@ -44,10 +45,11 @@ export default () => {
           <FilterProvider>
             <Router>
               <Switch>
+                <Route exact path='/' component={Entrance} />
+                <Route exact path='/enrollLocation' component={SetMyArea} />
+                <Route exact path='/write' component={NewProduct} />
+                <Route path='/product/:id' component={ProductDetail} />
                 <Grid container className={classes.root}>
-                  <Route exact path='/' component={Entrance} />
-                  <Route exact path='/enrollLocation' component={SetMyArea} />
-                  <Route exact path='/write' component={NewProduct} />
                   <Route path='/service'>
                     <ThemeProvider theme={theme}>
                       <Route exact path='/service/main' component={Main} />
