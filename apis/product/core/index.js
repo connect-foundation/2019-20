@@ -13,10 +13,10 @@ const Core = {
     Core.lastModifed = Date.now();
   },
   /**
- * 중고 상품 등록
- * @param {*} contents 새로운 데이터(Product 스키마를 따름)
- * @returns {Promise<String>} Object(등록 완료)
- */
+   * 중고 상품 등록
+   * @param {*} contents 새로운 데이터(Product 스키마를 따름)
+   * @returns {Promise<String>} Object(등록 완료)
+   */
   async insertProduct(contents) {
     Core.refreshLastModified();
     try {
@@ -36,14 +36,18 @@ const Core = {
    * @param {Object} sort 정렬 방법 (default { order:-1, createdAt: -1})
    * @returns {Promise<(Object|Array)>} Array(조회 결과)
    */
-  async getProducts(page = 1, limits = 10,
-    options = {}, sort = { order: -1, createdAt: -1 }) {
+  async getProducts(
+    page = 1,
+    limits = 10,
+    options = {},
+    sort = { order: -1, createdAt: -1 },
+  ) {
     try {
-      const result = await Product
-        .find(options || {})
+      const result = await Product.find(options || {})
         .sort(sort)
         .skip((page - 1) * limits)
         .limit(limits);
+      console.log(result);
       return result;
     } catch (e) {
       throw Error(message.errorProcessing);
@@ -116,10 +120,7 @@ const Core = {
     let sort = esquery.sort || [];
     const isNotDefaultSetSortOption = (arr) => !arr || !arr.includes((info) => 'order' in info);
     if (isNotDefaultSetSortOption(sort)) {
-      sort = [
-        ...sort,
-        { order: 'desc' },
-      ];
+      sort = [...sort, { order: 'desc' }];
     }
     const query = { _source: true, ...esquery, sort };
     try {
