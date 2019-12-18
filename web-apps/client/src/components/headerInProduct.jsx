@@ -1,7 +1,8 @@
 import React from 'react';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {makeStyles} from '@material-ui/core/styles';
+
+import GoBackButton from './goBackButton';
 
 const useStyles = makeStyles(() => ({
   header: {
@@ -28,7 +29,7 @@ const HeaderInProduct = () => {
   const classes = useStyles();
   return (
     <div className={classes.header}>
-      <ArrowBackIcon className={classes.back} />
+      <GoBackButton className={classes.back} />
       <MoreVertIcon className={classes.more} />
     </div>
   );

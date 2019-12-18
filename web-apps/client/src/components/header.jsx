@@ -2,8 +2,9 @@ import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 import AddPicture from './addPicture';
+import GoBackButton from './goBackButton';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -15,9 +16,6 @@ const useStyles = makeStyles(() => ({
     background: 'white',
     color: '#555',
   },
-  exit: {
-    color: '#555',
-  },
 }));
 
 const Header = () => {
@@ -26,7 +24,7 @@ const Header = () => {
     <div className={classes.root}>
       <AppBar position='static'>
         <Toolbar variant='dense' className={classes.headerButtons}>
-          <ExitToAppIcon className={classes.exit} />
+          <GoBackButton />
           중고거래 글쓰기
           <AddPicture />
         </Toolbar>
