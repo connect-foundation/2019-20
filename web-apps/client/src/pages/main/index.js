@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useState, useEffect, useContext} from 'react';
+import {Link} from 'react-router-dom';
 
-import { Typography, GridList, GridListTile, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  Typography,
+  GridList,
+  GridListTile,
+  CircularProgress,
+} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import FilterIcon from '@material-ui/icons/Tune';
 import NotifyIcon from '@material-ui/icons/NotificationsNoneOutlined';
@@ -11,8 +16,8 @@ import ActionBar from '../../components/action-bar';
 import Card from '../../components/card';
 
 import getButtons from '../../utils/action-bar';
-import { getProductList } from './fetch';
-import { filterContext } from '../../contexts/filters';
+import {getProductList} from './fetch';
+import {filterContext} from '../../contexts/filters';
 
 const isScrollBottom = () =>
   window.innerHeight + window.scrollY >= document.body.offsetHeight;
@@ -27,7 +32,7 @@ const useStyles = makeStyles({
   loading: {
     textAlign: 'center',
     height: 'auto !important',
-  }
+  },
 });
 
 const Main = () => {
@@ -40,12 +45,12 @@ const Main = () => {
   const [loading, setLoading] = useState(false);
   const [cols, setCols] = useState(1);
   const [list, setList] = useState([]);
-  const [settings, setSettings] = useState({ from: 0, limits: 10 });
+  const [settings, setSettings] = useState({from: 0, limits: 10});
 
   const buttons = [
     getButtons('검색', '/', <SearchIcon />),
-    getButtons('필터', '/category', <FilterIcon />),
-    getButtons('알림', '/', <NotifyIcon />)
+    getButtons('필터', '/service/category', <FilterIcon />),
+    getButtons('알림', '/', <NotifyIcon />),
   ];
 
   const cardListElements = list.map(({ id, hits, title, pictures, price, order, distance, interests }) => {
@@ -62,7 +67,7 @@ const Main = () => {
           interests={interests.length}
         />
       </GridListTile>
-    )
+    );
   });
 
   const findProductsBySettings = () => {
@@ -72,8 +77,8 @@ const Main = () => {
       }
       setLoading(true);
       try {
-        const { filter } = filterConsumer;
-        const result = await getProductList({ ...filter, ...settings });
+        const {filter} = filterConsumer;
+        const result = await getProductList({...filter, ...settings});
         setList((state) => [...state, ...result]);
       } catch (e) {
         console.log(JSON.stringify(e));
@@ -82,7 +87,7 @@ const Main = () => {
       setLoading(false);
     };
     loadData();
-  }
+  };
 
   useEffect(findProductsBySettings, [settings]);
 
@@ -92,7 +97,10 @@ const Main = () => {
       if (isScrollBottom()) {
         if (!timer) {
           timer = setTimeout(() => {
-            setSettings((state) => ({ ...state, from: state.from + state.limits }));
+            setSettings((state) => ({
+              ...state,
+              from: state.from + state.limits,
+            }));
             timer = null;
           }, SCROLLEVENTDELAY);
         }
@@ -111,7 +119,9 @@ const Main = () => {
     };
   }, []);
 
-  const { filter: { localname, distance } } = filterConsumer;
+  const {
+    filter: {localname, distance},
+  } = filterConsumer;
   const address = localname.split(' ');
   const name = address[address.length - 1];
 
@@ -119,18 +129,18 @@ const Main = () => {
     <>
       <ActionBar
         leftArea={(
-          <Link to='/location' underline='none'>
+          <Link to='/service/location' underline='none'>
             <Typography color='primary' variant='subtitle1'>
               {name}
             </Typography>
           </Link>
-        )}
+)}
         title={(
           <>
             {TITLE}
             {localname === '전체' ? '' : ` ~ ${distance}km 까지`}
           </>
-        )}
+)}
         buttons={buttons}
       />
       <GridList spacing={0} cols={cols} className={classes.list}>
@@ -142,7 +152,7 @@ const Main = () => {
         )}
       </GridList>
     </>
-  )
+  );
 };
 
 export default Main;

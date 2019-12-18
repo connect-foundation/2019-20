@@ -1,25 +1,30 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import './App.css';
 
 // pages
-import { ThemeProvider, makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import {ThemeProvider, makeStyles} from '@material-ui/core/styles';
+import {Grid} from '@material-ui/core';
 import TmpChat from './pages/TmpChat';
 import ChatRoom from './pages/ChatRoom';
-import Home from './pages/main';
+import Main from './pages/main';
+import Entrance from './pages/entrance';
 import Filters from './pages/filters';
 import Location from './pages/area';
 import NewProduct from './pages/newProduct';
-import MyArticle from './pages/my-article-list';
-import Mypage from './pages/mypage';
+// TODO
+// import MyArticle from './pages/my-article-list';
+// import Mypage from './pages/mypage';
+import SetMyArea from './pages/setMyArea';
 
-import ListView from './components/list-view';
-import { getBuyListById, getInterestProductById } from './service/product';
+// TODO
+// import ListView from './components/list-view';
+// import { getBuyListById, getInterestProductById } from './service/product';
 
 import { FilterProvider } from './contexts/filters';
 import { SnackbarProvider } from './contexts/snackbar';
-import { UserProvider } from './contexts/user';
+import UserStore from './contexts/user';
+import AlertMessageStore from './contexts/alertMessage';
 
 import Navigator from './pages/navigator';
 import NoticeBar from './pages/notice';
@@ -28,49 +33,62 @@ import muiTheme from './theme/muiTheme';
 import theme from './theme';
 
 import './style.css';
+import AlertDialog from './components/alertDialog';
 
 const useStyles = makeStyles({
   root: {
-    margin: '0 0 5rem 0',
-  }
+    margin: '0',
+  },
 });
 
 export default () => {
   const classes = useStyles({});
+
   return (
-    <UserProvider>
-      <SnackbarProvider>
-        <FilterProvider>
-          <Router>
-            <Switch>
-              <Grid container className={classes.root}>
-                <ThemeProvider theme={theme}>
-                  <Route exact path='/' component={Home} />
-                  <Route exact path='/category' component={Filters} />
-                  <Route exact path='/location' component={Location} />
-                  <Route exact path='/info' component={Mypage} />
-                  <Route exact path='/my-article' component={MyArticle} />
-                  <Route exact path='/buy-list'>
-                    <ListView title='구매 내역' getProducts={getBuyListById} />
+    <AlertMessageStore>
+      <UserStore>
+        <SnackbarProvider>
+          <FilterProvider>
+            <Router>
+              <Switch>
+                <Grid container className={classes.root}>
+                  <Route exact path='/' component={Entrance} />
+                  <Route exact path='/enrollLocation' component={SetMyArea} />
+                  <Route exact path='/write' component={NewProduct} />
+                  <Route path='/service'>
+                    <ThemeProvider theme={theme}>
+                      <Route exact path='/service/main' component={Main} />
+                      <Route
+                        exact
+                        path='/service/category'
+                        component={Filters}
+                      />
+                      <Route
+                        exact
+                        path='/service/location'
+                        component={Location}
+                      />
+                    </ThemeProvider>
+                    <ThemeProvider theme={muiTheme}>
+                      <Route exact path='/service/chat' component={TmpChat} />
+                      <Route
+                        exact
+                        path='/service/chat/room/:id'
+                        Component={ChatRoom}
+                      />
+                    </ThemeProvider>
+                    <ThemeProvider theme={theme}>
+                      <Navigator />
+                      <NoticeBar />
+                    </ThemeProvider>
                   </Route>
-                  <Route exact path='/favorite-list'>
-                    <ListView title='찜한 내역' getProducts={getInterestProductById} />
-                  </Route>
-                </ThemeProvider>
-                <ThemeProvider theme={muiTheme}>
-                  <Route exact path='/chat' component={TmpChat} />
-                  <Route path='/chat/room/:id' Component={ChatRoom} />
-                </ThemeProvider>
-                <Route exact path='/write' component={NewProduct} />
-              </Grid>
-            </Switch>
-            <ThemeProvider theme={theme}>
-              <Navigator />
-              <NoticeBar />
-            </ThemeProvider>
-          </Router>
-        </FilterProvider>
-      </SnackbarProvider>
-    </UserProvider>
+                  <AlertDialog />
+                </Grid>
+              </Switch>
+            </Router>
+          </FilterProvider>
+        </SnackbarProvider>
+      </UserStore>
+    </AlertMessageStore>
   );
 };

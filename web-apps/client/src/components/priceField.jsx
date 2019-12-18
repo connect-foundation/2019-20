@@ -27,11 +27,7 @@ const PriceField = ({setPrice, negotiable, setNegotiable}) => {
 
   return (
     <div className={classes.price}>
-      <TextField
-        id='standard-basic'
-        label='가격(원)'
-        onChange={onPriceChange}
-      />
+      <TextField id='price' label='가격(원)' onChange={onPriceChange} />
       <div className={classes.negotiable}>
         <Checkbox
           checked={negotiable}

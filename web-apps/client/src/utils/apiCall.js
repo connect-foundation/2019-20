@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {imageHandleURI, productHandleURI} from '../assets/uris';
+import {imageHandleURI, productHandleURI, addUserURI} from '../assets/uris';
 
 const deletePicture = async (mobileKey, deskTopKey) => {
   try {
@@ -30,4 +30,18 @@ const uploadProduct = async (product) => {
   }
 };
 
-export {deletePicture, uploadImages, uploadProduct};
+const addUser = async ({latitude, longitude}) => {
+  try {
+    const options = {
+      method: 'post',
+      url: addUserURI,
+      withCredentials: true,
+      data: {latitude, longitude},
+    };
+    await axios(options);
+  } catch (e) {
+    throw new Error(e.response.status);
+  }
+};
+
+export {deletePicture, uploadImages, uploadProduct, addUser};

@@ -1,24 +1,26 @@
-import React, { useState, useContext } from 'react';
+import React, {useState, useContext} from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import useFetch from '../hooks/useFetch';
-import { ProductContext } from '../contexts/productStore';
+
+import {ProductContext} from '../contexts/productStore';
+import {AlertMessageContext} from '../contexts/alertMessage';
+import {UserContext} from '../contexts/user';
 
 import Drawer from './drawer';
 import DealType from './dealType';
 import ImageList from './imageList';
 import PriceField from './priceField';
-import { uploadProduct } from '../utils/apiCall';
+import {uploadProduct} from '../utils/apiCall';
 
 const useStyles = makeStyles(() => ({
   formContainer: {
     display: 'flex',
     justifyContent: 'center',
     overflowY: 'auto',
-    paddingBottom: '2rem',
   },
   list: {
     width: 250,
@@ -42,7 +44,7 @@ const useStyles = makeStyles(() => ({
   },
   submitButton: {
     position: 'fixed',
-    bottom: '2.8rem',
+    bottom: '0',
     left: '0',
     width: '100%',
     display: 'block',
@@ -66,7 +68,9 @@ const ProductForm = () => {
   const [negotiable, setNegotiable] = useState(false);
   const [contents, setContents] = useState('');
 
-  const { setAlertMessage, user, images } = useContext(ProductContext);
+  const {images} = useContext(ProductContext);
+  const {user} = useContext(UserContext);
+  const {setAlertMessage} = useContext(AlertMessageContext);
 
   const categoryAPI = 'category';
   const statusTypeListAPI = 'statusType';
@@ -119,14 +123,17 @@ const ProductForm = () => {
     evt.preventDefault();
 
     const enrolledImages = images.map((image) => {
-      const { mobile, deskTop } = image;
-      return { mobile, deskTop };
+      const {mobile, deskTop} = image;
+      return {mobile, deskTop};
     });
 
     const product = {
       title,
-      userId: user.id,
-      location: { type: 'Point', coordinates: [user.latitude, user.longitude] },
+      userId: user !== null && user.id,
+      location: user !== null && {
+        lat: user.latitude,
+        lon: user.longitude,
+      },
       price: Number(price),
       pictures: enrolledImages,
       contents,

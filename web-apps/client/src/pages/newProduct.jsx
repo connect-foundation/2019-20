@@ -1,9 +1,8 @@
-import React, { useEffect, createElement } from 'react';
+import React, {useEffect, createElement} from 'react';
 import Header from '../components/header';
 import ProductForm from '../components/productForm';
 import ProductStore from '../contexts/productStore';
-import { makeStyles } from '@material-ui/core/styles';
-import AlertDialog from '../components/alertDialog';
+import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   productForm: {
@@ -16,7 +15,6 @@ const NewProduct = () => {
   const classes = useStyles();
   useEffect(() => {
     const css = document.createElement('style');
-    css.type = 'text/css';
     css.innerText = `
     html {
       font-size: calc(10px + 3.5vmin);
@@ -41,18 +39,16 @@ const NewProduct = () => {
       font-family: 'Nanum Gothic';
     }
     `;
-    console.log(css);
     const id = document.head.appendChild(css);
     return () => {
       document.head.removeChild(id);
-    }
+    };
   }, []);
 
   return (
     <ProductStore>
       <Header />
       <ProductForm className={classes.productForm} />
-      <AlertDialog />
     </ProductStore>
   );
 };
