@@ -22,7 +22,6 @@ const AlertDialog = () => {
     dispatchMessage({type: 'clear'});
   };
 
-  console.log(message);
   return (
     <div>
       <Dialog
