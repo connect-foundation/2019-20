@@ -16,6 +16,7 @@ import NewProduct from './pages/newProduct';
 // import MyArticle from './pages/my-article-list';
 // import Mypage from './pages/mypage';
 import SetMyArea from './pages/setMyArea';
+import ProductDetail from './pages/ProductDetail';
 
 // TODO
 // import ListView from './components/list-view';
@@ -25,6 +26,7 @@ import { FilterProvider } from './contexts/filters';
 import { SnackbarProvider } from './contexts/snackbar';
 import UserStore from './contexts/user';
 import AlertMessageStore from './contexts/alertMessage';
+import ImageStore from './contexts/ImageStore';
 
 import Navigator from './pages/navigator';
 import NoticeBar from './pages/notice';
@@ -49,43 +51,47 @@ export default () => {
       <UserStore>
         <SnackbarProvider>
           <FilterProvider>
-            <Router>
-              <Switch>
-                <Grid container className={classes.root}>
+            <ImageStore>
+              <Router>
+                <Switch>
                   <Route exact path='/' component={Entrance} />
                   <Route exact path='/enrollLocation' component={SetMyArea} />
                   <Route exact path='/write' component={NewProduct} />
-                  <Route path='/service'>
-                    <ThemeProvider theme={theme}>
-                      <Route exact path='/service/main' component={Main} />
-                      <Route
-                        exact
-                        path='/service/category'
-                        component={Filters}
-                      />
-                      <Route
-                        exact
-                        path='/service/location'
-                        component={Location}
-                      />
-                    </ThemeProvider>
-                    <ThemeProvider theme={muiTheme}>
-                      <Route exact path='/service/chat' component={TmpChat} />
-                      <Route
-                        exact
-                        path='/service/chat/room/:id'
-                        Component={ChatRoom}
-                      />
-                    </ThemeProvider>
-                    <ThemeProvider theme={theme}>
-                      <Navigator />
-                      <NoticeBar />
-                    </ThemeProvider>
-                  </Route>
-                  <AlertDialog />
-                </Grid>
-              </Switch>
-            </Router>
+                  <Route path='/product/:id' component={ProductDetail} />
+
+                  <Grid container className={classes.root}>
+                    <Route path='/service'>
+                      <ThemeProvider theme={theme}>
+                        <Route exact path='/service/main' component={Main} />
+                        <Route
+                          exact
+                          path='/service/category'
+                          component={Filters}
+                        />
+                        <Route
+                          exact
+                          path='/service/location'
+                          component={Location}
+                        />
+                      </ThemeProvider>
+                      <ThemeProvider theme={muiTheme}>
+                        <Route exact path='/service/chat' component={TmpChat} />
+                        <Route
+                          exact
+                          path='/service/chat/room/:id'
+                          Component={ChatRoom}
+                        />
+                      </ThemeProvider>
+                      <ThemeProvider theme={theme}>
+                        <Navigator />
+                        <NoticeBar />
+                      </ThemeProvider>
+                    </Route>
+                  </Grid>
+                </Switch>
+                <AlertDialog />
+              </Router>
+            </ImageStore>
           </FilterProvider>
         </SnackbarProvider>
       </UserStore>

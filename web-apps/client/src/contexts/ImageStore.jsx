@@ -1,8 +1,8 @@
 import React, {useState, useEffect, createContext} from 'react';
 
-export const ProductContext = createContext('');
+export const ImageContext = createContext('');
 
-const ProductStore = ({children}) => {
+const ImageStore = ({children}) => {
   const [images, setImages] = useState([]);
 
   const fileDelimiter = ' ';
@@ -51,15 +51,15 @@ const ProductStore = ({children}) => {
   }, [images]);
 
   return (
-    <ProductContext.Provider
+    <ImageContext.Provider
       value={{
         images,
         setImages,
       }}
     >
       {children}
-    </ProductContext.Provider>
+    </ImageContext.Provider>
   );
 };
 
-export default ProductStore;
+export default ImageStore;

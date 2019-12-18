@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {ProductContext} from '../contexts/productStore';
+import {ImageContext} from '../contexts/ImageStore';
 import Loading from './loading';
 import ProductImage from './productImage';
 import {makeStyles} from '@material-ui/core';
@@ -19,7 +19,7 @@ const useStyle = makeStyles(() => ({
 
 const ImageList = () => {
   const classes = useStyle();
-  const {images} = useContext(ProductContext);
+  const {images} = useContext(ImageContext);
   const [imageList, setImageList] = useState('');
 
   const buildImageList = (images) => {

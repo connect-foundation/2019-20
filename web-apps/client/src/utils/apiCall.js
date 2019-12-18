@@ -1,5 +1,10 @@
 import axios from 'axios';
-import {imageHandleURI, productHandleURI, addUserURI} from '../assets/uris';
+import {
+  imageHandleURI,
+  productHandleURI,
+  addUserURI,
+  logOutURI,
+} from '../assets/uris';
 
 const deletePicture = async (mobileKey, deskTopKey) => {
   try {
@@ -23,8 +28,8 @@ const uploadImages = async (formData) => {
 
 const uploadProduct = async (product) => {
   try {
-    const response = await axios.post(productHandleURI, product);
-    return response;
+    const {data} = await axios.post(productHandleURI, product);
+    return data;
   } catch (err) {
     throw new Error(err);
   }
@@ -44,4 +49,17 @@ const addUser = async ({latitude, longitude}) => {
   }
 };
 
-export {deletePicture, uploadImages, uploadProduct, addUser};
+const deleteJWTRequest = async () => {
+  try {
+    const options = {
+      method: 'get',
+      url: logOutURI,
+      withCredentials: true,
+    };
+    await axios(options);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export {deletePicture, uploadImages, uploadProduct, addUser, deleteJWTRequest};

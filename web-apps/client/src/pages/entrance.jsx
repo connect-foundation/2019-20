@@ -22,9 +22,13 @@ const Wrapper = styled.div`
 const Entrance = () => {
   const {user} = useContext(UserContext);
 
-  const isLogInned = () => {
-    return !!(user && user.id && user.id >= 0);
+    const isLogInned = () => {
+    if (user && user.id && user.id.length > 0) {
+      return true;
+    }
+    return false;
   };
+
   return (
     <Wrapper>
       <Logo />
