@@ -7,7 +7,7 @@ import {AlertMessageContext} from './alertMessage';
 export const UserContext = createContext();
 
 const User = ({children}) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({id: ''});
   const {setAlertMessage} = useContext(AlertMessageContext);
 
   const jwtErrorMessage = '잘못된 유저 정보로 인해 로그아웃 됩니다.';
