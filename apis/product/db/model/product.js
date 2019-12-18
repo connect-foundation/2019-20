@@ -137,7 +137,7 @@ const productSchema = new Schema({
 
 productSchema.plugin(mongoosastic, mongoosasticSettings);
 
-productSchema.static('search', promiseSearch.bind(productSchema));
+productSchema.static('search', promiseSearch);
 
 const pushKeywordForTokenization = (doc) => {
   documentsToAnalyze.title = [...documentsToAnalyze.title, doc.title];
