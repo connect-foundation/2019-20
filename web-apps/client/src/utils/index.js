@@ -40,3 +40,17 @@ export const formatChat = (rowChat = []) => {
   });
   return result;
 };
+
+// 디바운싱
+export const debounce = (func, wait) => {
+  let timer = null;
+  return (...args) => {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    timer = setTimeout(() => {
+      func(...args);
+    }, wait);
+  };
+};
