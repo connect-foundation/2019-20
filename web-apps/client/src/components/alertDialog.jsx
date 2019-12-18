@@ -7,21 +7,22 @@ import Button from '@material-ui/core/Button';
 import {AlertMessageContext} from '../contexts/alertMessage';
 
 const AlertDialog = () => {
-  const {alertMessage} = useContext(AlertMessageContext);
+  const {message, dispatchMessage} = useContext(AlertMessageContext);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (alertMessage.length > 0) {
+    if (message.length > 0 || message.type === 'div') {
       setOpen(true);
     } else {
       setOpen(false);
     }
-  }, [alertMessage]);
+  }, [message]);
 
   const handleClose = () => {
-    setOpen(false);
+    dispatchMessage({type: 'clear'});
   };
 
+  console.log(message);
   return (
     <div>
       <Dialog
@@ -32,7 +33,7 @@ const AlertDialog = () => {
       >
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            {alertMessage}
+            {message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
