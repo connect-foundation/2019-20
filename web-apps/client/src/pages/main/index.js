@@ -48,20 +48,18 @@ const Main = () => {
     getButtons('알림', '/', <NotifyIcon />)
   ];
 
-  const temp =
-    'https://user-images.githubusercontent.com/38881005/69973260-8f1b4d00-1566-11ea-8d55-be1da311aef8.jpg';
-  const cardListElements = list.map(({ id, title, price, order, distance }) => {
+  const cardListElements = list.map(({ id, hits, title, pictures, price, order, distance, interests }) => {
     const distanceText = distance ? `${distance.toFixed(2)}km` : '';
     return (
       <GridListTile key={id} className={classes.list}>
         <Card
           title={title}
-          image={temp}
+          image={pictures[0]}
           area={distanceText}
           date={order}
           price={price}
-          chat={10}
-          interests={11}
+          hits={hits}
+          interests={interests.length}
         />
       </GridListTile>
     )

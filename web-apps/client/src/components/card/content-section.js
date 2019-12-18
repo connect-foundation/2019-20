@@ -9,7 +9,7 @@ import {
 } from '../../utils/time';
 import useStyle from './style';
 
-const ContentSection = ({ title, area, date, price, chat, interests }) => {
+const ContentSection = ({ title, area, date, price, hits, interests }) => {
   const classes = useStyle({});
   const minutesAgoString = calculateHourMinuteAndSeconds(date, Date.now());
   const moneyWithDigitString = takeDigitFromNumber(price);
@@ -26,7 +26,7 @@ const ContentSection = ({ title, area, date, price, chat, interests }) => {
           </Grid>
         </Grid>
         <Grid container className={classes.chatHitsSection}>
-          <ChatIcon />{chat} &nbsp;
+          <ChatIcon />{hits} &nbsp;
           <InterestIcon />{interests}
         </Grid>
       </Grid>
@@ -39,7 +39,7 @@ ContentSection.propTypes = {
   area: PropTypes.string.isRequired,
   date: PropTypes.number.isRequired,
   price: PropTypes.number.isRequired,
-  chat: PropTypes.number.isRequired,
+  hits: PropTypes.number.isRequired,
   interests: PropTypes.number.isRequired,
 };
 
