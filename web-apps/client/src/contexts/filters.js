@@ -14,7 +14,7 @@ const filterInfo = {
   CATEGORYLABEL: [],
 };
 
-const TYPE = {
+const FILTER_TYPE = {
   INITIAL: 0,
   CATEGORY_INITIAL: 1,
   PRICE: 2,
@@ -28,33 +28,33 @@ const TYPE = {
 const filterReducer = (state, { type, payload }) => {
   switch (type) {
 
-    case TYPE.INITIAL:
+    case FILTER_TYPE.INITIAL:
       return JSON.parse(JSON.stringify(filterInfo));
 
-    case TYPE.PRICE:
+    case FILTER_TYPE.PRICE:
       return { ...state, price: { ...payload } };
 
-    case TYPE.CATEGORY_ADD:
+    case FILTER_TYPE.CATEGORY_ADD:
       return { ...state, categories: [...state.categories, payload] };
 
-    case TYPE.CATEGORY_REMOVE: {
+    case FILTER_TYPE.CATEGORY_REMOVE: {
       const updatedCategory =
         state.categories.filter((name) => name !== payload);
       return { ...state, categories: updatedCategory };
     }
 
-    case TYPE.COORDINATE: {
+    case FILTER_TYPE.COORDINATE: {
       const { coordinates, localname } = payload;
       const distance = state.distance || 1;
       return { ...state, coordinates, localname, distance };
     }
 
-    case TYPE.CATEGORY_INITIAL:
+    case FILTER_TYPE.CATEGORY_INITIAL:
       filterInfo.CATEGORYLABEL = payload;
       filterInfo.categories = payload;
       return { ...state, categories: payload, CATEGORYLABEL: payload };
 
-    case TYPE.DISTANCE:
+    case FILTER_TYPE.DISTANCE:
       if (+payload === 0) {
         return { ...state, distance: +payload, localname: '전체' }
       }
@@ -68,12 +68,12 @@ const filterReducer = (state, { type, payload }) => {
 export const filterContext = createContext({});
 
 export const FilterProvider = ({ children }) => {
-  const [filter, dispatch] = useReducer(filterReducer, filterInfo);
+  const [filter, dispatchFilter] = useReducer(filterReducer, filterInfo);
   useEffect(() => {
     const getCategoryFromServer = async () => {
       try {
         const list = await getCategoryList();
-        dispatch({ type: TYPE.CATEGORY_INITIAL, payload: list });
+        dispatchFilter({ type: FILTER_TYPE.CATEGORY_INITIAL, payload: list });
       } catch (err) {
         alert('카테고리 정보를 불러 올 수 없습니다.');
       }
@@ -81,7 +81,7 @@ export const FilterProvider = ({ children }) => {
     getCategoryFromServer();
   }, []);
   return (
-    <filterContext.Provider value={{ TYPE, filter, dispatch }}>
+    <filterContext.Provider value={{ FILTER_TYPE, filter, dispatchFilter }}>
       {children}
     </filterContext.Provider>
   );

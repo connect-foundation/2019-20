@@ -43,6 +43,20 @@ export const formatChat = (rowChat = []) => {
   return result;
 };
 
+// 디바운싱
+export const debounce = (func, wait) => {
+  let timer = null;
+  return (...args) => {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    timer = setTimeout(() => {
+      func(...args);
+    }, wait);
+  };
+};
+
 export const isMobile = (userAgent) => {
   const mobileEnv = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
   if (mobileEnv.test(userAgent)) {
@@ -50,6 +64,7 @@ export const isMobile = (userAgent) => {
   }
   return false;
 };
+
 export const getReputation = (reputation, numberOfRater) => {
   if (numberOfRater === 0) {
     return 5;
@@ -69,6 +84,7 @@ const getCurrentLocation = () => {
     );
   });
 };
+
 function getDistance(lon1, lat1, lon2, lat2) {
   /** Converts numeric degrees to radians */
   const toRadian = (num) => {
