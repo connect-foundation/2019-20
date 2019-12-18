@@ -19,6 +19,7 @@ const MESSAGE = {
   ZERO_RESULT: '검색결과가 없습니다',
   ERROR: '서버와 통신에 실패하였습니다.',
   NOT_LOADED: 'api가 현재 로드되지 않았습니다. 잠시후에 시도해주세요',
+  GET_GEOLCATION_ERROR: '현재 위치정보를 불러올 수 없습니다. 위치 정보 접근 권한이 필요합니다.',
 };
 
 const useStyles = makeStyles({
@@ -112,6 +113,8 @@ const KakaoMap = ({ appKey, width, height, callback }, ref) => {
     navigator.geolocation.getCurrentPosition((point) => {
       const { coords: { latitude, longitude } } = point;
       ref.current.setCenterCoordinates(latitude, longitude);
+    }, () => {
+      alert(MESSAGE.GET_GEOLCATION_ERROR);
     });
   }, [ref]);
 
