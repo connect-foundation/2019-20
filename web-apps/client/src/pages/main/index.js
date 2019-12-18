@@ -36,7 +36,7 @@ const useStyles = makeStyles({
 });
 
 const Main = () => {
-  const TITLE = '폴';
+  const TITLE = '풀';
   const SCROLLEVENTDELAY = 200;
   const classes = useStyles({});
 
@@ -53,20 +53,18 @@ const Main = () => {
     getButtons('알림', '/', <NotifyIcon />),
   ];
 
-  const temp =
-    'https://user-images.githubusercontent.com/38881005/69973260-8f1b4d00-1566-11ea-8d55-be1da311aef8.jpg';
-  const cardListElements = list.map(({id, title, price, order, distance}) => {
+  const cardListElements = list.map(({ id, hits, title, pictures, price, order, distance, interests }) => {
     const distanceText = distance ? `${distance.toFixed(2)}km` : '';
     return (
       <GridListTile key={id} className={classes.list}>
         <Card
           title={title}
-          image={temp}
+          image={pictures[0]}
           area={distanceText}
           date={order}
           price={price}
-          chat={10}
-          interests={11}
+          hits={hits}
+          interests={interests.length}
         />
       </GridListTile>
     );
@@ -130,19 +128,19 @@ const Main = () => {
   return (
     <>
       <ActionBar
-        leftArea={
+        leftArea={(
           <Link to='/service/location' underline='none'>
             <Typography color='primary' variant='subtitle1'>
               {name}
             </Typography>
           </Link>
-        }
-        title={
+)}
+        title={(
           <>
             {TITLE}
             {localname === '전체' ? '' : ` ~ ${distance}km 까지`}
           </>
-        }
+)}
         buttons={buttons}
       />
       <GridList spacing={0} cols={cols} className={classes.list}>

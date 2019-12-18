@@ -5,7 +5,7 @@ import ImageSection from './image-section';
 import ContentSection from './content-section';
 import useStyle from './style';
 
-const Card = ({ title, image, area, date, price, chat, interests }) => {
+const Card = ({ title, image, area, date, price, hits, interests }) => {
   const classes = useStyle({});
   return (
     <>
@@ -16,7 +16,7 @@ const Card = ({ title, image, area, date, price, chat, interests }) => {
           area={area}
           date={date}
           price={price}
-          chat={chat}
+          hits={hits}
           interests={interests}
         />
       </Grid>
