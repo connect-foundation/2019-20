@@ -6,8 +6,6 @@ import { mongoosasticSettings } from '../../config';
 
 const { Schema } = mongoose;
 
-const KEYWORD_ANALYSIS_CYCLE = 5000;
-
 const documentsToAnalyze = { title: [] };
 
 const productSchema = new Schema({
@@ -190,9 +188,18 @@ Product.createMapping({
   },
 }, () => { });
 
+/*
+ 사용자가 등록한 제목을 분석하여 키워드 index에 저장
+ 요청할 때마다 모든 단어를 처리하기에는 과도한 요청이 올 수 있어
+ 5초 단위로 처리
+*/
+const KEYWORD_ANALYSIS_INTERVAL = 5000;
 const timer = setInterval(() => {
-  const title = documentsToAnalyze.title.slice(0, 100).join(' ');
+  // 100개씩 끊기
+  const title = documentsToAnalyze.title.slice(0, 100).join('\n');
   documentsToAnalyze.title = documentsToAnalyze.title.slice(100);
+
+  // seed 인경우 더이상 업데이트할 데이터가 없으면 종료
   if (!title.length) {
     if (process.env.NODE_ENV === 'development') {
       clearInterval(timer);
@@ -200,6 +207,8 @@ const timer = setInterval(() => {
     }
     return;
   }
+
+  // insert keyword index
   const insertKeyword = (err, { tokens }) => {
     if (err) {
       return;
@@ -209,10 +218,13 @@ const timer = setInterval(() => {
       .map(({ token }) => ({ word: token }));
     const wordSet = new Set();
     words.forEach((word) => (wordSet.add(word)));
-    wordSet.forEach(async (word) => {
-      await Keyword.findOneAndUpdate(word, word, { upsert: true });
+    wordSet.forEach((word) => {
+      Keyword.findOneAndUpdate(word, word, { upsert: true }, () => {
+      });
     });
   };
+
+  // analyze test 결과를 keyword index에 저장
   Product.esClient.indices.analyze({
     index: 'products',
     body: {
@@ -220,6 +232,6 @@ const timer = setInterval(() => {
       analyzer: 'korean',
     },
   }, insertKeyword);
-}, KEYWORD_ANALYSIS_CYCLE);
+}, KEYWORD_ANALYSIS_INTERVAL);
 
 module.exports = Product;
