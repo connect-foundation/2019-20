@@ -11,11 +11,11 @@ import LocatonIcon from '@material-ui/icons/LocationOn';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
 
-import PrettoSlider from '../components/pretto-slider';
-import InlineItems from '../components/inline-items';
-import ActionBar from '../components/action-bar';
+import PrettoSlider from '../components/PrettoSlider';
+import InlineItems from '../components/InlineItems';
+import ActionBar from '../components/ActionBar';
 
-import { UserContext } from '../contexts/user';
+import { UserContext } from '../contexts/User';
 
 const useStyles = makeStyles({
   root: {

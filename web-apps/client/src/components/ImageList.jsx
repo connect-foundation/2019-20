@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {ImageContext} from '../contexts/ImageStore';
-import Loading from './loading';
-import ProductImage from './productImage';
+import {ImageContext} from '../contexts/Image';
+import Loading from './Loading';
+import ProductImage from './ProductImage';
 import {makeStyles} from '@material-ui/core';
 
 const useStyle = makeStyles(() => ({

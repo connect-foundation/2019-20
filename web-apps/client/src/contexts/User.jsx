@@ -2,7 +2,7 @@ import React, {useState, createContext, useContext} from 'react';
 
 import useCredentialFetch from '../hooks/useCredentialFetch';
 import {loginStatusHandleURI} from '../assets/uris';
-import {AlertMessageContext} from './alertMessage';
+import {AlertMessageContext} from './AlertMessage';
 
 export const UserContext = createContext();
 

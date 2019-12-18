@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import Button from '@material-ui/core/Button';
-import {UserContext} from '../contexts/user';
-import {ImageContext} from '../contexts/ImageStore';
+import {UserContext} from '../contexts/User';
+import {ImageContext} from '../contexts/Image';
 import {deletePicture, deleteJWTRequest} from '../utils/apiCall';
 
 const LogOutButton = ({width}) => {

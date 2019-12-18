@@ -6,15 +6,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppyLicon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 
-import ToolBar from '../../components/tool-bar';
-import Field from '../../components/field';
-import InputForm from '../../components/two-number-input';
+import ToolBar from '../../components/ToolBar';
+import Field from '../../components/Field';
+import InputForm from '../../components/TwoNumberInput';
 
-import Category from './category';
+import Category from './Category';
 import getButtons from '../../utils/action-bar';
 
-import { filterContext } from '../../contexts/filters';
-import { SnackbarContext } from '../../contexts/snackbar';
+import { filterContext } from '../../contexts/Filters';
+import { SnackbarContext } from '../../contexts/SnackBar';
 
 const useStyles = makeStyles({
   container: {

@@ -5,13 +5,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import ClearIcon from '@material-ui/icons/Clear';
 import CheckIcon from '@material-ui/icons/Check';
 
-import ToolBar from '../components/tool-bar';
-import KakakoMap from '../components/kakao-map';
-import AddressList from '../components/address-list';
+import ToolBar from '../components/ToolBar';
+import KakakoMap from '../components/KakaoMap';
+import AddressList from '../components/AddressList';
 import getButtons from '../utils/action-bar';
 
-import { filterContext } from '../contexts/filters';
-import { SnackbarContext } from '../contexts/snackbar';
+import { filterContext } from '../contexts/Filters';
+import { SnackbarContext } from '../contexts/SnackBar';
 import { KAKAO_API } from '../utils/config';
 import { debounce } from '../utils';
 

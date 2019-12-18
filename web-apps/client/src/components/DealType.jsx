@@ -2,7 +2,7 @@ import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import RadioButton from './radioButton';
+import RadioButton from './RadioButton';
 
 const useStyles = makeStyles(() => ({
   radioGroup: {

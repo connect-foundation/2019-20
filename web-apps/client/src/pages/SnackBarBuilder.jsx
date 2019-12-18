@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-import SlideUpSnackbar from '../components/snack-bar';
-import { SnackbarContext } from '../contexts/snackbar';
+import SlideUpSnackbar from '../components/SnackBar';
+import { SnackbarContext } from '../contexts/SnackBar';
 
 export default () => {
   const { notice, setNotice } = useContext(SnackbarContext);

@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 import { List, ListItem } from '@material-ui/core';
 
-import ToolBar from './tool-bar';
+import ToolBar from './ToolBar';
 
-import { UserContext } from '../contexts/user';
+import { UserContext } from '../contexts/User';
 
 const Lists = ({ title, getProducts }) => {
   const { user } = useContext(UserContext);

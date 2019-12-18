@@ -17,7 +17,7 @@ import ChatInputField from '../components/ChatInputField';
 import ChatSection from '../components/ChatSection';
 
 // context
-import {ChatSocketContext} from '../contexts/socket';
+import {ChatSocketContext} from '../contexts/Socket';
 
 // utils
 import {isInSameDay, isEmptyArr, setBaseDate, formatChat} from '../utils';

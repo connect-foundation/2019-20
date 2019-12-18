@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {ImageContext} from '../contexts/ImageStore';
+import {ImageContext} from '../contexts/Image';
 import {makeStyles} from '@material-ui/core/styles';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import {deletePicture} from '../utils/apiCall';

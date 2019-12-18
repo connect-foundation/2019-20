@@ -2,7 +2,7 @@ import React from 'react';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {makeStyles} from '@material-ui/core/styles';
 
-import GoBackButton from './goBackButton';
+import GoBackButton from './GoBackButton';
 
 const useStyles = makeStyles(() => ({
   header: {
