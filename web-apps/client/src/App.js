@@ -8,34 +8,34 @@ import {Grid} from '@material-ui/core';
 import TmpChat from './pages/TmpChat';
 import ChatRoom from './pages/ChatRoom';
 import Main from './pages/main';
-import Entrance from './pages/entrance';
+import Entrance from './pages/Entrance';
 import Filters from './pages/filters';
-import Location from './pages/area';
-import NewProduct from './pages/newProduct';
+import Location from './pages/Area';
+import WriteProduct from './pages/WriteProduct';
 // TODO
 // import MyArticle from './pages/my-article-list';
 // import Mypage from './pages/mypage';
-import SetMyArea from './pages/setMyArea';
+import SetMyArea from './pages/SetMyArea';
 import ProductDetail from './pages/ProductDetail';
 
 // TODO
 // import ListView from './components/list-view';
 // import { getBuyListById, getInterestProductById } from './service/product';
 
-import { FilterProvider } from './contexts/filters';
-import { SnackbarProvider } from './contexts/snackbar';
-import UserStore from './contexts/user';
-import AlertMessageStore from './contexts/alertMessage';
-import ImageStore from './contexts/ImageStore';
+import {FilterProvider} from './contexts/Filters';
+import {SnackbarProvider} from './contexts/SnackBar';
+import UserStore from './contexts/User';
+import AlertMessageStore from './contexts/AlertMessage';
+import Image from './contexts/Image';
 
-import Navigator from './pages/navigator';
-import NoticeBar from './pages/notice';
+import Navigator from './pages/Navigator';
+import NoticeBar from './pages/SnackBarBuilder';
 
 import muiTheme from './theme/muiTheme';
 import theme from './theme';
 
 import './style.css';
-import AlertDialog from './components/alertDialog';
+import AlertDialog from './components/AlertDialog';
 
 const useStyles = makeStyles({
   root: {
@@ -51,12 +51,12 @@ export default () => {
       <UserStore>
         <SnackbarProvider>
           <FilterProvider>
-            <ImageStore>
+            <Image>
               <Router>
                 <Switch>
                   <Route exact path='/' component={Entrance} />
                   <Route exact path='/enrollLocation' component={SetMyArea} />
-                  <Route exact path='/write' component={NewProduct} />
+                  <Route exact path='/write' component={WriteProduct} />
                   <Route path='/product/:id' component={ProductDetail} />
 
                   <Grid container className={classes.root}>
@@ -91,7 +91,7 @@ export default () => {
                 </Switch>
                 <AlertDialog />
               </Router>
-            </ImageStore>
+            </Image>
           </FilterProvider>
         </SnackbarProvider>
       </UserStore>

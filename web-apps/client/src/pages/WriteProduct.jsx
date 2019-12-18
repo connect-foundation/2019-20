@@ -2,11 +2,11 @@ import React, {useEffect, useContext} from 'react';
 
 import {Redirect} from 'react-router-dom';
 
-import Header from '../components/header';
-import ProductForm from '../components/productForm';
+import WriteHeader from '../components/WriteHeader';
+import ProductForm from '../components/ProductForm';
 
-import {UserContext} from '../contexts/user';
-import {AlertMessageContext} from '../contexts/alertMessage';
+import {UserContext} from '../contexts/User';
+import {AlertMessageContext} from '../contexts/AlertMessage';
 
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const NewProduct = () => {
+const WriteProduct = () => {
   const classes = useStyles();
   const {user} = useContext(UserContext);
   const {dispatchMessage} = useContext(AlertMessageContext);
@@ -54,10 +54,10 @@ const NewProduct = () => {
 
   return (
     <>
-      <Header />
+      <WriteHeader />
       <ProductForm className={classes.productForm} />
     </>
   );
 };
 
-export default NewProduct;
+export default WriteProduct;

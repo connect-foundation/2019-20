@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import DrawerList from './drawerList';
+import DrawerList from './DrawerList';
 
 const useStyles = makeStyles(() => ({
   field: {

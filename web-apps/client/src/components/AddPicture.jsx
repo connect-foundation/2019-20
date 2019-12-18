@@ -3,8 +3,8 @@ import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {ImageContext} from '../contexts/ImageStore';
-import {AlertMessageContext} from '../contexts/alertMessage';
+import {ImageContext} from '../contexts/Image';
+import {AlertMessageContext} from '../contexts/AlertMessage';
 
 import useImageUpload from '../hooks/useImageUpload';
 

@@ -3,8 +3,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
-import AddPicture from './addPicture';
-import GoBackButton from './goBackButton';
+import AddPicture from './AddPicture';
+import GoBackButton from './GoBackButton';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Header = () => {
+const WriteHeader = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -33,4 +33,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default WriteHeader;

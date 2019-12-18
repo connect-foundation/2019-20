@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Actionbar from './action-bar';
-import GoBackButton from './goBackButton';
+import Actionbar from './ActionBar';
+import GoBackButton from './GoBackButton';
 
 const ActivityLayorToolbar = ({title, buttons = []}) => {
   return (

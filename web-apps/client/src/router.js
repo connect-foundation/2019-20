@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import Home from './pages/main';
 import Filters from './pages/filters';
-import Location from './pages/area';
+import Location from './pages/Area';
 
 const link = {
   home: '/',

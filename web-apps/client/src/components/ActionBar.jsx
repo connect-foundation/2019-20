@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import IconButton from './icon-buton';
+import IconButton from './IconButon';
 
 const useStyles = makeStyles({
   rightButtons: { flexGrow: 1, textAlign: 'right' },

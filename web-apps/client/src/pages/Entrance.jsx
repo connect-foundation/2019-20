@@ -1,10 +1,10 @@
 import React, {useEffect, useContext} from 'react';
 import {Redirect} from 'react-router-dom';
 import styled from 'styled-components';
-import NaverLogInButton from '../components/naverLogInButton';
-import SkipLogInButton from '../components/skipLogInButton';
-import Logo from '../components/logo';
-import {UserContext} from '../contexts/user';
+import NaverLogInButton from '../components/NaverLogInButton';
+import SkipLogInButton from '../components/SkipLogInButton';
+import Logo from '../components/Logo';
+import {UserContext} from '../contexts/User';
 
 const Wrapper = styled.div`
   display: flex;

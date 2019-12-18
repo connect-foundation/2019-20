@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 
 // context
-import {ChatSocketProvider, ChatSocketContext} from '../contexts/socket';
+import {ChatSocketProvider, ChatSocketContext} from '../contexts/Socket';
 
 const HOST = 'http://10.180.171.184:5000';
 const NAME_SPACE = '/chat';

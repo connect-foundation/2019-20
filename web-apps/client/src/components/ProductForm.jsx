@@ -8,14 +8,14 @@ import Button from '@material-ui/core/Button';
 
 import useFetch from '../hooks/useFetch';
 
-import {ImageContext} from '../contexts/ImageStore';
-import {AlertMessageContext} from '../contexts/alertMessage';
-import {UserContext} from '../contexts/user';
+import {ImageContext} from '../contexts/Image';
+import {AlertMessageContext} from '../contexts/AlertMessage';
+import {UserContext} from '../contexts/User';
 
-import Drawer from './drawer';
-import DealType from './dealType';
-import ImageList from './imageList';
-import PriceField from './priceField';
+import Drawer from './Drawer';
+import DealType from './DealType';
+import ImageList from './ImageList';
+import PriceField from './PriceField';
 import {uploadProduct} from '../utils/apiCall';
 
 const useStyles = makeStyles(() => ({

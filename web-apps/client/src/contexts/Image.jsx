@@ -2,7 +2,7 @@ import React, {useState, useEffect, createContext} from 'react';
 
 export const ImageContext = createContext('');
 
-const ImageStore = ({children}) => {
+const Image = ({children}) => {
   const [images, setImages] = useState([]);
 
   const fileDelimiter = ' ';
@@ -62,4 +62,4 @@ const ImageStore = ({children}) => {
   );
 };
 
-export default ImageStore;
+export default Image;

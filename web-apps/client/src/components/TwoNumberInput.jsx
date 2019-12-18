@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Grid, Typography } from '@material-ui/core';
 
-import RadiusInput from './radius-input';
+import RadiusInput from './RadiusInput';
 
 const Form = ({ holders }, ref) => {
   const inputRefs = [useRef(null), useRef(null)];

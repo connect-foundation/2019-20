@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 
 import { List, ListItem } from '@material-ui/core';
 
-import Tabs from '../components/tap-page';
-import ToolBar from '../components/tool-bar';
+import Tabs from '../components/TapPage';
+import ToolBar from '../components/ToolBar';
 
-import { UserContext } from '../contexts/user';
+import { UserContext } from '../contexts/User';
 
 const getProducts = async (id, from) => {
   try {

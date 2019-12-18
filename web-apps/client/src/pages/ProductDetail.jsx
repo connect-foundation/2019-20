@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import ProductFooter from '../components/ProductFooter';
-import ProductProfile from '../components/productProfile';
-import SellerInfo from '../components/sellerInfo';
-import ProductDescription from '../components/productDescription';
+import ProductProfile from '../components/ProductProfile';
+import SellerInfo from '../components/SellerInfo';
+import ProductDescription from '../components/ProductDescription';
 
 import useFetch from '../hooks/useFetch';
 

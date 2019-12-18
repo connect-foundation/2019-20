@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 
 import { GridList, GridListTile } from '@material-ui/core';
 
-import Checkbox from '../../components/checkbox-label';
-import { filterContext } from '../../contexts/filters';
-import { SnackbarContext } from '../../contexts/snackbar';
+import Checkbox from '../../components/CheckboxLabel';
+import { filterContext } from '../../contexts/Filters';
+import { SnackbarContext } from '../../contexts/SnackBar';
 
 const MESSAGE = {
   ADD: '추가됐습니다',

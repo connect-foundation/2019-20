@@ -5,11 +5,11 @@ import {Link} from 'react-router-dom';
 import {ListItem, TextField, List, Button} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {AlertMessageContext} from '../contexts/alertMessage';
-import {UserContext} from '../contexts/user';
+import {AlertMessageContext} from '../contexts/AlertMessage';
+import {UserContext} from '../contexts/User';
 
-import ToolBar from '../components/tool-bar';
-import KakakoMap from '../components/kakao-map';
+import ToolBar from '../components/ToolBar';
+import KakakoMap from '../components/KakaoMap';
 
 import {KAKAO_API} from '../utils/config';
 import {addUser} from '../utils/apiCall';

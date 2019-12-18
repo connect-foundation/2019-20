@@ -11,7 +11,7 @@ import { IconButton, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import GpsIcon from '@material-ui/icons/GpsFixed';
 
-import useLoadScript from '../hooks/use-load-script';
+import useLoadScript from '../hooks/useLoadScript';
 
 import { debounce } from '../utils';
 

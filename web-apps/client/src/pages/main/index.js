@@ -12,12 +12,12 @@ import SearchIcon from '@material-ui/icons/Search';
 import FilterIcon from '@material-ui/icons/Tune';
 import NotifyIcon from '@material-ui/icons/NotificationsNoneOutlined';
 
-import ActionBar from '../../components/action-bar';
+import ActionBar from '../../components/ActionBar';
 import Card from '../../components/card';
 
 import getButtons from '../../utils/action-bar';
 import {getProductList} from './fetch';
-import {filterContext} from '../../contexts/filters';
+import {filterContext} from '../../contexts/Filters';
 
 const isScrollBottom = () =>
   window.innerHeight + window.scrollY >= document.body.offsetHeight;
