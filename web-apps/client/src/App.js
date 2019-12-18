@@ -77,9 +77,9 @@ export default () => {
                       <NoticeBar />
                     </ThemeProvider>
                   </Route>
-                  <AlertDialog />
                 </Grid>
               </Switch>
+              <AlertDialog />
             </Router>
           </FilterProvider>
         </SnackbarProvider>
