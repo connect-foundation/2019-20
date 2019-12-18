@@ -23,8 +23,8 @@ const uploadImages = async (formData) => {
 
 const uploadProduct = async (product) => {
   try {
-    const response = await axios.post(productHandleURI, product);
-    return response;
+    const {data} = await axios.post(productHandleURI, product);
+    return data;
   } catch (err) {
     throw new Error(err);
   }
