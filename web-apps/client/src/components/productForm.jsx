@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 
 import useFetch from '../hooks/useFetch';
 
-import {ProductContext} from '../contexts/productStore';
+import {ImageContext} from '../contexts/ImageStore';
 import {AlertMessageContext} from '../contexts/alertMessage';
 import {UserContext} from '../contexts/user';
 
@@ -73,7 +73,7 @@ const ProductForm = () => {
   const [contents, setContents] = useState('');
   const [nextPage, setNextPage] = useState('');
 
-  const {images} = useContext(ProductContext);
+  const {images} = useContext(ImageContext);
   const {user} = useContext(UserContext);
   const {dispatchMessage} = useContext(AlertMessageContext);
 

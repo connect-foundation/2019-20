@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {ProductContext} from '../contexts/productStore';
+import {ImageContext} from '../contexts/ImageStore';
 import {makeStyles} from '@material-ui/core/styles';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import {deletePicture} from '../utils/apiCall';
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductImage = ({mobile, name, deskTop}) => {
   const classes = useStyles();
-  const {images, setImages, setAlertMessage} = useContext(ProductContext);
+  const {images, setImages, setAlertMessage} = useContext(ImageContext);
 
   const onDelete = async () => {
     const mobileKey = mobile.split('/').slice(-1)[0];

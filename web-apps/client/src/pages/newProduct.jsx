@@ -5,7 +5,6 @@ import {Redirect} from 'react-router-dom';
 import Header from '../components/header';
 import ProductForm from '../components/productForm';
 
-import ProductStore from '../contexts/productStore';
 import {UserContext} from '../contexts/user';
 import {AlertMessageContext} from '../contexts/alertMessage';
 
@@ -54,10 +53,10 @@ const NewProduct = () => {
   }
 
   return (
-    <ProductStore>
+    <>
       <Header />
       <ProductForm className={classes.productForm} />
-    </ProductStore>
+    </>
   );
 };
 
