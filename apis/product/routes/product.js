@@ -23,8 +23,6 @@ const router = express.Router();
  * status=거래중,거래완료
  * order=order,-userId (order 오름차순, userId 내림차순)
  */
-router.use('/picture', pictureRouter);
-
 router
   .route('/')
   .get(queryAnalysisMiddleware, getProductListController)
@@ -35,5 +33,7 @@ router
   .get(findProductByIdController)
   .put(isLoggedInUser, modifyProductController)
   .delete(isLoggedInUser, deleteProductController);
+
+router.use('/picture', pictureRouter);
 
 export default router;

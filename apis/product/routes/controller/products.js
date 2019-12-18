@@ -38,7 +38,7 @@ export const findProductByIdController = async ({ params: { id } }, res, next) =
     const result = await getProducts(1, 1, { _id: id });
     const product = result[0];
     const seller = await getSellerInfo(product.userId);
-    res.json(Object.assign(product, seller));
+    res.send({ product, seller });
   } catch (e) {
     next({ status: 400, message: e.toString() });
   }
