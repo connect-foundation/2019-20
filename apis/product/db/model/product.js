@@ -50,7 +50,7 @@ const productSchema = new Schema({
       },
       message: '10장 이하의 사진만 등록 가능합니다.',
     },
-    es_type: 'string',
+    es_type: 'nested',
     required: true,
     es_indexed: true,
   },
