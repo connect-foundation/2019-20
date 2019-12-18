@@ -31,8 +31,12 @@ const SellerInfo = ({seller, location}) => {
   const [name, setName] = useState('');
   const [reputation, setReputation] = useState(5);
   const [distance, setDistance] = useState(0);
-
+  const [fail, setFailMessage] = useState('');
   useEffect(() => {
+    if (seller === null) {
+      setFailMessage('판매자의 정보를 읽을 수 없습니다.');
+      return;
+    }
     setName(seller && seller.name);
     setReputation(
       seller && getReputation(seller.reputation, seller.numberOfRater),
@@ -72,6 +76,13 @@ const SellerInfo = ({seller, location}) => {
     return null;
   };
 
+  if (fail.length) {
+    return (
+      <Information>
+            <div style={{color: 'red'}}>{fail}</div>
+      </Information>
+    );
+  }
   return (
     <Information>
       <div>
