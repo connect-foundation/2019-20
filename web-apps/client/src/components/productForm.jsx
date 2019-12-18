@@ -1,5 +1,7 @@
 import React, {useState, useContext} from 'react';
 
+import {Redirect} from 'react-router-dom';
+
 import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -21,6 +23,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'center',
     overflowY: 'auto',
+    paddingBottom: '2rem',
   },
   list: {
     width: 250,
@@ -43,6 +46,7 @@ const useStyles = makeStyles(() => ({
     resize: 'none',
   },
   submitButton: {
+    height: '2rem',
     position: 'fixed',
     bottom: '0',
     left: '0',
@@ -67,16 +71,26 @@ const ProductForm = () => {
   const [price, setPrice] = useState('');
   const [negotiable, setNegotiable] = useState(false);
   const [contents, setContents] = useState('');
+  const [nextPage, setNextPage] = useState('');
 
   const {images} = useContext(ProductContext);
   const {user} = useContext(UserContext);
-  const {setAlertMessage} = useContext(AlertMessageContext);
+  const {dispatchMessage} = useContext(AlertMessageContext);
 
   const categoryAPI = 'category';
   const statusTypeListAPI = 'statusType';
-  const emptyErrorMessage = '비어있는 항목이 있습니다. 확인해 주세요 :D';
-  const submitErrorMessage =
-    '상품 등록에 실패했습니다. 잠시후 다시 시도해 주세요. :D';
+  const emptyErrorMessage = (msg) => {
+    const basic = <div>비어있는 항목이 있습니다. 확인해 주세요 :D</div>;
+    return (
+      <div>
+        {basic}
+        {msg}
+      </div>
+    );
+  };
+  const submitErrorMessage = (
+    <div>상품 등록에 실패했습니다. 잠시후 다시 시도해 주세요. :D</div>
+  );
 
   const loadCategory = useFetch(categoryAPI, setCategoryList);
   const loadStatusType = useFetch(statusTypeListAPI, setStatusTypeList);
@@ -92,12 +106,11 @@ const ProductForm = () => {
       productStatus,
       category,
     } = product;
-
     if (!title || !title.length) {
       result += '제목 ';
     }
     if (!userId || !userId.length) {
-      result = '로그인 하셨나요?';
+      result = '로그인 정보가 없습니다.';
       return result;
     }
     if (!price || price <= 0) {
@@ -145,14 +158,22 @@ const ProductForm = () => {
 
     const emptyElement = checkAllInfoFilled(product);
     if (emptyElement.length) {
-      setAlertMessage(emptyErrorMessage + `(${emptyElement})`);
+      dispatchMessage({
+        type: 'error_message',
+        payload: emptyErrorMessage(emptyElement),
+      });
       return;
     }
 
     try {
-      await uploadProduct(product);
+      const {_id} = await uploadProduct(product);
+      window.localStorage.clear();
+      setNextPage(`/product/${_id}`);
     } catch (err) {
-      setAlertMessage(submitErrorMessage);
+      dispatchMessage({
+        type: 'error_message',
+        payload: submitErrorMessage,
+      });
     }
   };
 
@@ -181,6 +202,10 @@ const ProductForm = () => {
   const onContentChange = (e) => {
     setContents(e.target.value);
   };
+
+  if (nextPage.length) {
+    return <Redirect to={nextPage} />;
+  }
 
   return (
     <div className={classes.formContainer}>
