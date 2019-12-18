@@ -12,8 +12,8 @@ const Carousel = ({images}) => {
         <div
           style={{
             backgroundImage: `url(${image})`,
-            height: '250px',
             width: '100%',
+            height: '250px',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
@@ -21,11 +21,8 @@ const Carousel = ({images}) => {
       </a>
     ));
 
-  const imageSize = 100;
   return (
     <MyCarousel
-      initialSlideHeight={imageSize}
-      initialSlideWidth={imageSize}
       cellAlign='center'
       slideIndex={slideIndex}
       afterSlide={(slideIndex) => setSlideIndex(slideIndex)}
