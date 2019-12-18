@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 `;
 
 const ProductDetail = ({match}) => {
-  const productID = match.params.id; //'5df31c6672300026b6ef3c85';
+  const productID = match.params.id;
 
   const [detail, seDetail] = useState(null);
   const [product, setProduct] = useState(null);
