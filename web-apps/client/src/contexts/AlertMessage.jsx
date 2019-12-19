@@ -2,12 +2,17 @@ import React, { useReducer, createContext } from 'react';
 
 export const AlertMessageContext = createContext({});
 
+const ACTION_TYPE = {
+  CLEAR: 'clear',
+  ERROR: 'error_message',
+};
+
 const alertMessageReducer = (state, action) => {
   switch (action.type) {
-    case 'clear': {
+    case ACTION_TYPE.CLEAR: {
       return state.slice(1);
     }
-    case 'error_message': {
+    case ACTION_TYPE.ERROR: {
       return [...state, action.payload];
     }
     default: {
@@ -20,7 +25,9 @@ const AlertMessage = ({ children }) => {
   const [message, dispatchMessage] = useReducer(alertMessageReducer, []);
 
   return (
-    <AlertMessageContext.Provider value={{ message, dispatchMessage }}>
+    <AlertMessageContext.Provider
+      value={{message, dispatchMessage, ACTION_TYPE}}
+    >
       {children}
     </AlertMessageContext.Provider>
   );

@@ -47,7 +47,7 @@ const ProductDescription = ({description, interest}) => {
       <div style={{display: 'flex', marginTop: '1rem', color: '#444'}}>
         <div>조회: {hits} </div>
         <div style={{width: '1rem'}} />
-        <div>관심: {interest}</div>
+        <div>관심: {interest.length}</div>
       </div>
     </Description>
   );
