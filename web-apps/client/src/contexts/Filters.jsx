@@ -68,7 +68,7 @@ export const filterContext = createContext({});
 
 export const FilterProvider = ({ children }) => {
   const [filter, dispatchFilter] = useReducer(filterReducer, initialFilters);
-  const { dispatchMessage } = useContext(AlertMessageContext)
+  const { ACTION_TYPE, dispatchMessage } = useContext(AlertMessageContext)
   const CATEOGRY_LABEL_LOAD_FAIL = '카테고리 정보를 불러 올 수 없습니다.';
   useEffect(() => {
     const getCategoryFromServer = async () => {
@@ -76,11 +76,11 @@ export const FilterProvider = ({ children }) => {
         const list = await getCategoryList();
         dispatchFilter({ type: FILTER_TYPE.CATEGORY_INITIAL, payload: list });
       } catch (err) {
-        dispatchMessage({ type: 'error_message', payload: CATEOGRY_LABEL_LOAD_FAIL })
+        dispatchMessage({ type: ACTION_TYPE.ERROR, payload: CATEOGRY_LABEL_LOAD_FAIL })
       }
     };
     getCategoryFromServer();
-  }, [dispatchMessage]);
+  }, [ACTION_TYPE.ERROR, dispatchMessage]);
   return (
     <filterContext.Provider value={{ FILTER_TYPE, filter, dispatchFilter }}>
       {children}
