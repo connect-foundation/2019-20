@@ -1,13 +1,17 @@
-export const imageHandleURI = 'http://10.180.170.175:5000/products/picture';
-export const productHandleURI = 'http://10.180.170.175:5000/products';
+const PRODUCT_API = 'http://49.236.137.63';
+export const imageHandleURI = `${PRODUCT_API}/products/picture`;
+export const productHandleURI = `${PRODUCT_API}/products`;
 export const loginStatusHandleURI = 'http:/10.180.170.213:5001/myInfo';
 export const naverLoginURI = 'http://10.180.170.213:5001/naver/login';
 export const addUserURI = 'http://10.180.170.213:5001/addUser';
-export const productDetailAPI = (id) => `http://10.180.170.175:5000/products/${id}`;
+export const productDetailAPI = (id) => `${PRODUCT_API}/products/${id}`;
 export const logOutURI = 'http://10.180.170.213:5001/logout';
-export const productList = 'http://10.180.170.175:5000/products';
-export const cagtegoryInfo = 'http://10.180.170.175:5000/info/category';
+export const productList = `${PRODUCT_API}/products`
+export const cagtegoryInfo = `${PRODUCT_API}/info/category`;
+export const keywordURI = `${PRODUCT_API}/info/keyword`;
 export const routes = {
-  LOCATION_FILTER: '/service/location',
   PRODUCT: '/product',
+  LOCATION_FILTER: '/service/location',
+  SEARCH: '/service/search',
+  FILTER: '/service/category',
 };

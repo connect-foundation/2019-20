@@ -4,11 +4,11 @@ import useCredentialFetch from '../hooks/useCredentialFetch';
 import { loginStatusHandleURI } from '../assets/uris';
 import { AlertMessageContext } from './AlertMessage';
 
-export const UserContext = createContext();
+export const UserContext = createContext({});
 
-const User = ({children}) => {
-  const [user, setUser] = useState({id: ''});
-  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
+const User = ({ children }) => {
+  const [user, setUser] = useState({ id: '김철수' });
+  const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
 
   const jwtErrorMessage = '잘못된 유저 정보로 인해 로그아웃 됩니다.';
   const serverErrorMessage =
@@ -17,9 +17,9 @@ const User = ({children}) => {
   const detectUserErrorHandler = (err) => {
     if (err) {
       if (err.message === 'Network Error') {
-        dispatchMessage({type: ACTION_TYPE.ERROR, payload: serverErrorMessage});
+        dispatchMessage({ type: ACTION_TYPE.ERROR, payload: serverErrorMessage });
       } else if (err.response.status === 400) {
-        dispatchMessage({type: ACTION_TYPE.ERROR, payload: jwtErrorMessage});
+        dispatchMessage({ type: ACTION_TYPE.ERROR, payload: jwtErrorMessage });
       }
     }
   };

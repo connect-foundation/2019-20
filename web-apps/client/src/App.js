@@ -17,6 +17,7 @@ import WriteProduct from './pages/WriteProduct';
 import Mypage from './pages/MyPage';
 import SetMyArea from './pages/SetMyArea';
 import ProductDetail from './pages/ProductDetail';
+import Search from './pages/Search';
 
 // TODO
 // import ListView from './components/list-view';
@@ -36,6 +37,8 @@ import theme from './theme';
 
 import './style.css';
 import AlertDialog from './components/AlertDialog';
+
+import { routes } from './assets/uris';
 
 const useStyles = makeStyles({
   root: {
@@ -66,13 +69,18 @@ export default () => {
                         <Route exact path='/service/main' component={Main} />
                         <Route
                           exact
-                          path='/service/category'
+                          path={routes.FILTER}
                           component={Filters}
                         />
                         <Route
                           exact
-                          path='/service/location'
+                          path={routes.LOCATION_FILTER}
                           component={Location}
+                        />
+                        <Route
+                          exact
+                          path={routes.SEARCH}
+                          component={Search}
                         />
                       </ThemeProvider>
                       <ThemeProvider theme={muiTheme}>

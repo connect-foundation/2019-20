@@ -7,10 +7,12 @@ import { useHistory } from 'react-router-dom';
 import { List, ListItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Input from '../components/search';
-import ToolBar from '../components/tool-bar';
+import Input from '../components/Search';
+import ToolBar from '../components/ToolBar';
 
-import { filterContext } from '../contexts/filters';
+import { filterContext } from '../contexts/Filters';
+
+import { keywordURI } from '../assets/uris';
 
 const useStyles = makeStyles({
   'root': {
@@ -22,7 +24,7 @@ const useStyles = makeStyles({
 });
 
 const getKeywordList = async (keyword) => {
-  const response = await axios.get('http://localhost:5000/info/keyword', {
+  const response = await axios.get(keywordURI, {
     params: { keyword }
   })
   return response.data;
@@ -35,7 +37,7 @@ export default () => {
   const SEARCH_DELAY = 500;
   const classes = useStyles({});
   const inputRef = useRef({ current: '' });
-  const { filter: { keyword }, dispatch, TYPE } = useContext(filterContext);
+  const { filter: { keyword }, dispatchFilter, FILTER_TYPE } = useContext(filterContext);
   const [list, setList] = useState([]);
   const [recommend, setRecommned] = useState('');
   const timer = { current: '' };
@@ -84,7 +86,7 @@ export default () => {
 
   const updateKeyword = (event) => {
     const name = event.target.innerText;
-    dispatch({ type: TYPE.KEYWORD, payload: name });
+    dispatchFilter({ type: FILTER_TYPE.KEYWORD, payload: name });
     histroy.goBack();
   };
 
@@ -93,7 +95,7 @@ export default () => {
       return;
     }
     const name = inputRef.current.get();
-    dispatch({ type: TYPE.KEYWORD, payload: name });
+    dispatchFilter({ type: FILTER_TYPE.KEYWORD, payload: name });
     histroy.goBack();
   }
 

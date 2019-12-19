@@ -61,7 +61,7 @@ const filterReducer = (state, { type, payload }) => {
       }
       return { ...state, distance: +payload };
 
-    case TYPE.KEYWORD:
+    case FILTER_TYPE.KEYWORD:
       return { ...state, keyword: payload };
 
     default:
