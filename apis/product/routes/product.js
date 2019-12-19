@@ -1,5 +1,4 @@
 import express from 'express';
-import isLoggedInUser from '../services/user';
 import queryAnalysisMiddleware from './middleware/listView';
 import {
   modifyProductController,
@@ -8,6 +7,7 @@ import {
   getProductListController,
   findProductByIdController,
 } from './controller/products';
+import isLoggedInUser from './middleware/user';
 import pictureRouter from './picture';
 
 const router = express.Router();

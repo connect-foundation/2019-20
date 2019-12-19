@@ -5,7 +5,7 @@ import {
   updateProduct,
   insertProduct,
 } from '../../core';
-import getSellerInfo from '../../core/callAPI';
+import { getSellerInfo } from '../../core/callAPI';
 
 export const deleteProductController = async ({ params: { id } }, res, next) => {
   try {
