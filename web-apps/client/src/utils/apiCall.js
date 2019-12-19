@@ -4,6 +4,7 @@ import {
   productHandleURI,
   addUserURI,
   logOutURI,
+  deleteProductURI,
 } from '../assets/uris';
 
 const deletePicture = async (mobileKey, deskTopKey) => {
@@ -62,4 +63,24 @@ const deleteJWTRequest = async () => {
   }
 };
 
-export {deletePicture, uploadImages, uploadProduct, addUser, deleteJWTRequest};
+const deleteProduct = async (id, userId) => {
+  try {
+    const options = {
+      method: 'delete',
+      url: deleteProductURI(id),
+      data: {userId},
+    };
+    await axios(options);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export {
+  deletePicture,
+  uploadImages,
+  uploadProduct,
+  addUser,
+  deleteJWTRequest,
+  deleteProduct,
+};

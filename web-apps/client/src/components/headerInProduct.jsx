@@ -1,8 +1,15 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
+import {useHistory} from 'react-router-dom';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {makeStyles} from '@material-ui/core/styles';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import GoBackButton from './GoBackButton';
+
+import {UserContext} from '../contexts/User';
+
+import {deleteProduct} from '../utils/apiCall';
 
 const useStyles = makeStyles(() => ({
   header: {
@@ -25,12 +32,63 @@ const useStyles = makeStyles(() => ({
     height: '2rem',
   },
 }));
-const HeaderInProduct = () => {
+const HeaderInProduct = ({id, seller}) => {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  let history = useHistory();
+
+  const {user} = useContext(UserContext);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleUpdate = () => {
+    handleClose();
+  };
+  const handleDelete = async () => {
+    try {
+      await deleteProduct(id, user.id);
+      history.replace('/service/main');
+    } catch (e) {
+      alert('삭제 실패');
+    }
+
+    handleClose();
+  };
+  const isOwner = () => {
+    return !!(
+      user &&
+      user.id &&
+      seller &&
+      seller.userId &&
+      user.id === seller.userId
+    );
+  };
+
   return (
     <div className={classes.header}>
       <GoBackButton className={classes.back} />
-      <MoreVertIcon className={classes.more} />
+      {isOwner() && (
+        <>
+          <div onClick={handleClick}>
+            <MoreVertIcon className={classes.more} />
+          </div>
+          <Menu
+            id='simple-menu'
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleUpdate}>수정</MenuItem>
+            <MenuItem onClick={handleDelete}>삭제</MenuItem>
+          </Menu>
+        </>
+      )}
     </div>
   );
 };

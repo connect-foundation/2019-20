@@ -7,6 +7,7 @@ export const productDetailAPI = (id) => `http://localhost:5000/products/${id}`;
 export const logOutURI = 'http://localhost:5001/logout';
 export const productList = 'http://localhost:5000/products';
 export const cagtegoryInfo = 'http://localhost:5000/info/category';
+export const mainPage = 'http://localhost:3000/service/main'
 export const routes = {
   LOCATION_FILTER: '/service/location',
   PRODUCT: '/product',

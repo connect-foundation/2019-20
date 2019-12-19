@@ -41,7 +41,7 @@ const AddPicture = () => {
       });
       setFile(allowed);
       dispatchMessage({
-        action: ACTION_TYPE.ERROR,
+        type: ACTION_TYPE.ERROR,
         payload: msg.fileMaximumUploadErrorMessage,
       });
       return;

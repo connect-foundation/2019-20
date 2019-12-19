@@ -1,4 +1,4 @@
-import React, { useReducer, createContext } from 'react';
+import React, {useReducer, createContext} from 'react';
 
 export const AlertMessageContext = createContext({});
 
@@ -21,7 +21,7 @@ const alertMessageReducer = (state, action) => {
   }
 };
 
-const AlertMessage = ({ children }) => {
+const AlertMessage = ({children}) => {
   const [message, dispatchMessage] = useReducer(alertMessageReducer, []);
 
   return (

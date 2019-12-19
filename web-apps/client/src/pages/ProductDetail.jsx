@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useContext} from 'react';
 import styled from 'styled-components';
 
+import {useHistory} from 'react-router-dom';
+
 import ProductFooter from '../components/ProductFooter';
 import ProductProfile from '../components/ProductProfile';
 import SellerInfo from '../components/SellerInfo';
@@ -10,7 +12,7 @@ import useFetch from '../hooks/useFetch';
 
 import {isMobile} from '../utils/index';
 import filterObject from '../utils/object';
-import {productDetailAPI} from '../assets/uris';
+import {productDetailAPI, mainPage} from '../assets/uris';
 import descriptionField from '../assets/productDescriptionField';
 import msg from '../assets/errorMessages';
 
@@ -22,6 +24,7 @@ const Wrapper = styled.div`
 `;
 
 const ProductDetail = ({match}) => {
+  let history = useHistory();
   const {user} = useContext(UserContext);
   const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
   const productID = match.params.id;
@@ -39,13 +42,17 @@ const ProductDetail = ({match}) => {
       setSeller(detail.seller);
     }
   }, [detail]);
+
   useEffect(() => {
-    if (product !== null) {
+    if (product) {
       const filtered = filterObject(product, descriptionField);
       setDescription(filtered);
       setInterest(product.interests);
       const footer = filterObject(product, ['price', 'negotiable']);
       setFooterData(footer);
+    } else if (product === undefined) {
+      alert(msg.productNotFound);
+      history.replace('/service/main');
     }
   }, [product]);
 
