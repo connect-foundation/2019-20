@@ -1,16 +1,11 @@
 import axios from 'axios';
-import {
-  imageHandleURI,
-  productHandleURI,
-  addUserURI,
-  logOutURI,
-} from '../assets/uris';
+import { PRODUCT, AUTH } from '../assets/uris';
 
 const deletePicture = async (mobileKey, deskTopKey) => {
   try {
-    await axios.delete(imageHandleURI, {data: {key: mobileKey}});
+    await axios.delete(PRODUCT.IMAGE_HANDLE, { data: { key: mobileKey } });
     if (mobileKey !== deskTopKey) {
-      await axios.delete(imageHandleURI, {data: {key: deskTopKey}});
+      await axios.delete(PRODUCT.IMAGE_HANDLE, { data: { key: deskTopKey } });
     }
   } catch (err) {
     throw new Error(err);
@@ -19,7 +14,7 @@ const deletePicture = async (mobileKey, deskTopKey) => {
 
 const uploadImages = async (formData) => {
   try {
-    const response = await axios.post(imageHandleURI, formData);
+    const response = await axios.post(PRODUCT.IMAGE_HANDLE, formData);
     return response;
   } catch (err) {
     throw new Error(err);
@@ -28,20 +23,20 @@ const uploadImages = async (formData) => {
 
 const uploadProduct = async (product) => {
   try {
-    const {data} = await axios.post(productHandleURI, product);
+    const { data } = await axios.post(PRODUCT.PRODUCT_HANDLE, product);
     return data;
   } catch (err) {
     throw new Error(err);
   }
 };
 
-const addUser = async ({latitude, longitude}) => {
+const addUser = async ({ latitude, longitude }) => {
   try {
     const options = {
       method: 'post',
-      url: addUserURI,
+      url: AUTH.ADD_USER,
       withCredentials: true,
-      data: {latitude, longitude},
+      data: { latitude, longitude },
     };
     await axios(options);
   } catch (e) {
@@ -53,7 +48,7 @@ const deleteJWTRequest = async () => {
   try {
     const options = {
       method: 'get',
-      url: logOutURI,
+      url: AUTH.LOGOUT,
       withCredentials: true,
     };
     await axios(options);
@@ -62,4 +57,4 @@ const deleteJWTRequest = async () => {
   }
 };
 
-export {deletePicture, uploadImages, uploadProduct, addUser, deleteJWTRequest};
+export { deletePicture, uploadImages, uploadProduct, addUser, deleteJWTRequest };

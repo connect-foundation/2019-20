@@ -18,7 +18,7 @@ import LogoutButton from '../components/LogOutButton';
 import { AlertMessageContext } from '../contexts/AlertMessage';
 import { UserContext } from '../contexts/User';
 
-import { routes } from '../assets/uris';
+import { ROUTES } from '../assets/uris';
 
 const useStyles = makeStyles({
   root: {
@@ -72,9 +72,9 @@ const MyPage = () => {
   const firstName = user.name.slice(1);
 
   const buttons = [
-    [<SellIcon />, '판매 내역', '/my-article'],
-    [<BuyIcon />, '구매 내역', '/buy-list'],
-    [<FavoriteIcon />, '찜한 내역', '/favorite-list']
+    [<SellIcon />, '판매 내역', ROUTES.SELL_LIST],
+    [<BuyIcon />, '구매 내역', ROUTES.BUY_LIST],
+    [<FavoriteIcon />, '찜한 내역', ROUTES.FAVORITE_LIST]
   ].map(LabledIconButton);
 
   return (
@@ -99,7 +99,7 @@ const MyPage = () => {
           <InlineItems items={buttons} />
         </ListItem>
         <ListItem divider className='card'>
-          <Link to={routes.ENROLL_LOCATION}>
+          <Link to={ROUTES.ENROLL_LOCATION}>
             <LocatonIcon /> 내 동네 설정
           </Link>
         </ListItem>

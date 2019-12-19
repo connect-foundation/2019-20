@@ -8,10 +8,11 @@ import Tabs from '../components/TapPage';
 import ToolBar from '../components/ToolBar';
 
 import { UserContext } from '../contexts/User';
+import { PRODUCT } from '../assets/uris';
 
 const getProducts = async (id, from) => {
   try {
-    const response = await axios.get('http://localhost:5000/secrets',
+    const response = await axios.get(PRODUCT.PRODUCT_SELL_LIST_MEMBER,
       {
         params: { id, from }
       });
@@ -34,7 +35,7 @@ const BuyList = () => {
 
   useEffect(() => {
     const getProductsById = async () => {
-      const data = await getProducts(user, from);
+      const data = await getProducts(user.id, from);
       setList((previousList) => {
         const newList = { ...previousList };
         data.forEach(({ _id, _source }) => {

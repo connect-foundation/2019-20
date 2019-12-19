@@ -1,14 +1,14 @@
 import React from 'react';
 import naverButton from '../assets/naverLogIn.png';
 import styled from 'styled-components';
-import {naverLoginURI} from '../assets/uris';
+import { AUTH } from '../assets/uris';
 
 const NaverButton = styled.img`
   width: 12rem;
 `;
 const NaverLogInButton = () => {
   return (
-    <a href={naverLoginURI}>
+    <a href={AUTH.NAVER_LOGIN}>
       <NaverButton src={naverButton} />
     </a>
   );

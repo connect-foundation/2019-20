@@ -12,7 +12,7 @@ import ToolBar from '../components/ToolBar';
 
 import { filterContext } from '../contexts/Filters';
 
-import { keywordURI } from '../assets/uris';
+import { PRODUCT } from '../assets/uris';
 
 const useStyles = makeStyles({
   'root': {
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 });
 
 const getKeywordList = async (keyword) => {
-  const response = await axios.get(keywordURI, {
+  const response = await axios.get(PRODUCT.KEYWORD_SEARCH, {
     params: { keyword }
   })
   return response.data;

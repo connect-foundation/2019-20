@@ -10,7 +10,7 @@ import useFetch from '../hooks/useFetch';
 
 import { isMobile } from '../utils/index';
 import filterObject from '../utils/object';
-import { productDetailAPI } from '../assets/uris';
+import { PRODUCT } from '../assets/uris';
 import descriptionField from '../assets/productDescriptionField';
 import msg from '../assets/errorMessages';
 
@@ -82,7 +82,7 @@ const ProductDetail = ({ match }) => {
     setInterest(result);
   };
 
-  useFetch(productDetailAPI(productID), seDetail, productInfoLoadError);
+  useFetch(PRODUCT.getProdutDetialUri(productID), seDetail, productInfoLoadError);
 
   const images = selectImages(product);
 
