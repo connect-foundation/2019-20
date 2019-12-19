@@ -203,7 +203,11 @@ Product.createMapping(
       },
     },
   },
-  () => {},
+  (err) => {
+    if (err) {
+      console.log(err);
+    }
+  },
 );
 
 /*
@@ -215,6 +219,9 @@ const KEYWORD_ANALYSIS_INTERVAL = 5000;
 const timer = setInterval(() => {
   // 100개씩 끊기
   const title = documentsToAnalyze.title.slice(0, 100).join('\n');
+  if (process.env.NODE_ENV === 'development') {
+    console.log(documentsToAnalyze.title.length);
+  }
   documentsToAnalyze.title = documentsToAnalyze.title.slice(100);
 
   // seed 인경우 더이상 업데이트할 데이터가 없으면 종료
@@ -229,6 +236,7 @@ const timer = setInterval(() => {
   // insert keyword index
   const insertKeyword = (err, { tokens }) => {
     if (err) {
+      console.log('analysis', err);
       return;
     }
     const words = tokens
@@ -237,7 +245,11 @@ const timer = setInterval(() => {
     const wordSet = new Set();
     words.forEach((word) => wordSet.add(word));
     wordSet.forEach((word) => {
-      Keyword.findOneAndUpdate(word, word, { upsert: true }, () => {});
+      Keyword.findOneAndUpdate(word, word, { upsert: true }, (err) => {
+        if (err && err.codeName !== 'DuplicateKey') {
+          console.log('update', err);
+        }
+      });
     });
   };
 
