@@ -1,8 +1,8 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, {useState, createContext, useContext} from 'react';
 
 import useCredentialFetch from '../hooks/useCredentialFetch';
-import { loginStatusHandleURI } from '../assets/uris';
-import { AlertMessageContext } from './AlertMessage';
+import {loginStatusHandleURI} from '../assets/uris';
+import {AlertMessageContext} from './AlertMessage';
 
 export const UserContext = createContext();
 
@@ -24,10 +24,10 @@ const User = ({children}) => {
     }
   };
 
-  //useCredentialFetch(loginStatusHandleURI, setUser, detectUserErrorHandler);
+  useCredentialFetch(loginStatusHandleURI, setUser, detectUserErrorHandler);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{user, setUser}}>
       {children}
     </UserContext.Provider>
   );

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
-import { category, statusTypeList } from '../assets/list';
+import {category, statusTypeList} from '../assets/list';
 
 const UseFetch = (uri, callback, errHandler) => {
   const [loading, setLoading] = useState(false);
@@ -22,8 +22,8 @@ const UseFetch = (uri, callback, errHandler) => {
       if (mockData.length) {
         callback(mockData);
       } else {
-        const res = await axios.get(uri);
-        callback(res);
+        const {data} = await axios.get(uri);
+        callback(data);
       }
     } catch (e) {
       errHandler();

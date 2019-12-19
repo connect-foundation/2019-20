@@ -8,18 +8,23 @@ import {AlertMessageContext} from '../contexts/AlertMessage';
 
 import useImageUpload from '../hooks/useImageUpload';
 
+import msg from '../assets/errorMessages';
+
 const useStyles = makeStyles(() => ({
   input: {display: 'none'},
 }));
 const AddPicture = () => {
   const classes = useStyles();
-  const fileMaximumUploadErrorMessage = '사진은 10장까지만 입력 가능합니다.';
   const [file, setFile] = useState([]);
   const inputRef = useRef(false);
   const {images, setImages} = useContext(ImageContext);
-  const {setAlertMessage} = useContext(AlertMessageContext);
+  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
 
-  useImageUpload(images, file, inputRef, setImages, setAlertMessage);
+  const errorCallback = (msg) => {
+    dispatchMessage({action: ACTION_TYPE.ERROR, payload: msg});
+  };
+
+  useImageUpload(images, file, inputRef, setImages, errorCallback);
 
   const imageUploadListener = async (evt) => {
     const selectedFiles = Array.from(evt.target.files);
@@ -35,7 +40,10 @@ const AddPicture = () => {
         }
       });
       setFile(allowed);
-      setAlertMessage(fileMaximumUploadErrorMessage);
+      dispatchMessage({
+        action: ACTION_TYPE.ERROR,
+        payload: msg.fileMaximumUploadErrorMessage,
+      });
       return;
     }
     setFile(selectedFiles);

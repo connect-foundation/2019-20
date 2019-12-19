@@ -22,14 +22,11 @@ const useStyles = makeStyles(() => ({
 const WriteProduct = () => {
   const classes = useStyles();
   const {user} = useContext(UserContext);
-  const {dispatchMessage} = useContext(AlertMessageContext);
+  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
   const notLogInErrorMessage = '로그인 먼저 하셔야 합니다.';
 
   const isLogInned = (user) => {
-    if (user === null) {
-      return false;
-    }
-    return true;
+    return user !== null;
   };
 
   useEffect(() => {
@@ -46,7 +43,7 @@ const WriteProduct = () => {
   const result = isLogInned(user);
   if (!result) {
     dispatchMessage({
-      type: 'error_message',
+      type: ACTION_TYPE.ERROR,
       payload: notLogInErrorMessage,
     });
     return <Redirect to='/' />;

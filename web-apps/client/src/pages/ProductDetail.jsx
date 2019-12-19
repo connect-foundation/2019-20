@@ -39,7 +39,6 @@ const ProductDetail = ({match}) => {
       setSeller(detail.seller);
     }
   }, [detail]);
-
   useEffect(() => {
     if (product !== null) {
       const filtered = filterObject(product, descriptionField);
@@ -59,7 +58,7 @@ const ProductDetail = ({match}) => {
 
   const selectImages = (data) => {
     let result = [];
-    if (data !== null) {
+    if (data) {
       if (isMobile(navigator.userAgent)) {
         if (data.pictures.length) {
           result = data.pictures.map((pic) => pic.mobile);
@@ -87,7 +86,7 @@ const ProductDetail = ({match}) => {
 
   return (
     <Wrapper>
-      <ProductProfile images={images} />
+      <ProductProfile images={images} id={productID} seller={product} />
       <SellerInfo seller={seller} location={product && product.location} />
       <ProductDescription description={description} interest={interest} />
       <ProductFooter

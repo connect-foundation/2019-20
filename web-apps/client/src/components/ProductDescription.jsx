@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import {takeDigitFromNumber} from '../utils/time';
 
 const Description = styled.div`
   margin: 1rem;
