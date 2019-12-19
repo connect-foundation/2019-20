@@ -4,14 +4,21 @@ import { isClientError, isServerError } from '../../utils/detectError';
 
 const serverErrorHandler = (err, req, res, next) => {
   if (isServerError(err)) {
-    if (
-      err.message === msg.naverError
-      || err.message === msg.ErrorWhenCheckMember
-    ) {
-      res.redirect(uri.client500ErrorPage);
-    } else if (err.message === msg.internalError) {
-      res.status(err.status);
-      res.json({ message: err.message });
+    switch (err.message) {
+      case msg.naverError:
+        res.redirect(uri.client500ErrorPage);
+        break;
+      case msg.ErrorWhenCheckMember:
+        res.redirect(uri.client500ErrorPage);
+        break;
+      case msg.internalError:
+        res.status(err.status);
+        res.json({ message: err.message });
+        break;
+      default:
+        res.status(err.status);
+        res.json({ message: err.message });
+        break;
     }
   } else {
     next(err);
@@ -20,17 +27,21 @@ const serverErrorHandler = (err, req, res, next) => {
 
 const clientErrorHandler = (err, req, res, next) => {
   if (isClientError(err)) {
-    if (err.message === msg.invalidJwtToken) {
-      res.status(err.status);
-      res.clearCookie('jwt');
-      res.json({ message: err.message });
-    } else if (err.message === msg.validationError) {
-      res.status(err.status);
-      res.clearCookie('jwt');
-      res.json({ message: err.message });
-    } else {
-      res.status(err.status);
-      res.json({ message: err.message });
+    switch (err.message) {
+      case msg.invalidJwtToken:
+        res.status(err.status);
+        res.clearCookie('jwt');
+        res.json({ message: err.message });
+        break;
+      case msg.validationError:
+        res.status(err.status);
+        res.clearCookie('jwt');
+        res.json({ message: err.message });
+        break;
+      default:
+        res.status(err.status);
+        res.json({ message: err.message });
+        break;
     }
   } else {
     next(err);

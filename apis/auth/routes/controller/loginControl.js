@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import uri from '../../assets/uris';
 import msg from '../../assets/errorMessages';
+import filterObject from '../../utils';
 
 const getUserInfoByJWT = (req, res, next) => {
   const { info } = res.locals;
@@ -66,9 +67,7 @@ const newAccountLogIn = (req, res) => {
     'numberOfRater',
   ];
 
-  const info = Object.keys(res.locals)
-    .filter((key) => fields.includes(key))
-    .reduce((acc, cur) => Object.assign(acc, { [cur]: res.locals[cur] }), {});
+  const info = filterObject(res.locals, fields);
 
   const token = jwt.sign(info, process.env.JWT_PRIVATE_KEY);
   res.cookie('jwt', token, {
@@ -89,9 +88,7 @@ const login = async (req, res) => {
     'numberOfRater',
   ];
 
-  const info = Object.keys(res.locals)
-    .filter((key) => fields.includes(key))
-    .reduce((acc, cur) => Object.assign(acc, { [cur]: res.locals[cur] }), {});
+  const info = filterObject(res.locals, fields);
 
   if (info.id && info.id.length) {
     const token = jwt.sign(info, process.env.JWT_PRIVATE_KEY);
