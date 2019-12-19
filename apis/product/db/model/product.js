@@ -1,10 +1,13 @@
 import mongoose from 'mongoose';
 import mongoosastic from 'mongoosastic';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import Keyword from './keyword';
+import promiseSearch from '../common/statics';
+import { mongoosasticSettings } from '../../config';
 
 const { Schema } = mongoose;
+
+const documentsToAnalyze = { title: [] };
+
 const productSchema = new Schema(
   {
     title: {
@@ -48,7 +51,9 @@ const productSchema = new Schema(
         },
         message: '10장 이하의 사진만 등록 가능합니다.',
       },
+      es_type: 'nested',
       required: true,
+      es_indexed: true,
     },
     location: {
       geo_point: {
@@ -76,10 +81,9 @@ const productSchema = new Schema(
       es_indexed: true,
     },
     interests: {
-      type: Number,
-      default: 0,
-      required: true,
-      es_type: 'integer',
+      type: Array,
+      required: false,
+      es_type: 'string',
       es_indexed: true,
     },
     currentStatus: {
@@ -87,6 +91,12 @@ const productSchema = new Schema(
       enum: ['대기', '거래중', '거래완료', '비공개'],
       default: '대기',
       required: true,
+      es_type: 'string',
+      es_indexed: true,
+    },
+    buyer: {
+      type: String,
+      default: '',
       es_type: 'string',
       es_indexed: true,
     },
@@ -126,29 +136,18 @@ const productSchema = new Schema(
   },
 );
 
-productSchema.plugin(mongoosastic, {
-  hosts: [`${process.env.ELASTICSEARCH}`],
-  bulk: {
-    size: 100,
-    delay: 1000,
-  },
-  filter: (doc) => doc.currentStatus === '비공개',
-  type: '_doc',
+productSchema.plugin(mongoosastic, mongoosasticSettings);
+
+productSchema.static('search', promiseSearch);
+
+const pushKeywordForTokenization = (doc) => {
+  documentsToAnalyze.title = [...documentsToAnalyze.title, doc.title];
+};
+
+productSchema.post('save', pushKeywordForTokenization);
+productSchema.post('insertMany', (error, docs) => {
+  docs.forEach(pushKeywordForTokenization);
 });
-
-function customSearch(query, options) {
-  return new Promise((resolve, reject) => {
-    this.esSearch(query, options, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
-}
-
-productSchema.static('search', customSearch);
 
 const Product = mongoose.model('Product', productSchema);
 
@@ -206,5 +205,53 @@ Product.createMapping(
   },
   () => {},
 );
+
+/*
+ 사용자가 등록한 제목을 분석하여 키워드 index에 저장
+ 요청할 때마다 모든 단어를 처리하기에는 과도한 요청이 올 수 있어
+ 5초 단위로 처리
+*/
+const KEYWORD_ANALYSIS_INTERVAL = 5000;
+const timer = setInterval(() => {
+  // 100개씩 끊기
+  const title = documentsToAnalyze.title.slice(0, 100).join('\n');
+  documentsToAnalyze.title = documentsToAnalyze.title.slice(100);
+
+  // seed 인경우 더이상 업데이트할 데이터가 없으면 종료
+  if (!title.length) {
+    if (process.env.NODE_ENV === 'development') {
+      clearInterval(timer);
+      console.log('finish');
+    }
+    return;
+  }
+
+  // insert keyword index
+  const insertKeyword = (err, { tokens }) => {
+    if (err) {
+      return;
+    }
+    const words = tokens
+      .filter(({ token }) => token.length >= 2)
+      .map(({ token }) => ({ word: token }));
+    const wordSet = new Set();
+    words.forEach((word) => wordSet.add(word));
+    wordSet.forEach((word) => {
+      Keyword.findOneAndUpdate(word, word, { upsert: true }, () => {});
+    });
+  };
+
+  // analyze test 결과를 keyword index에 저장
+  Product.esClient.indices.analyze(
+    {
+      index: 'products',
+      body: {
+        text: title,
+        analyzer: 'korean',
+      },
+    },
+    insertKeyword,
+  );
+}, KEYWORD_ANALYSIS_INTERVAL);
 
 module.exports = Product;

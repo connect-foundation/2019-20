@@ -34,14 +34,20 @@ export const getProductListController = async (req, res, next) => {
 };
 
 export const findProductByIdController = async ({ params: { id } }, res, next) => {
+  let product;
+  let seller;
   try {
     const result = await getProducts(1, 1, { _id: id });
-    const product = result[0];
-    const seller = await getSellerInfo(product.userId);
-    res.send({ product, seller });
+    [product] = result;
   } catch (e) {
     next({ status: 400, message: e.toString() });
   }
+  try {
+    seller = await getSellerInfo(product.userId);
+  } catch (e) {
+    seller = null;
+  }
+  res.send({ product, seller });
 };
 
 export const modifyProductController = async (req, res, next) => {

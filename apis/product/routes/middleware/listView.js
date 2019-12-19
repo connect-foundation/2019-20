@@ -6,7 +6,7 @@ import {
 } from '../../core/string-conveter';
 
 const addFilter = (filter = [], query) => {
-  if ('range' in query || 'term' in query) {
+  if ('range' in query || 'term' in query || 'match' in query) {
     return [...filter, query];
   }
   return [...filter, { bool: query }];
@@ -110,7 +110,44 @@ const addOrderToOption = ({ query: { sort } }, res, next) => {
 const addKeywordTofilter = ({ query: { keyword } }, res, next) => {
   if (keyword) {
     const query = {
-      term: { title: keyword },
+      match: {
+        title: {
+          query: keyword,
+          fuzziness: 'auto',
+        },
+      },
+    };
+    res.locals.filter = addFilter(res.locals.filter, query);
+  }
+  next();
+};
+
+const removePrivatePost = (req, res, next) => {
+  const query = {
+    must_not: {
+      match: {
+        currentStatus: '비공개',
+      },
+    },
+  };
+  res.locals.filter = addFilter(res.locals.filter, query);
+  next();
+};
+
+const addInterestFilter = ({ query: { interest } }, res, next) => {
+  if (interest) {
+    const query = {
+      match: { interests: interest },
+    };
+    res.locals.filter = addFilter(res.locals.filter, query);
+  }
+  next();
+};
+
+const addBuyerFilter = ({ query: { buyer } }, res, next) => {
+  if (buyer) {
+    const query = {
+      match: { buyer },
     };
     res.locals.filter = addFilter(res.locals.filter, query);
   }
@@ -125,7 +162,10 @@ const queryAnalysisMiddleware = [
   addGeoDistanceFilter,
   addPriceToFilter,
   addDealStatusToFilter,
+  removePrivatePost,
   addOrderToOption,
+  addInterestFilter,
+  addBuyerFilter,
 ];
 
 export default queryAnalysisMiddleware;
