@@ -8,6 +8,7 @@ import {
   getProductListController,
   findProductByIdController,
 } from './controller/products';
+import pictureRouter from './picture';
 
 const router = express.Router();
 
@@ -24,16 +25,17 @@ const router = express.Router();
  * buyer=구매자
  * interest=사용자
  */
-router.route('/')
+router
+  .route('/')
   .get(queryAnalysisMiddleware, getProductListController)
-  .post(isLoggedInUser,
-    writeProductCotroller);
+  .post(isLoggedInUser, writeProductCotroller);
 
-router.route('/:id')
+router
+  .route('/:id')
   .get(findProductByIdController)
-  .put(isLoggedInUser,
-    modifyProductController)
-  .delete(isLoggedInUser,
-    deleteProductController);
+  .put(isLoggedInUser, modifyProductController)
+  .delete(isLoggedInUser, deleteProductController);
+
+router.use('/picture', pictureRouter);
 
 export default router;
