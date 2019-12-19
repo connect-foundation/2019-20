@@ -40,7 +40,7 @@ const Main = () => {
   const classes = useStyles({});
 
   const { filter } = useContext(filterContext);
-  const { dispatchMessage } = useContext(AlertMessageContext);
+  const { ACTION_TYPE, dispatchMessage } = useContext(AlertMessageContext);
 
   const [loading, setLoading] = useState(false);
   const [cols, setCols] = useState(1);
@@ -63,7 +63,7 @@ const Main = () => {
         const result = await getProductList({ ...filter, ...settings });
         setList((state) => [...state, ...result]);
       } catch (e) {
-        dispatchMessage({ type: 'error_message', payload: '데이터를 불러오는 중 오류가 발생하였습니다.' })
+        dispatchMessage({ type: ACTION_TYPE.ERROR, payload: '데이터를 불러오는 중 오류가 발생하였습니다.' })
       }
       setLoading(false);
     };
