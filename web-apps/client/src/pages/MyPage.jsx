@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Avatar, ListItem, List, Typography, IconButton } from '@material-ui/core';
+import { Grid, Avatar, ListItem, List, Typography, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -14,6 +14,7 @@ import PrettoSlider from '../components/PrettoSlider';
 import InlineItems from '../components/InlineItems';
 import ActionBar from '../components/ActionBar';
 import LogoutButton from '../components/LogOutButton';
+import NaverLogInButton from '../components/NaverLogInButton';
 
 import { AlertMessageContext } from '../contexts/AlertMessage';
 import { UserContext } from '../contexts/User';
@@ -64,7 +65,11 @@ const MyPage = () => {
   }, []);
 
   if (!isLogged(user)) {
-    return null;
+    return (
+      <Grid container justify='center' alignItems='center' style={({ height: '100vh' })}>
+        <NaverLogInButton />
+      </Grid>
+    );
   }
 
   const grade = (user.reputation / user.numberOfRater).toFixed(2);

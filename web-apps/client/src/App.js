@@ -62,7 +62,7 @@ export default () => {
                   <Route path={ROUTES.PRODUCT_INFO} component={ProductDetail} />
 
                   <Grid container className={classes.root}>
-                    <Route path={ROUTES.VIEW_WITH_NVAIGATOR}>
+                    <Route path={VIEW_WITH_NVAIGATOR}>
                       <ThemeProvider theme={theme}>
                         <Route exact path={ROUTES.MYPAGE} component={Mypage} />
                         <Route exact path={ROUTES.MAIN} component={Main} />
