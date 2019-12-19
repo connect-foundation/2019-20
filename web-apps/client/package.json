@@ -9,6 +9,7 @@
     "clsx": "^1.0.4",
     "immer": "^5.0.0",
     "inko": "^1.1.1",
+    "nuka-carousel": "^4.5.13",
     "intersection-observer": "^0.7.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
@@ -21,7 +22,8 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "styled-components": "^4.4.1"
   },
   "lint-staged": {
     "*/*.js": [
@@ -55,6 +57,7 @@
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.7.0",
     "lint-staged": "^9.4.3",
+    "mutationobserver-shim": "^0.3.3",
     "redux-devtools": "^3.5.0"
   }
 }
