@@ -1,14 +1,14 @@
-import React, {useReducer, createContext} from 'react';
+import React, { useReducer, createContext } from 'react';
 
-export const AlertMessageContext = createContext();
+export const AlertMessageContext = createContext({});
 
 const alertMessageReducer = (state, action) => {
   switch (action.type) {
     case 'clear': {
-      return '';
+      return state.slice(1);
     }
     case 'error_message': {
-      return action.payload;
+      return [...state, action.payload];
     }
     default: {
       throw new Error(`unexpected action.type: ${action.type}`);
@@ -16,11 +16,11 @@ const alertMessageReducer = (state, action) => {
   }
 };
 
-const AlertMessage = ({children}) => {
-  const [message, dispatchMessage] = useReducer(alertMessageReducer, '');
+const AlertMessage = ({ children }) => {
+  const [message, dispatchMessage] = useReducer(alertMessageReducer, []);
 
   return (
-    <AlertMessageContext.Provider value={{message, dispatchMessage}}>
+    <AlertMessageContext.Provider value={{ message, dispatchMessage }}>
       {children}
     </AlertMessageContext.Provider>
   );
