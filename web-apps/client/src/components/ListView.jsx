@@ -18,7 +18,7 @@ const Lists = ({ title, getProducts }) => {
   const { user } = useContext(UserContext);
   const [from, setFrom] = useState(0);
   const [list, setList] = useState([]);
-  alert('test');
+
   const loadList = debounce(async () => {
     const data = await getProducts(user.id, from);
     setList((state) => [...state, ...data]);
