@@ -14,4 +14,5 @@ export const routes = {
   LOCATION_FILTER: '/service/location',
   SEARCH: '/service/search',
   FILTER: '/service/category',
+  ENROLL_LOCATION: '/enroll-location',
 };

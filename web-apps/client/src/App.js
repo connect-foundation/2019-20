@@ -58,7 +58,7 @@ export default () => {
               <Router>
                 <Switch>
                   <Route exact path='/' component={Entrance} />
-                  <Route exact path='/enrollLocation' component={SetMyArea} />
+                  <Route exact path={routes.ENROLL_LOCATION} component={SetMyArea} />
                   <Route exact path='/write' component={WriteProduct} />
                   <Route path='/product/:id' component={ProductDetail} />
 
