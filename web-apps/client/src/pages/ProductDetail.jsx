@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import styled from 'styled-components';
 
 import ProductFooter from '../components/ProductFooter';
@@ -9,32 +9,29 @@ import ProductDescription from '../components/ProductDescription';
 import useFetch from '../hooks/useFetch';
 
 import {isMobile} from '../utils/index';
-import objectFilter from '../utils/object';
+import filterObject from '../utils/object';
 import {productDetailAPI} from '../assets/uris';
+import descriptionField from '../assets/productDescriptionField';
+import msg from '../assets/errorMessages';
+
+import {UserContext} from '../contexts/User';
+import {AlertMessageContext} from '../contexts/AlertMessage';
 
 const Wrapper = styled.div`
   position: relative;
 `;
 
 const ProductDetail = ({match}) => {
+  const {user} = useContext(UserContext);
+  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
   const productID = match.params.id;
 
   const [detail, seDetail] = useState(null);
   const [product, setProduct] = useState(null);
-  const [seller, setSeller] = useState(null);
+  const [seller, setSeller] = useState({});
   const [description, setDescription] = useState({});
   const [footerData, setFooterData] = useState({price: 0, negotiable: false});
-  const [interest, setInterest] = useState(0);
-
-  const descriptionField = [
-    'title',
-    'category',
-    'contents',
-    'hits',
-    'deliverAvailable',
-    'currentStatus',
-    'productStatus',
-  ];
+  const [interest, setInterest] = useState([]);
 
   useEffect(() => {
     if (detail !== null) {
@@ -45,16 +42,19 @@ const ProductDetail = ({match}) => {
 
   useEffect(() => {
     if (product !== null) {
-      const filtered = objectFilter(product, descriptionField);
+      const filtered = filterObject(product, descriptionField);
       setDescription(filtered);
       setInterest(product.interests);
-      const footer = objectFilter(product, ['price', 'negotiable']);
+      const footer = filterObject(product, ['price', 'negotiable']);
       setFooterData(footer);
     }
   }, [product]);
 
   const productInfoLoadError = () => {
-    alert('상품 정보 로드 실패');
+    dispatchMessage({
+      type: ACTION_TYPE.ERROR,
+      payload: msg.ProductDetailLoadFailError,
+    });
   };
 
   const selectImages = (data) => {
@@ -74,10 +74,11 @@ const ProductDetail = ({match}) => {
   };
 
   const addInterest = () => {
-    setInterest(interest + 1);
+    setInterest([...interest, user.id]);
   };
   const minusInterest = () => {
-    setInterest(interest - 1);
+    const result = [...interest].slice(0, -1);
+    setInterest(result);
   };
 
   useFetch(productDetailAPI(productID), seDetail, productInfoLoadError);

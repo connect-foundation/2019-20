@@ -1,5 +1,5 @@
 // 재너럴
-import msg from '../assets/messages';
+import msg from '../assets/errorMessages';
 
 export const isEmptyArr = (arr) => Array.isArray(arr) && arr.length < 1;
 

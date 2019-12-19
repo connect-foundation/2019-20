@@ -8,7 +8,7 @@ export const UserContext = createContext();
 
 const User = ({children}) => {
   const [user, setUser] = useState({id: ''});
-  const {setAlertMessage} = useContext(AlertMessageContext);
+  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
 
   const jwtErrorMessage = '잘못된 유저 정보로 인해 로그아웃 됩니다.';
   const serverErrorMessage =
@@ -17,9 +17,9 @@ const User = ({children}) => {
   const detectUserErrorHandler = (err) => {
     if (err) {
       if (err.message === 'Network Error') {
-        setAlertMessage(serverErrorMessage);
+        dispatchMessage({type: ACTION_TYPE.ERROR, payload: serverErrorMessage});
       } else if (err.response.status === 400) {
-        setAlertMessage(jwtErrorMessage);
+        dispatchMessage({type: ACTION_TYPE.ERROR, payload: jwtErrorMessage});
       }
     }
   };
