@@ -14,6 +14,7 @@ import LogoutIcon from '@material-ui/icons/ExitToApp';
 import PrettoSlider from '../components/PrettoSlider';
 import InlineItems from '../components/InlineItems';
 import ActionBar from '../components/ActionBar';
+import LogoutButton from '../components/LogOutButton';
 
 import { UserContext } from '../contexts/User';
 
@@ -49,8 +50,8 @@ const MyPage = () => {
   const classes = useStyles({});
 
   const grade = (user.reputation / user.numberOfRater).toFixed(2);
-  const lastName = user.name[0];
-  const firstName = user.name.slice(1);
+  const lastName = '가' // user.name[0];
+  const firstName = '나다' //user.name.slice(1);
 
   const buttons = [
     [<SellIcon />, '판매 내역', '/my-article'],
@@ -83,7 +84,7 @@ const MyPage = () => {
           <Link to='/location'><LocatonIcon /> 내 동네 설정</Link>
         </ListItem>
         <ListItem divider className='card'>
-          <LogoutIcon /> 로그아웃
+          <LogoutIcon /> <LogoutButton />
         </ListItem>
         <ListItem divider className='card'>
           <DeleteIcon /> 회원 탈퇴

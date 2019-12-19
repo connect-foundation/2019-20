@@ -1,10 +1,10 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 
 // pages
-import {ThemeProvider, makeStyles} from '@material-ui/core/styles';
-import {Grid} from '@material-ui/core';
+import { ThemeProvider, makeStyles } from '@material-ui/core/styles';
+import { Grid } from '@material-ui/core';
 import TmpChat from './pages/TmpChat';
 import ChatRoom from './pages/ChatRoom';
 import Main from './pages/main';
@@ -14,7 +14,7 @@ import Location from './pages/Area';
 import WriteProduct from './pages/WriteProduct';
 // TODO
 // import MyArticle from './pages/my-article-list';
-// import Mypage from './pages/mypage';
+import Mypage from './pages/MyPage';
 import SetMyArea from './pages/SetMyArea';
 import ProductDetail from './pages/ProductDetail';
 
@@ -22,8 +22,8 @@ import ProductDetail from './pages/ProductDetail';
 // import ListView from './components/list-view';
 // import { getBuyListById, getInterestProductById } from './service/product';
 
-import {FilterProvider} from './contexts/Filters';
-import {SnackbarProvider} from './contexts/SnackBar';
+import { FilterProvider } from './contexts/Filters';
+import { SnackbarProvider } from './contexts/SnackBar';
 import UserStore from './contexts/User';
 import AlertMessageStore from './contexts/AlertMessage';
 import Image from './contexts/Image';
@@ -62,6 +62,7 @@ export default () => {
                   <Grid container className={classes.root}>
                     <Route path='/service'>
                       <ThemeProvider theme={theme}>
+                        <Route exact path='/service/info' component={Mypage} />
                         <Route exact path='/service/main' component={Main} />
                         <Route
                           exact
@@ -89,12 +90,12 @@ export default () => {
                     </Route>
                   </Grid>
                 </Switch>
-                <AlertDialog />
               </Router>
             </Image>
           </FilterProvider>
         </SnackbarProvider>
       </UserStore>
+      <AlertDialog />
     </AlertMessageStore>
   );
 };
