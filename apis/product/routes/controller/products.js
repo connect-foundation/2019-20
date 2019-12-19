@@ -5,6 +5,7 @@ import {
   updateProduct,
   insertProduct,
 } from '../../core';
+import getSellerInfo from '../../core/callAPI';
 
 export const deleteProductController = async ({ params: { id } }, res, next) => {
   try {
@@ -35,15 +36,22 @@ export const getProductListController = async (req, res, next) => {
 export const findProductByIdController = async ({ params: { id } }, res, next) => {
   try {
     const result = await getProducts(1, 1, { _id: id });
-    res.json(result);
+    const product = result[0];
+    const seller = await getSellerInfo(product.userId);
+    res.send({ product, seller });
   } catch (e) {
     next({ status: 400, message: e.toString() });
   }
 };
 
 export const modifyProductController = async (req, res, next) => {
-  const { body, params: { id } } = req;
-  const { locals: { userId } } = res;
+  const {
+    body,
+    params: { id },
+  } = req;
+  const {
+    locals: { userId },
+  } = res;
   try {
     const result = await updateProduct(id, userId, body);
     res.json(result);
