@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/category', controller.getProductSchemaController);
 router.get('/keyword', controller.getKeywordController);
-router.get('/user/products', controller.getKeywordController);
+router.get('/user/products', controller.getProductUserList);
 
 export default router;

@@ -219,9 +219,6 @@ const KEYWORD_ANALYSIS_INTERVAL = 5000;
 const timer = setInterval(() => {
   // 100개씩 끊기
   const title = documentsToAnalyze.title.slice(0, 100).join('\n');
-  if (process.env.NODE_ENV === 'development') {
-    console.log(documentsToAnalyze.title.length);
-  }
   documentsToAnalyze.title = documentsToAnalyze.title.slice(100);
 
   // seed 인경우 더이상 업데이트할 데이터가 없으면 종료
