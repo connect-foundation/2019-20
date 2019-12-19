@@ -1,13 +1,13 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
-import {AlertMessageContext} from '../contexts/AlertMessage';
+import { AlertMessageContext } from '../contexts/AlertMessage';
 
 const AlertDialog = () => {
-  const {message, dispatchMessage} = useContext(AlertMessageContext);
+  const { message, dispatchMessage } = useContext(AlertMessageContext);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const AlertDialog = () => {
   }, [message]);
 
   const handleClose = () => {
-    dispatchMessage({type: 'clear'});
+    dispatchMessage({ type: 'clear' });
   };
 
   return (
@@ -32,7 +32,7 @@ const AlertDialog = () => {
       >
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            {message}
+            {message[0]}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

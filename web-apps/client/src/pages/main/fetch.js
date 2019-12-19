@@ -1,11 +1,9 @@
 import Axios from 'axios';
-import { PRODUCT_API } from '../../utils/config';
-
-const URI = PRODUCT_API;
+import { productList, cagtegoryInfo } from '../../assets/uris';
 
 export const getCategoryList = async () => {
   try {
-    const response = await Axios.get(`${URI}/info/category`);
+    const response = await Axios.get(cagtegoryInfo);
     return response.data;
   } catch (err) {
     if (err.response) {
@@ -49,7 +47,7 @@ const makeQuery = ({
 export const getProductList = async (options) => {
   try {
     const query = makeQuery(options);
-    const requestUri = `${URI}/products?${query}`;
+    const requestUri = `${productList}?${query}`;
     const response = await Axios.get(requestUri);
     const result = response.data.map(({ _id, _source, fields }) => {
       const data = {
