@@ -8,6 +8,8 @@ var dotenv = require('dotenv').config();
 var app = require('../app');
 var debug = require('debug')('template:server');
 var http = require('http');
+var https = require('https');
+var { sslOptions } = require('../config');
 
 /**
  * Get port from environment and store in Express.
@@ -21,6 +23,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+https.createServer(sslOptions, app).listen(443);
 
 /**
  * Listen on provided port, on all network interfaces.
