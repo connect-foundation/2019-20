@@ -1,14 +1,14 @@
-import React, {useState, createContext, useContext} from 'react';
+import React, { useState, createContext, useContext } from 'react';
 
 import useCredentialFetch from '../hooks/useCredentialFetch';
-import {loginStatusHandleURI} from '../assets/uris';
-import {AlertMessageContext} from './AlertMessage';
+import { loginStatusHandleURI } from '../assets/uris';
+import { AlertMessageContext } from './AlertMessage';
 
 export const UserContext = createContext();
 
-const User = ({children}) => {
-  const [user, setUser] = useState({id: ''});
-  const {setAlertMessage} = useContext(AlertMessageContext);
+const User = ({ children }) => {
+  const [user, setUser] = useState({ id: '' });
+  const { dispatchMessage } = useContext(AlertMessageContext);
 
   const jwtErrorMessage = '잘못된 유저 정보로 인해 로그아웃 됩니다.';
   const serverErrorMessage =
@@ -17,17 +17,17 @@ const User = ({children}) => {
   const detectUserErrorHandler = (err) => {
     if (err) {
       if (err.message === 'Network Error') {
-        setAlertMessage(serverErrorMessage);
+        dispatchMessage({ type: 'error_message', payload: serverErrorMessage });
       } else if (err.response.status === 400) {
-        setAlertMessage(jwtErrorMessage);
+        dispatchMessage({ type: 'error_message', payload: jwtErrorMessage });
       }
     }
   };
 
-  useCredentialFetch(loginStatusHandleURI, setUser, detectUserErrorHandler);
+  //useCredentialFetch(loginStatusHandleURI, setUser, detectUserErrorHandler);
 
   return (
-    <UserContext.Provider value={{user, setUser}}>
+    <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
   );

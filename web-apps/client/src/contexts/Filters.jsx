@@ -1,12 +1,11 @@
-import React, { createContext, useReducer, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { getCategoryList } from '../pages/main/fetch';
+import React, { createContext, useReducer, useEffect, useContext } from 'react';
 
-const filterInfo = {
-  price: {
-    start: 0,
-    end: 0,
-  },
+import { childrenType } from '../types';
+import { getCategoryList } from '../pages/main/fetch';
+import { AlertMessageContext } from './AlertMessage';
+
+const initialFilters = {
+  price: { start: 0, end: 0, },
   categories: [],
   coordinates: '',
   distance: 0,
@@ -29,7 +28,7 @@ const filterReducer = (state, { type, payload }) => {
   switch (type) {
 
     case FILTER_TYPE.INITIAL:
-      return JSON.parse(JSON.stringify(filterInfo));
+      return JSON.parse(JSON.stringify(initialFilters));
 
     case FILTER_TYPE.PRICE:
       return { ...state, price: { ...payload } };
@@ -50,8 +49,8 @@ const filterReducer = (state, { type, payload }) => {
     }
 
     case FILTER_TYPE.CATEGORY_INITIAL:
-      filterInfo.CATEGORYLABEL = payload;
-      filterInfo.categories = payload;
+      initialFilters.CATEGORYLABEL = payload;
+      initialFilters.categories = payload;
       return { ...state, categories: payload, CATEGORYLABEL: payload };
 
     case FILTER_TYPE.DISTANCE:
@@ -68,18 +67,20 @@ const filterReducer = (state, { type, payload }) => {
 export const filterContext = createContext({});
 
 export const FilterProvider = ({ children }) => {
-  const [filter, dispatchFilter] = useReducer(filterReducer, filterInfo);
+  const [filter, dispatchFilter] = useReducer(filterReducer, initialFilters);
+  const { dispatchMessage } = useContext(AlertMessageContext)
+  const CATEOGRY_LABEL_LOAD_FAIL = '카테고리 정보를 불러 올 수 없습니다.';
   useEffect(() => {
     const getCategoryFromServer = async () => {
       try {
         const list = await getCategoryList();
         dispatchFilter({ type: FILTER_TYPE.CATEGORY_INITIAL, payload: list });
       } catch (err) {
-        alert('카테고리 정보를 불러 올 수 없습니다.');
+        dispatchMessage({ type: 'error_message', payload: CATEOGRY_LABEL_LOAD_FAIL })
       }
     };
     getCategoryFromServer();
-  }, []);
+  }, [dispatchMessage]);
   return (
     <filterContext.Provider value={{ FILTER_TYPE, filter, dispatchFilter }}>
       {children}
@@ -89,5 +90,5 @@ export const FilterProvider = ({ children }) => {
 
 // https://stackoverflow.com/questions/42122522/reactjs-what-should-the-proptypes-be-for-this-props-children
 FilterProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: childrenType.isRequired,
 };
