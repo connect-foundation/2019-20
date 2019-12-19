@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
     {
+      id: { type: DataTypes.STRING, primaryKey: true },
       name: DataTypes.STRING,
       email: DataTypes.STRING,
       authority: DataTypes.ENUM('황제', '관리자', '손님'),

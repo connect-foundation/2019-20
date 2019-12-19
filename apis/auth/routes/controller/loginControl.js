@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import uri from '../../assets/uris';
 import msg from '../../assets/errorMessages';
+import filterObject from '../../utils';
 
 const getUserInfoByJWT = (req, res, next) => {
   const { info } = res.locals;
@@ -25,7 +26,7 @@ const getUserInfoByJWT = (req, res, next) => {
     numberOfRater,
   } = info;
   if (
-    id
+    id.length
     && name.length
     && email.length
     && authority.length
@@ -54,38 +55,55 @@ const logOutProcess = (req, res) => {
   res.end();
 };
 
+const newAccountLogIn = (req, res) => {
+  const fields = [
+    'id',
+    'name',
+    'email',
+    'authority',
+    'latitude',
+    'longitude',
+    'reputation',
+    'numberOfRater',
+  ];
+
+  const info = filterObject(res.locals, fields);
+
+  const token = jwt.sign(info, process.env.JWT_PRIVATE_KEY);
+  res.cookie('jwt', token, {
+    httpOnly: true,
+  });
+  res.json(info);
+};
+
 const login = async (req, res) => {
-  const {
-    id,
-    name,
-    email,
-    authority,
-    latitude,
-    longitude,
-    reputation,
-    numberOfRater,
-  } = res.locals;
-  if (id) {
-    const token = jwt.sign(
-      {
-        id,
-        name,
-        email,
-        authority,
-        latitude,
-        longitude,
-        reputation,
-        numberOfRater,
-      },
-      process.env.JWT_PRIVATE_KEY,
-    );
-    res.cookie('jwt', token, { path: '/', httpOnly: true });
+  const fields = [
+    'id',
+    'name',
+    'email',
+    'authority',
+    'latitude',
+    'longitude',
+    'reputation',
+    'numberOfRater',
+  ];
+
+  const info = filterObject(res.locals, fields);
+
+  if (info.id && info.id.length) {
+    const token = jwt.sign(info, process.env.JWT_PRIVATE_KEY);
+    res.cookie('jwt', token, { httpOnly: true });
     res.redirect(uri.clientMainPage);
   } else {
-    const token = jwt.sign({ name, email }, process.env.JWT_PRIVATE_KEY);
-    res.cookie('jwt', token, { path: '/enrollLocation', httpOnly: true });
+    const token = jwt.sign(
+      { name: info.name, email: info.email },
+      process.env.JWT_PRIVATE_KEY,
+    );
+    res.cookie('jwt', token, { httpOnly: true });
     res.redirect(uri.enrollLocationPage);
   }
 };
 
-export { getUserInfoByJWT, logOutProcess, login };
+export {
+  getUserInfoByJWT, logOutProcess, login, newAccountLogIn,
+};

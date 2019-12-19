@@ -5,6 +5,9 @@ import cors from 'cors';
 
 import indexRouter from './routes/index';
 import naverRouter from './routes/naver';
+
+import toAllowSetCookie from './utils/corsOptions';
+
 import {
   serverErrorHandler,
   clientErrorHandler,
@@ -12,7 +15,7 @@ import {
 
 const app = express();
 
-app.use(cors());
+app.use(cors(toAllowSetCookie));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
