@@ -17,7 +17,7 @@ import { filterContext } from '../../contexts/Filters';
 import { AlertMessageContext } from '../../contexts/AlertMessage';
 import { SnackbarContext } from '../../contexts/SnackBar';
 
-import { routes } from '../../assets/uris';
+import { ROUTES } from '../../assets/uris';
 
 import { isScrollBottom, debounce } from '../../utils';
 import useScrollDown from '../../hooks/useScrollDown'
@@ -56,8 +56,8 @@ const Main = () => {
   }
 
   const buttons = [
-    getButtons('검색', routes.SEARCH, <SearchIcon />),
-    getButtons('필터', routes.FILTER, <FilterIcon />),
+    getButtons('검색', ROUTES.SEARCH, <SearchIcon />),
+    getButtons('필터', ROUTES.FILTER, <FilterIcon />),
     getButtons('초기화', null, <ClearIcon />, clearKeyword),
   ];
 
@@ -103,7 +103,7 @@ const Main = () => {
     <>
       <ActionBar
         leftArea={(
-          <Link to={routes.LOCATION_FILTER}>
+          <Link to={ROUTES.LOCATION_FILTER}>
             <Typography color='primary' variant='subtitle1'>
               {name}
             </Typography>

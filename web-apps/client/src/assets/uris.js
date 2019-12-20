@@ -1,17 +1,40 @@
-const PRODUCT_API = 'http://49.236.137.63';
-export const imageHandleURI = `${PRODUCT_API}/products/picture`;
-export const productHandleURI = `${PRODUCT_API}/products`;
-export const loginStatusHandleURI = 'http:/10.180.170.213:5001/myInfo';
-export const naverLoginURI = 'http://10.180.170.213:5001/naver/login';
-export const addUserURI = 'http://10.180.170.213:5001/addUser';
-export const productDetailAPI = (id) => `${PRODUCT_API}/products/${id}`;
-export const logOutURI = 'http://10.180.170.213:5001/logout';
-export const productList = `${PRODUCT_API}/products`
-export const cagtegoryInfo = `${PRODUCT_API}/info/category`;
-export const keywordURI = `${PRODUCT_API}/info/keyword`;
-export const routes = {
+// 인증
+const AUTH_API = 'http://10.180.170.213:5001';
+export const AUTH = {
+  LOGIN_STATUS_HANDLE: `${AUTH_API}/myinfo`,
+  NAVER_LOGIN: `${AUTH_API}/naver/login`,
+  ADD_USER: `${AUTH_API}/addUser`,
+  LOGOUT: `${AUTH_API}/logout`,
+};
+
+// 상품
+const PRODUCT_API = 'https://product.oemarket.shop';
+export const PRODUCT = {
+  IMAGE_HANDLE: `${PRODUCT_API}/products/picture`,
+  PRODUCT_HANDLE: `${PRODUCT_API}/products`,
+  PRODUCT_LIST: `${PRODUCT_API}/products`,
+  CATEGORY_INFO: `${PRODUCT_API}/info/category`,
+  KEYWORD_SEARCH: `${PRODUCT_API}/info/keyword`,
+  PRODUCT_SELL_LIST_MEMBER: `${PRODUCT_API}/info/user/products`,
+  PRODUCT_INTEREST_LIST_MEMBER: `${PRODUCT_API}/products`,
+  PRODUCT_BUY_LIST_MEMBER: `${PRODUCT_API}/products`,
+  getProdutDetialUri: (id) => `${PRODUCT_API}/products/${id}`,
+};
+
+// client
+export const VIEW_WITH_NVAIGATOR = '/service';
+export const ROUTES = {
+  INDEX: '/',
+  MAIN: `${VIEW_WITH_NVAIGATOR}/main`,
+  WRITE: '/write',
   PRODUCT: '/product',
-  LOCATION_FILTER: '/service/location',
-  SEARCH: '/service/search',
-  FILTER: '/service/category',
+  PRODUCT_INFO: '/product/:id',
+  LOCATION_FILTER: `${VIEW_WITH_NVAIGATOR}/location`,
+  SEARCH: `${VIEW_WITH_NVAIGATOR}/search`,
+  FILTER: `${VIEW_WITH_NVAIGATOR}/category`,
+  ENROLL_LOCATION: '/enroll-location',
+  BUY_LIST: `${VIEW_WITH_NVAIGATOR}/products/buy`,
+  FAVORITE_LIST: `${VIEW_WITH_NVAIGATOR}/products/favorite`,
+  SELL_LIST: `${VIEW_WITH_NVAIGATOR}/products/sell`,
+  MYPAGE: `${VIEW_WITH_NVAIGATOR}/my-page`,
 };

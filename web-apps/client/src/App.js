@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 
-// pages
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import TmpChat from './pages/TmpChat';
@@ -12,16 +11,17 @@ import Entrance from './pages/Entrance';
 import Filters from './pages/filters';
 import Location from './pages/Area';
 import WriteProduct from './pages/WriteProduct';
-// TODO
-// import MyArticle from './pages/my-article-list';
+
+import MyArticle from './pages/ArticleList';
 import Mypage from './pages/MyPage';
 import SetMyArea from './pages/SetMyArea';
 import ProductDetail from './pages/ProductDetail';
 import Search from './pages/Search';
 
-// TODO
-// import ListView from './components/list-view';
-// import { getBuyListById, getInterestProductById } from './service/product';
+import ListView from './components/ListView';
+import AlertDialog from './components/AlertDialog';
+
+import { getBuyListById, getInterestProductById } from './service/product';
 
 import { FilterProvider } from './contexts/Filters';
 import { SnackbarProvider } from './contexts/SnackBar';
@@ -36,9 +36,8 @@ import muiTheme from './theme/muiTheme';
 import theme from './theme';
 
 import './style.css';
-import AlertDialog from './components/AlertDialog';
 
-import { routes } from './assets/uris';
+import { ROUTES, VIEW_WITH_NVAIGATOR } from './assets/uris';
 
 const useStyles = makeStyles({
   root: {
@@ -57,31 +56,26 @@ export default () => {
             <Image>
               <Router>
                 <Switch>
-                  <Route exact path='/' component={Entrance} />
-                  <Route exact path='/enrollLocation' component={SetMyArea} />
-                  <Route exact path='/write' component={WriteProduct} />
-                  <Route path='/product/:id' component={ProductDetail} />
+                  <Route exact path={ROUTES.INDEX} component={Entrance} />
+                  <Route exact path={ROUTES.ENROLL_LOCATION} component={SetMyArea} />
+                  <Route exact path={ROUTES.WRITE} component={WriteProduct} />
+                  <Route path={ROUTES.PRODUCT_INFO} component={ProductDetail} />
 
                   <Grid container className={classes.root}>
-                    <Route path='/service'>
+                    <Route path={VIEW_WITH_NVAIGATOR}>
                       <ThemeProvider theme={theme}>
-                        <Route exact path='/service/info' component={Mypage} />
-                        <Route exact path='/service/main' component={Main} />
-                        <Route
-                          exact
-                          path={routes.FILTER}
-                          component={Filters}
-                        />
-                        <Route
-                          exact
-                          path={routes.LOCATION_FILTER}
-                          component={Location}
-                        />
-                        <Route
-                          exact
-                          path={routes.SEARCH}
-                          component={Search}
-                        />
+                        <Route exact path={ROUTES.MYPAGE} component={Mypage} />
+                        <Route exact path={ROUTES.MAIN} component={Main} />
+                        <Route exact path={ROUTES.FILTER} component={Filters} />
+                        <Route exact path={ROUTES.LOCATION_FILTER} component={Location} />
+                        <Route exact path={ROUTES.SEARCH} component={Search} />
+                        <Route exact path={ROUTES.BUY_LIST}>
+                          <ListView getProducts={getBuyListById} title='구매내역' />
+                        </Route>
+                        <Route exact path={ROUTES.SELL_LIST} component={MyArticle} />
+                        <Route exact path={ROUTES.FAVORITE_LIST}>
+                          <ListView getProducts={getInterestProductById} title='관심목록' />
+                        </Route>
                       </ThemeProvider>
                       <ThemeProvider theme={muiTheme}>
                         <Route exact path='/service/chat' component={TmpChat} />

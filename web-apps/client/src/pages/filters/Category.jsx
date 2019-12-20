@@ -16,12 +16,12 @@ const Category = () => {
   const { setNotice } = useContext(SnackbarContext);
   const {
     filter: { categories, CATEGORYLABEL },
-    dispatch,
-    TYPE,
+    dispatchFilter,
+    FILTER_TYPE,
   } = useContext(filterContext);
 
   const addCategory = (label) => {
-    dispatch({ type: TYPE.CATEGORY_ADD, payload: label });
+    dispatchFilter({ type: FILTER_TYPE.CATEGORY_ADD, payload: label });
     setNotice(MESSAGE.ADD);
   };
 
@@ -29,7 +29,7 @@ const Category = () => {
     if (categories.length <= 1) {
       setNotice(MESSAGE.SELECT_LEAST_ONE);
     } else {
-      dispatch({ type: TYPE.CATEGORY_REMOVE, payload: label });
+      dispatchFilter({ type: FILTER_TYPE.CATEGORY_REMOVE, payload: label });
       setNotice(MESSAGE.REMOVE);
     }
   };
