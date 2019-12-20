@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import fs from 'fs';
 
 export const dbConnect = () => {
   const options = {
@@ -22,7 +23,7 @@ export const dbConnect = () => {
 };
 
 export const mongoosasticSettings = (process.env.NODE_ENV === 'test') ? {} : {
-  hosts: process.env.ELASTICSEARCH,
+  host: process.env.ELASTICSEARCH,
   port: process.env.ESPORT,
   bulk: {
     size: 100,
@@ -34,4 +35,9 @@ export const redisConnection = {
   port: process.env.REDIS_PORT,
   host: process.env.REDIS_HOST,
   password: process.env.REDIS_PASSWORD,
+};
+
+export const sslOptions = {
+  key: fs.readFileSync(process.env.KEY),
+  cert: fs.readFileSync(process.env.CERT)
 };
