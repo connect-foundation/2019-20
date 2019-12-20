@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import ProductFooter from '../components/ProductFooter';
 import ProductProfile from '../components/ProductProfile';
@@ -17,12 +18,14 @@ import msg from '../assets/errorMessages';
 import { UserContext } from '../contexts/User';
 import { AlertMessageContext } from '../contexts/AlertMessage';
 
+import { debounce } from '../utils';
+
 const Wrapper = styled.div`
   position: relative;
 `;
 
 const ProductDetail = ({ match }) => {
-  console.log('sdf');
+  const INTEREST_UPDATE_DELAY = 1000;
   const { user } = useContext(UserContext);
   const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
   const productID = match.params.id;
@@ -74,13 +77,23 @@ const ProductDetail = ({ match }) => {
     return result;
   };
 
-  const addInterest = () => {
-    setInterest([...interest, user.id]);
-  };
-  const minusInterest = () => {
-    const result = [...interest].slice(0, -1);
-    setInterest(result);
-  };
+  const updateInterest = useCallback(debounce((updateList) => {
+    axios.put(`${PRODUCT.PRODUCT_HANDLE}/${productID}`, { interests: updateList });
+  }, INTEREST_UPDATE_DELAY), []);
+
+  const clickHeart = (event, active) => {
+    let updateList;
+    if (active) {
+      updateList = [...interest, user.id];
+    }
+    if (!active) {
+      updateList = interest.filter((id) => id !== user.id);
+    }
+    setInterest(updateList);
+    updateInterest(updateList);
+  }
+
+  const heartStatus = (user) ? interest.includes(user.id) : false;
 
   useFetch(PRODUCT.getProdutDetialUri(productID), seDetail, productInfoLoadError);
 
@@ -93,8 +106,8 @@ const ProductDetail = ({ match }) => {
       <ProductDescription description={description} interest={interest} />
       <ProductFooter
         data={footerData}
-        addInterest={addInterest}
-        minusInterest={minusInterest}
+        heartStatus={heartStatus}
+        clickHeart={clickHeart}
       />
     </Wrapper>
   );

@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
@@ -26,32 +26,30 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Interest = ({addInterest, minusInterest}) => {
+const Interest = ({ active, clickHeart }) => {
   const classes = useStyles();
-  const [clicked, setClicked] = useState(false);
-  const [heart, setHeart] = useState(null);
-  const onInterest = () => {
-    setClicked(!clicked);
-    if (clicked) {
-      minusInterest();
-    } else {
-      addInterest();
-    }
-  };
+  const [heart, setHeart] = useState(active);
 
   useEffect(() => {
-    if (clicked) {
-      setHeart(<FavoriteIcon fontSize='large' className={classes.like} />);
-    } else {
-      setHeart(
-        <FavoriteBorderIcon fontSize='large' className={classes.unlike} />,
-      );
-    }
-  }, [clicked]);
+    setHeart(active);
+  }, [active]);
+
+  const clickEvent = (event) => {
+    setHeart(!heart);
+    clickHeart(event, !heart);
+  }
+
+  let favorteIcon;
+  if (heart) {
+    favorteIcon = <FavoriteIcon fontSize='large' className={classes.like} />;
+  }
+  if (!heart) {
+    favorteIcon = <FavoriteBorderIcon fontSize='large' className={classes.unlike} />;
+  }
   return (
     <div className={classes.interestWrapper}>
-      <div className={classes.interest} onClick={onInterest}>
-        {heart}
+      <div className={classes.interest} onClick={clickEvent}>
+        {favorteIcon}
       </div>
     </div>
   );
