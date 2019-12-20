@@ -79,6 +79,16 @@ const Core = {
     }
   },
 
+  async updateHits(_id) {
+    try {
+      const product = await Product.findById(_id);
+      product.hits += 1;
+      await product.save();
+    } catch (e) {
+      throw Error(message.errorProcessing);
+    }
+  },
+
   /**
    * 등록된 중고상품 삭제
    * @description 유저 아이디와 실제 document를 등록한 사용자가 일치할 경우에만 해당 정보를 삭제합니다..
@@ -174,4 +184,5 @@ export const {
   getElasticSearchResults,
   getLastModified,
   getRecommandKeyword,
+  updateHits,
 } = Core;

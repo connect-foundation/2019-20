@@ -9,6 +9,7 @@ import {
 } from './controller/products';
 import isLoggedInUser from './middleware/user';
 import pictureRouter from './picture';
+import { isAlreadyViewed, setCookieView } from './middleware/cookie';
 
 const router = express.Router();
 
@@ -32,7 +33,7 @@ router
 
 router
   .route('/:id')
-  .get(findProductByIdController)
+  .get(isAlreadyViewed, setCookieView, findProductByIdController)
   .put(isLoggedInUser, modifyProductController)
   .delete(isLoggedInUser, deleteProductController);
 

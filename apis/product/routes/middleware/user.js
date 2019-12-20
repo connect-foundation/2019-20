@@ -15,6 +15,7 @@ const isLoggedInUser = async (req, res, next) => {
   // } catch (e) {
   //   next({ status: 500, message: e.toString() });
   // }
+  res.locals.userId = '김철수'
   next();
 };
 
