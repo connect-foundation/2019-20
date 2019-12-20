@@ -30,7 +30,7 @@ const ProductDetail = ({ match }) => {
   const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
   const productID = match.params.id;
 
-  const [detail, seDetail] = useState(null);
+  const [detail, setDetail] = useState(null);
   const [product, setProduct] = useState(null);
   const [seller, setSeller] = useState({});
   const [description, setDescription] = useState({});
@@ -95,7 +95,7 @@ const ProductDetail = ({ match }) => {
 
   const heartStatus = (user) ? interest.includes(user.id) : false;
 
-  useFetch(PRODUCT.getProdutDetialUri(productID), seDetail, productInfoLoadError);
+  useFetch(PRODUCT.getProdutDetialUri(productID), setDetail, productInfoLoadError);
 
   const images = selectImages(product);
 
