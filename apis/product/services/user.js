@@ -1,5 +1,5 @@
 const isLoggedInUser = (req, res, next) => {
-  res.locals.userId = '김철수';
+  res.locals.userId = req.body.userId;
   next();
 };
 
