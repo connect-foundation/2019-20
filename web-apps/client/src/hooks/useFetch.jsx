@@ -22,8 +22,8 @@ const UseFetch = (uri, callback, errHandler) => {
       if (mockData.length) {
         callback(mockData);
       } else {
-        const res = await axios.get(uri);
-        callback(res);
+        const { data } = await axios.get(uri);
+        callback(data);
       }
     } catch (e) {
       errHandler();

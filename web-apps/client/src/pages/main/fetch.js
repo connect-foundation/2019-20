@@ -22,7 +22,8 @@ const makeQuery = ({
   coordinates,
   distance,
   from,
-  limits, }) => {
+  limits,
+  keyword }) => {
   const queries = [];
   if (from) {
     queries.push(['from', from]);
@@ -39,6 +40,9 @@ const makeQuery = ({
   }
   if (end || start) {
     queries.push(['price', `${start}${end ? `,${end}` : ''}`]);
+  }
+  if (keyword.length) {
+    queries.push(['keyword', keyword]);
   }
   const query = queries.map((q) => q.join('=')).join('&');
   return query;
