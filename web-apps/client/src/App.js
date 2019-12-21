@@ -6,7 +6,7 @@ import { ThemeProvider, makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import TmpChat from './pages/TmpChat';
 import ChatRoom from './pages/ChatRoom';
-import Main from './pages/main';
+import Main from './pages/Main';
 import Entrance from './pages/Entrance';
 import Filters from './pages/filters';
 import Location from './pages/Area';
@@ -56,12 +56,11 @@ export default () => {
             <Image>
               <Router>
                 <Switch>
-                  <Route exact path={ROUTES.INDEX} component={Entrance} />
-                  <Route exact path={ROUTES.ENROLL_LOCATION} component={SetMyArea} />
-                  <Route exact path={ROUTES.WRITE} component={WriteProduct} />
-                  <Route path={ROUTES.PRODUCT_INFO} component={ProductDetail} />
-
                   <Grid container className={classes.root}>
+                    <Route exact path={ROUTES.INDEX} component={Entrance} />
+                    <Route exact path={ROUTES.ENROLL_LOCATION} component={SetMyArea} />
+                    <Route exact path={ROUTES.WRITE} component={WriteProduct} />
+                    <Route path={ROUTES.PRODUCT_INFO} component={ProductDetail} />
                     <Route path={VIEW_WITH_NVAIGATOR}>
                       <ThemeProvider theme={theme}>
                         <Route exact path={ROUTES.MYPAGE} component={Mypage} />

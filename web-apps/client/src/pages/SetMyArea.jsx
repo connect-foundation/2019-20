@@ -1,159 +1,48 @@
-import React, {useState, useRef, useMemo, useContext} from 'react';
+import React, { useContext, useState } from 'react';
 
-import {Link} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
-import {ListItem, TextField, List, Button} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
+import { AlertMessageContext } from '../contexts/AlertMessage';
+import { UserContext } from '../contexts/User';
 
-import {AlertMessageContext} from '../contexts/AlertMessage';
-import {UserContext} from '../contexts/User';
-
-import ToolBar from '../components/ToolBar';
-import KakakoMap from '../components/KakaoMap';
+import MapAdjust from '../components/MapAdjust';
 
 import msg from '../assets/errorMessages'
-import {KAKAO_API} from '../utils/config';
-import {addUser} from '../utils/apiCall';
-
-const useStyles = makeStyles({
-  addressList: {
-    position: 'absolute',
-    top: 0,
-    zIndex: 10,
-    backgroundColor: 'rgba(255,255,255,0.9)',
-    width: '100%',
-    height: '100%',
-  },
-  confirmButton: {
-    background: '#1db000',
-    color: 'white',
-  },
-  link: {
-    textDecoration: 'none',
-    position: 'absolute',
-    right: '1.5rem',
-  },
-});
+import { addUser } from '../utils/apiCall';
+import { ROUTES } from '../assets/uris';
 
 const AreaPage = () => {
   const TITLE = '우리 동네 등록';
-  const classes = useStyles({});
-  const addressRef = useRef(null);
-  const mapRef = useRef(null);
 
-  const {setUser} = useContext(UserContext);
-  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
+  const { setUser } = useContext(UserContext);
+  const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
+  const [enroll, setEnroll] = useState(false);
 
-  const [addressList, setAddressList] = useState([]);
-
-  const [location, setLocation] = useState({
-    coordinates: [37.499096, 127.028099],
-    name: '패스트파이브 강남 4호점',
-  });
-
-  const enrollLocation = async () => {
-    const [latitude, longitude] = location.coordinates;
+  const enrollLocation = async (event, coordinates) => {
+    const [latitude, longitude] = coordinates.split(',');
     try {
-      const user = await addUser({latitude, longitude});
+      const user = await addUser({ latitude, longitude });
       setUser(user);
+      setEnroll(true);
     } catch (err) {
       if (err.message === 400) {
-        dispatchMessage({action:ACTION_TYPE.ERROR, payload:msg.alreadySignedUpMemberError});
+        dispatchMessage({ action: ACTION_TYPE.ERROR, payload: msg.alreadySignedUpMemberError });
       } else if (err.message === 500) {
-        dispatchMessage({action:ACTION_TYPE.ERROR, payload:msg.serverError});
+        dispatchMessage({ action: ACTION_TYPE.ERROR, payload: msg.serverError });
       }
     }
   };
 
-  const clickAddressList = (event) => {
-    const {
-      target: {
-        dataset: {x, y},
-      },
-    } = event;
-    mapRef.current.setCenterCoordinates(y, x);
-    setAddressList([]);
-  };
-
-  const searchAddress = async () => {
-    const keyword = addressRef.current.value;
-    if (keyword.length === 0) {
-      return;
-    }
-    const result = await mapRef.current.searchAddress(keyword);
-    setAddressList(() => result);
-  };
-
-  let timer;
-  const changeKeyword = () => {
-    clearTimeout(timer);
-    timer = setTimeout(searchAddress, 1000);
-  };
-
-  const kakaoSection = useMemo(() => {
-    const updateCurrentPosition = ({lat, lng, name}) => {
-      const payload = {
-        coordinates: [lat, lng],
-        areaName: name,
-      };
-      setLocation(payload);
-    };
-
-    return (
-      <KakakoMap
-        appKey={KAKAO_API}
-        width='100%'
-        height='65vh'
-        coordinates={location.coordinates}
-        callback={updateCurrentPosition}
-        ref={mapRef}
-      />
-    );
-  }, [location]);
+  if (enroll) {
+    return <Redirect to={ROUTES.MAIN} />
+  }
 
   return (
-    <>
-      <ToolBar title={TITLE} />
-      <div style={{margin: '0.5rem 1.5rem', width: '100%'}}>
-        <h4 style={{color: 'tomato'}}>
-          동네를 등록해야 회원가입이 완료됩니다.
-        </h4>
-        <TextField
-          variant='outlined'
-          fullWidth
-          placeholder='동명(읍,면)으로 검색 (ex. 서초동)'
-          inputRef={addressRef}
-          onChange={changeKeyword}
-        />
-        <div style={{position: 'relative'}}>
-          {kakaoSection}
-          {addressList.length > 0 && (
-            <List className={classes.addressList}>
-              {addressList.map(({address_name, x, y}) => (
-                <ListItem
-                  divider
-                  key={address_name}
-                  data-x={x}
-                  data-y={y}
-                  onClick={clickAddressList}
-                >
-                  {address_name}
-                </ListItem>
-              ))}
-            </List>
-          )}
-        </div>
-        <Link to='/service/main' className={classes.link}>
-          <Button
-            className={classes.confirmButton}
-            variant='contained'
-            onClick={enrollLocation}
-          >
-            확인
-          </Button>
-        </Link>
-      </div>
-    </>
+    <MapAdjust
+      title={TITLE}
+      applySettings={enrollLocation}
+      message='동네를 등록해야 회원가입이 완료됩니다.'
+    />
   );
 };
 
