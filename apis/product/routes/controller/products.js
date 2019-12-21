@@ -4,6 +4,7 @@ import {
   getElasticSearchResults,
   updateProduct,
   insertProduct,
+  updateHits,
 } from '../../core';
 import getSellerInfo from '../../core/callAPI';
 
@@ -37,6 +38,10 @@ export const findProductByIdController = async ({ params: { id } }, res, next) =
   let product;
   let seller;
   try {
+    const { locals: { read } } = res;
+    if (!read) {
+      updateHits(id);
+    }
     const result = await getProducts(1, 1, { _id: id });
     [product] = result;
   } catch (e) {

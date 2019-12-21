@@ -203,7 +203,11 @@ Product.createMapping(
       },
     },
   },
-  () => {},
+  (err) => {
+    if (err) {
+      console.log(err);
+    }
+  },
 );
 
 /*
@@ -229,6 +233,7 @@ const timer = setInterval(() => {
   // insert keyword index
   const insertKeyword = (err, { tokens }) => {
     if (err) {
+      console.log('analysis', err);
       return;
     }
     const words = tokens
@@ -237,7 +242,11 @@ const timer = setInterval(() => {
     const wordSet = new Set();
     words.forEach((word) => wordSet.add(word));
     wordSet.forEach((word) => {
-      Keyword.findOneAndUpdate(word, word, { upsert: true }, () => {});
+      Keyword.findOneAndUpdate(word, word, { upsert: true }, (error) => {
+        if (error && error.codeName !== 'DuplicateKey') {
+          console.log('update', error);
+        }
+      });
     });
   };
 
