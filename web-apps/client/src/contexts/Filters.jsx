@@ -11,6 +11,7 @@ const initialFilters = {
   distance: 0,
   localname: '전체',
   CATEGORYLABEL: [],
+  keyword: '',
 };
 
 const FILTER_TYPE = {
@@ -22,6 +23,7 @@ const FILTER_TYPE = {
   LOCAL_NAME: 5,
   COORDINATE: 6,
   DISTANCE: 7,
+  KEYWORD: 8,
 };
 
 const filterReducer = (state, { type, payload }) => {
@@ -58,6 +60,9 @@ const filterReducer = (state, { type, payload }) => {
         return { ...state, distance: +payload, localname: '전체' }
       }
       return { ...state, distance: +payload };
+
+    case FILTER_TYPE.KEYWORD:
+      return { ...state, keyword: payload };
 
     default:
       return state;

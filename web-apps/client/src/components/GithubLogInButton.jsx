@@ -1,7 +1,7 @@
 import React from 'react';
 import githubButton from '../assets/github.png';
 import styled from 'styled-components';
-import {githubLoginURI} from '../assets/uris';
+import {AUTH} from '../assets/uris';
 
 const GithubButton = styled.img`
   width: 12.2rem;
@@ -10,7 +10,7 @@ const GithubButton = styled.img`
 const GithubLogInButton = () => {
   return (
     <a
-      href={githubLoginURI}
+      href={AUTH.githubLoginURI}
       style={{borderRadius: '1rem', background: 'white'}}
     >
       <GithubButton src={githubButton} />

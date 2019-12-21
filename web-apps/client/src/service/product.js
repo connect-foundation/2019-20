@@ -1,25 +1,28 @@
 import axios from 'axios';
 
-export const getBuyListById = async (user, from) => {
+import {PRODUCT} from '../assets/uris';
+
+const getData = async (uri, params) => {
   try {
-    const response = await axios.get('http://localhost:5000/products',
-      {
-        params: { buyer: user.id, from }
-      });
+    const response = await axios.get(uri, {params});
     return response.data;
   } catch (e) {
     return [];
   }
 };
 
+export const getBuyListById = async (user, from) => {
+  const response = await getData(PRODUCT.PRODUCT_BUY_LIST_MEMBER, {
+    buyer: user.id,
+    from,
+  });
+  return response;
+};
+
 export const getInterestProductById = async (user, from) => {
-  try {
-    const response = await axios.get('http://localhost:5000/products',
-      {
-        params: { interests: user.id, from }
-      });
-    return response.data;
-  } catch (e) {
-    return [];
-  }
+  const response = await getData(PRODUCT.PRODUCT_INTEREST_LIST_MEMBER, {
+    interest: user.id,
+    from,
+  });
+  return response;
 };

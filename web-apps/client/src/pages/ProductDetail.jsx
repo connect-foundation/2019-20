@@ -1,5 +1,6 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import {useHistory} from 'react-router-dom';
 
@@ -12,12 +13,14 @@ import useFetch from '../hooks/useFetch';
 
 import {isMobile} from '../utils/index';
 import filterObject from '../utils/object';
-import {productDetailAPI, mainPage} from '../assets/uris';
+import {PRODUCT} from '../assets/uris';
 import descriptionField from '../assets/productDescriptionField';
 import msg from '../assets/errorMessages';
 
 import {UserContext} from '../contexts/User';
 import {AlertMessageContext} from '../contexts/AlertMessage';
+
+import {debounce} from '../utils';
 
 const Wrapper = styled.div`
   position: relative;
@@ -25,11 +28,12 @@ const Wrapper = styled.div`
 
 const ProductDetail = ({match}) => {
   let history = useHistory();
+  const INTEREST_UPDATE_DELAY = 1000;
   const {user} = useContext(UserContext);
   const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
   const productID = match.params.id;
 
-  const [detail, seDetail] = useState(null);
+  const [detail, setDetail] = useState(null);
   const [product, setProduct] = useState(null);
   const [seller, setSeller] = useState({});
   const [description, setDescription] = useState({});
@@ -79,15 +83,34 @@ const ProductDetail = ({match}) => {
     return result;
   };
 
-  const addInterest = () => {
-    setInterest([...interest, user.id]);
-  };
-  const minusInterest = () => {
-    const result = [...interest].slice(0, -1);
-    setInterest(result);
+  const updateInterest = useCallback(
+    debounce((updateList) => {
+      axios.put(`${PRODUCT.PRODUCT_HANDLE}/${productID}`, {
+        interests: updateList,
+      });
+    }, INTEREST_UPDATE_DELAY),
+    [],
+  );
+
+  const clickHeart = (event, active) => {
+    let updateList;
+    if (active) {
+      updateList = [...interest, user.id];
+    }
+    if (!active) {
+      updateList = interest.filter((id) => id !== user.id);
+    }
+    setInterest(updateList);
+    updateInterest(updateList);
   };
 
-  useFetch(productDetailAPI(productID), seDetail, productInfoLoadError);
+  const heartStatus = user ? interest.includes(user.id) : false;
+
+  useFetch(
+    PRODUCT.getProdutDetialUri(productID),
+    setDetail,
+    productInfoLoadError,
+  );
 
   const images = selectImages(product);
 
@@ -98,8 +121,8 @@ const ProductDetail = ({match}) => {
       <ProductDescription description={description} interest={interest} />
       <ProductFooter
         data={footerData}
-        addInterest={addInterest}
-        minusInterest={minusInterest}
+        heartStatus={heartStatus}
+        clickHeart={clickHeart}
       />
     </Wrapper>
   );

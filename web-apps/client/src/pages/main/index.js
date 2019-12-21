@@ -10,18 +10,19 @@ import {
 import {makeStyles} from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import FilterIcon from '@material-ui/icons/Tune';
-import NotifyIcon from '@material-ui/icons/NotificationsNoneOutlined';
+import ClearIcon from '@material-ui/icons/Clear';
 
 import ActionBar from '../../components/ActionBar';
 import ProductListItem from '../../components/ProductListItem';
 
 import getButtons from '../../utils/action-bar';
 
-import {getProductList} from './fetch';
-import {filterContext} from '../../contexts/Filters';
-import {AlertMessageContext} from '../../contexts/AlertMessage';
+import { getProductList } from './fetch';
+import { filterContext } from '../../contexts/Filters';
+import { AlertMessageContext } from '../../contexts/AlertMessage';
+import { SnackbarContext } from '../../contexts/SnackBar';
 
-import {routes} from '../../assets/uris';
+import { ROUTES } from '../../assets/uris';
 
 import {isScrollBottom, debounce} from '../../utils';
 import useScrollDown from '../../hooks/useScrollDown';
@@ -44,18 +45,25 @@ const Main = () => {
   const SCROLL_EVENT_DELAY = 200;
   const classes = useStyles({});
 
-  const {filter} = useContext(filterContext);
-  const {ACTION_TYPE, dispatchMessage} = useContext(AlertMessageContext);
+  const { FILTER_TYPE, filter, dispatchFilter } = useContext(filterContext);
+  const { ACTION_TYPE, dispatchMessage } = useContext(AlertMessageContext);
+  const { setNotice } = useContext(SnackbarContext);
 
   const [loading, setLoading] = useState(false);
   const [cols, setCols] = useState(1);
   const [list, setList] = useState([]);
   const [settings, setSettings] = useState({from: 0, limits: 10});
 
+  const clearKeyword = (event) => {
+    event.preventDefault();
+    dispatchFilter({ type: FILTER_TYPE.KEYWORD, payload: '' });
+    setNotice('검색어가 초기화 되었습니다.');
+  }
+
   const buttons = [
-    getButtons('검색', '/', <SearchIcon />),
-    getButtons('필터', '/service/category', <FilterIcon />),
-    getButtons('알림', '/', <NotifyIcon />),
+    getButtons('검색', ROUTES.SEARCH, <SearchIcon />),
+    getButtons('필터', ROUTES.FILTER, <FilterIcon />),
+    getButtons('초기화', null, <ClearIcon />, clearKeyword),
   ];
 
   const findProductsBySettings = () => {
@@ -79,6 +87,7 @@ const Main = () => {
   };
 
   useEffect(findProductsBySettings, [settings]);
+
   const loadNextPage = debounce(() => {
     if (isScrollBottom()) {
       setSettings((state) => ({
@@ -105,7 +114,7 @@ const Main = () => {
     <>
       <ActionBar
         leftArea={(
-          <Link to={routes.LOCATION_FILTER}>
+          <Link to={ROUTES.LOCATION_FILTER}>
             <Typography color='primary' variant='subtitle1'>
               {name}
             </Typography>

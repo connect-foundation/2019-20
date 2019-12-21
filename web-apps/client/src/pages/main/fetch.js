@@ -1,9 +1,9 @@
 import Axios from 'axios';
-import { productList, cagtegoryInfo } from '../../assets/uris';
+import { PRODUCT } from '../../assets/uris';
 
 export const getCategoryList = async () => {
   try {
-    const response = await Axios.get(cagtegoryInfo);
+    const response = await Axios.get(PRODUCT.CATEGORY_INFO);
     return response.data;
   } catch (err) {
     if (err.response) {
@@ -22,7 +22,8 @@ const makeQuery = ({
   coordinates,
   distance,
   from,
-  limits, }) => {
+  limits,
+  keyword }) => {
   const queries = [];
   if (from) {
     queries.push(['from', from]);
@@ -40,6 +41,9 @@ const makeQuery = ({
   if (end || start) {
     queries.push(['price', `${start}${end ? `,${end}` : ''}`]);
   }
+  if (keyword.length) {
+    queries.push(['keyword', keyword]);
+  }
   const query = queries.map((q) => q.join('=')).join('&');
   return query;
 };
@@ -47,7 +51,7 @@ const makeQuery = ({
 export const getProductList = async (options) => {
   try {
     const query = makeQuery(options);
-    const requestUri = `${productList}?${query}`;
+    const requestUri = `${PRODUCT.PRODUCT_LIST}?${query}`;
     const response = await Axios.get(requestUri);
     const result = response.data.map(({ _id, _source, fields }) => {
       const data = {

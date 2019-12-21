@@ -1,16 +1,41 @@
-const client_id = '8f4c544bcba0936615ee';
-export const imageHandleURI = 'http://localhost:5000/products/picture';
-export const productHandleURI = 'http://localhost:5000/products';
-export const loginStatusHandleURI = 'https://auth.oemarket.shop/myInfo';
-export const githubLoginURI = `https://github.com/login/oauth/authorize?scope=user:email&client_id=${client_id}`;
-export const addUserURI = 'https://auth.oemarket.shop/addUser';
-export const productDetailAPI = (id) => `http://localhost:5000/products/${id}`;
-export const logOutURI = 'https://auth.oemarket.shop/logout';
-export const productList = 'http://localhost:5000/products';
-export const cagtegoryInfo = 'http://localhost:5000/info/category';
-export const mainPage = 'http://localhost:3000/service/main';
-export const routes = {
-  LOCATION_FILTER: '/service/location',
-  PRODUCT: '/product',
+// 인증
+const AUTH_API = 'https://auth.oemarket.shop';
+export const AUTH = {
+  LOGIN_STATUS_HANDLE: `${AUTH_API}/myinfo`,
+  ADD_USER: `${AUTH_API}/addUser`,
+  LOGOUT: `${AUTH_API}/logout`,
+  githubLoginURI: `${AUTH_API}/github/login`
 };
-export const deleteProductURI = (id) => `http://localhost:5000/products/${id}`;
+
+// 상품
+const PRODUCT_API = 'https://product.oemarket.shop';
+export const PRODUCT = {
+  IMAGE_HANDLE: `${PRODUCT_API}/products/picture`,
+  PRODUCT_HANDLE: `${PRODUCT_API}/products`,
+  PRODUCT_LIST: `${PRODUCT_API}/products`,
+  CATEGORY_INFO: `${PRODUCT_API}/info/category`,
+  KEYWORD_SEARCH: `${PRODUCT_API}/info/keyword`,
+  PRODUCT_SELL_LIST_MEMBER: `${PRODUCT_API}/info/user/products`,
+  PRODUCT_INTEREST_LIST_MEMBER: `${PRODUCT_API}/products`,
+  PRODUCT_BUY_LIST_MEMBER: `${PRODUCT_API}/products`,
+  getProdutDetialUri: (id) => `${PRODUCT_API}/products/${id}`,
+  deleteProductURI: (id) => `${PRODUCT_API}/products/${id}`,
+};
+
+// client
+export const VIEW_WITH_NVAIGATOR = '/service';
+export const ROUTES = {
+  INDEX: '/',
+  MAIN: `${VIEW_WITH_NVAIGATOR}/main`,
+  WRITE: '/write',
+  PRODUCT: '/product',
+  PRODUCT_INFO: '/product/:id',
+  LOCATION_FILTER: `${VIEW_WITH_NVAIGATOR}/location`,
+  SEARCH: `${VIEW_WITH_NVAIGATOR}/search`,
+  FILTER: `${VIEW_WITH_NVAIGATOR}/category`,
+  ENROLL_LOCATION: '/enroll-location',
+  BUY_LIST: `${VIEW_WITH_NVAIGATOR}/products/buy`,
+  FAVORITE_LIST: `${VIEW_WITH_NVAIGATOR}/products/favorite`,
+  SELL_LIST: `${VIEW_WITH_NVAIGATOR}/products/sell`,
+  MYPAGE: `${VIEW_WITH_NVAIGATOR}/my-page`,
+};
