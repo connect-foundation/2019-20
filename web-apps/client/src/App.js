@@ -6,7 +6,7 @@ import { ThemeProvider, makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import TmpChat from './pages/TmpChat';
 import ChatRoom from './pages/ChatRoom';
-import Main from './pages/main';
+import Main from './pages/Main';
 import Entrance from './pages/Entrance';
 import Filters from './pages/filters';
 import Location from './pages/Area';

@@ -149,8 +149,8 @@ const KakaoMap = ({ appKey, width, height, callback }, ref) => {
       setCurrentCoordinates();
 
       // 좌표 값에 해당하는 행정동, 법정동 정보 callback 반환
-      const getCurrentAddressByCoordinates = (lat, lng) => {
-        geocoder.coord2RegionCode(lng, lat, (result, status) => {
+      const getCurrentAddressByCoordinates = (lng, lat) => {
+        geocoder.coord2RegionCode(lat, lng, (result, status) => {
           const { ZERO_RESULT, ERROR } = kakao.maps.services.Status;
           if (!callback) {
             return;

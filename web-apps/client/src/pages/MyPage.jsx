@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Grid, Avatar, ListItem, List, Typography, IconButton } from '@material-ui/core';
@@ -21,6 +21,7 @@ import { UserContext } from '../contexts/User';
 
 import { deleteUser } from '../utils/apiCall';
 import { isLoggedIn } from '../utils/auth';
+import { findAddressByCoordinates } from '../utils/geolocation';
 import { ROUTES } from '../assets/uris';
 
 const useStyles = makeStyles({
@@ -42,6 +43,12 @@ const useStyles = makeStyles({
   }
 });
 
+const MESSAGE = {
+  LOAD_LOCATION: '현재 주소를 읽고있습니다.',
+  LOAD_LOCATION_FAIL: '주소 정보를 읽을 수 없습니다',
+  FORBIDEN: '로그인한 사용자만 접근 가능합니다.',
+};
+
 const LabledIconButton = (item) => {
   const [icon, label, link] = item;
   return (
@@ -55,15 +62,33 @@ const LabledIconButton = (item) => {
 };
 
 const MyPage = () => {
-  const { user, setUser } = useContext(UserContext);
   const classes = useStyles({});
+
+  const { user, setUser } = useContext(UserContext);
   const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
+  const [address, setAddress] = useState(MESSAGE.LOAD_LOCATION);
 
   useEffect(() => {
     if (!isLoggedIn(user) || !user.name) {
-      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: '로그인한 사용자만 접근 가능합니다.' });
+      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: MESSAGE.FORBIDEN });
     }
-  }, []);
+  }, [ACTION_TYPE.ERROR, dispatchMessage, user]);
+
+  useEffect(() => {
+    if (!isLoggedIn(user)) {
+      return;
+    }
+    const getAddress = async () => {
+      try {
+        const { latitude, longitude } = user;
+        const name = await findAddressByCoordinates(latitude, longitude);
+        setAddress(name);
+      } catch (e) {
+        setAddress(MESSAGE.LOAD_LOCATION_FAIL);
+      }
+    };
+    getAddress();
+  }, [user, setAddress]);
 
   // 로그인을 하지 않아도 해당 조건이 거짓이 되는 경우가 있어 user.name 추가
   if (!isLoggedIn(user) || !user.name) {
@@ -112,9 +137,7 @@ const MyPage = () => {
           <InlineItems items={buttons} />
         </ListItem>
         <ListItem divider className='card'>
-          <Link to={ROUTES.ENROLL_LOCATION}>
-            <LocatonIcon /> 내 동네 설정
-          </Link>
+          <LocatonIcon /> 내 동네 설정(준비중) - {address}
         </ListItem>
         <ListItem divider className='card'>
           <LogoutButton />

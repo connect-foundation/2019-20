@@ -11,7 +11,7 @@ import AddressList from './AddressList';
 import ToolBar from './ToolBar';
 
 import getButtons from '../utils/action-bar';
-import { KAKAO_API } from '../utils/config';
+import { KAKAO_API } from '../utils/geolocation';
 import { debounce } from '../utils';
 
 const useStyles = makeStyles({
