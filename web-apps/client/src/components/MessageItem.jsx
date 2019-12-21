@@ -14,7 +14,7 @@ import {getISOCurrentDate} from '../utils';
 import {uIdType, messageShape} from '../types';
 
 // component
-const ChatRow = ({message: {userId, content, timestamp}, currentUser}) => (
+const MessageItem = ({message: {userId, content, timestamp}, currentUser}) => (
   <ListItem>
     <Grid
       container
@@ -33,12 +33,12 @@ const ChatRow = ({message: {userId, content, timestamp}, currentUser}) => (
   </ListItem>
 );
 
-ChatRow.propTypes = {
+MessageItem.propTypes = {
   message: messageShape,
   currentUser: uIdType,
 };
 
-ChatRow.defaultProps = {
+MessageItem.defaultProps = {
   message: {
     timestamp: getISOCurrentDate(),
     content: '',
@@ -47,4 +47,4 @@ ChatRow.defaultProps = {
   currentUser: null,
 };
 
-export default ChatRow;
+export default MessageItem;

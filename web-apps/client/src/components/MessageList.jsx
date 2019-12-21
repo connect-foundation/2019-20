@@ -5,10 +5,10 @@ import {arrayOf} from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 
 // components
-import ChatRow from './ChatRow';
+import MessageItem from './MessageItem';
 
 // types
-import {uIdType, messageShape} from '../types';
+import {messageShape} from '../types';
 
 // utils
 import {getISOCurrentDate} from '../utils';
@@ -22,17 +22,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 // component
-export default function ChatList({messages, currentUser}) {
+export default function ChatList({messages}) {
   const classes = useStyles({});
 
   return (
     <ul className={classes.ul}>
       {messages.map((message) => (
-        <ChatRow
-          key={`item-${message.timestamp}`}
-          message={message}
-          currentUser={currentUser}
-        />
+        <MessageItem key={`item-${message.timestamp}`} message={message} />
       ))}
     </ul>
   );
@@ -40,7 +36,6 @@ export default function ChatList({messages, currentUser}) {
 
 ChatList.propTypes = {
   messages: arrayOf(messageShape),
-  currentUser: uIdType,
 };
 
 ChatList.defaultProps = {
@@ -51,5 +46,4 @@ ChatList.defaultProps = {
       userId: null,
     },
   ],
-  currentUser: null,
 };
