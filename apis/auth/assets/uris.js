@@ -4,4 +4,5 @@ export default {
   clientMainPage: 'http://localhost:3000/service/main',
   enrollLocationPage: 'http://localhost:3000/enroll-location',
   clientHost: 'http://localhost:3000',
+  productionClientHost: 'https://www.oemarket.shop',
 };
