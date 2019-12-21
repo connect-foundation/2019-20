@@ -9,8 +9,8 @@
     "clsx": "^1.0.4",
     "immer": "^5.0.0",
     "inko": "^1.1.1",
-    "nuka-carousel": "^4.5.13",
     "intersection-observer": "^0.7.0",
+    "nuka-carousel": "^4.5.13",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -52,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-syntax-jsx": "^7.7.4",
     "@types/jest": "^24.0.23",
     "cross-env": "^6.0.3",
     "eslint-config-airbnb": "^18.0.1",
