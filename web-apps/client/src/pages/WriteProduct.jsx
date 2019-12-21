@@ -1,18 +1,18 @@
-import React, {useEffect, useContext} from 'react';
+import React, { useEffect, useContext } from 'react';
 
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import WriteHeader from '../components/WriteHeader';
 import ProductForm from '../components/ProductForm';
 
-import {UserContext} from '../contexts/User';
-import {AlertMessageContext} from '../contexts/AlertMessage';
+import { UserContext } from '../contexts/User';
+import { AlertMessageContext } from '../contexts/AlertMessage';
 
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import initCSS from '../assets/cssText';
 
-import isLoggedIn from '../utils/auth';
+import { isLoggedIn } from '../utils/auth';
 
 const useStyles = makeStyles(() => ({
   productForm: {
@@ -23,8 +23,8 @@ const useStyles = makeStyles(() => ({
 
 const WriteProduct = () => {
   const classes = useStyles();
-  const {user} = useContext(UserContext);
-  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
+  const { user } = useContext(UserContext);
+  const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
   const notLogInErrorMessage = '로그인 먼저 하셔야 합니다.';
 
   useEffect(() => {

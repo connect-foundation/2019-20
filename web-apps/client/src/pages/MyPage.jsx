@@ -19,6 +19,8 @@ import GithubLogInButton from '../components/GithubLogInButton';
 import { AlertMessageContext } from '../contexts/AlertMessage';
 import { UserContext } from '../contexts/User';
 
+import { deleteUser } from '../utils/apiCall';
+import { isLoggedIn } from '../utils/auth';
 import { ROUTES } from '../assets/uris';
 
 const useStyles = makeStyles({
@@ -35,6 +37,9 @@ const useStyles = makeStyles({
   reputation: {
     padding: '2rem 2rem 0 2rem',
   },
+  labelButton: {
+    backgroundColor: '#1db000'
+  }
 });
 
 const LabledIconButton = (item) => {
@@ -42,7 +47,7 @@ const LabledIconButton = (item) => {
   return (
     <Link to={link}>
       <IconButton>
-        <Avatar style={{backgroundColor: '#1db000'}}>{icon}</Avatar>
+        <Avatar>{icon}</Avatar>
       </IconButton>
       <Typography>{label}</Typography>
     </Link>
@@ -50,19 +55,18 @@ const LabledIconButton = (item) => {
 };
 
 const MyPage = () => {
-  const {user} = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const classes = useStyles({});
   const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
 
-  const isLogged = (user) => user !== null;
-
   useEffect(() => {
-    if (!isLogged(user)) {
+    if (!isLoggedIn(user) || !user.name) {
       dispatchMessage({ type: ACTION_TYPE.ERROR, payload: '로그인한 사용자만 접근 가능합니다.' });
     }
   }, []);
 
-  if (!isLogged(user)) {
+  // 로그인을 하지 않아도 해당 조건이 거짓이 되는 경우가 있어 user.name 추가
+  if (!isLoggedIn(user) || !user.name) {
     return (
       <Grid container justify='center' alignItems='center' style={({ height: '100vh' })}>
         <GithubLogInButton />
@@ -79,6 +83,16 @@ const MyPage = () => {
     [<BuyIcon />, '구매 내역', ROUTES.BUY_LIST],
     [<FavoriteIcon />, '찜한 내역', ROUTES.FAVORITE_LIST]
   ].map(LabledIconButton);
+
+  const leaveHere = async (event) => {
+    event.preventDefault();
+    try {
+      await deleteUser();
+    } catch (e) {
+      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: '처리중 오류가 발생하였습니다.' });
+    }
+    setUser(null);
+  };
 
   return (
     <>
@@ -105,7 +119,7 @@ const MyPage = () => {
         <ListItem divider className='card'>
           <LogoutButton />
         </ListItem>
-        <ListItem divider className='card'>
+        <ListItem divider className='card' onClick={leaveHere}>
           <DeleteIcon /> 회원 탈퇴
         </ListItem>
       </List>

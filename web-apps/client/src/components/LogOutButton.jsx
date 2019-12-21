@@ -26,7 +26,6 @@ const LogOutButton = ({ width }) => {
   const logout = () => {
     setUser(null);
   };
-  console.log(user);
   const logoutProcess = async () => {
     deleteAllImages();
     cleanLocalStorage();
