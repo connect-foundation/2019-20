@@ -4,7 +4,7 @@ import logger from 'morgan';
 import cors from 'cors';
 
 import indexRouter from './routes/index';
-import naverRouter from './routes/naver';
+import githubRouter from './routes/github';
 
 import toAllowSetCookie from './utils/corsOptions';
 
@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
-app.use('/naver', naverRouter);
+app.use('/github', githubRouter);
 
 app.use(serverErrorHandler);
 app.use(clientErrorHandler);
