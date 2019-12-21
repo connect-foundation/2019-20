@@ -5,7 +5,7 @@ import { isClientError, isServerError } from '../../utils/detectError';
 const serverErrorHandler = (err, req, res, next) => {
   if (isServerError(err)) {
     switch (err.message) {
-      case msg.naverError:
+      case msg.githubError:
         res.redirect(uri.client500ErrorPage);
         break;
       case msg.ErrorWhenCheckMember:

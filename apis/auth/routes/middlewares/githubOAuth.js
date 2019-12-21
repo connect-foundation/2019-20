@@ -1,6 +1,11 @@
 import axios from 'axios';
 import msg from '../../assets/errorMessages';
 
+const redirectGithubLogin = (req, res) => {
+  const id = process.env.CLIENT_ID;
+  const githubLogin = `https://github.com/login/oauth/authorize?scope=user:email&client_id=${id}`;
+  res.redirect(githubLogin);
+};
 const getAccessToken = async (req, res, next) => {
   const { code } = req.query;
   const id = process.env.CLIENT_ID;
@@ -56,4 +61,4 @@ const fetchUserInfo = async (req, res, next) => {
   }
 };
 
-export { getAccessToken, fetchUserInfo };
+export { redirectGithubLogin, getAccessToken, fetchUserInfo };
