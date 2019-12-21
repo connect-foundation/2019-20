@@ -4,7 +4,7 @@ export const AUTH = {
   LOGIN_STATUS_HANDLE: `${AUTH_API}/myinfo`,
   ADD_USER: `${AUTH_API}/addUser`,
   LOGOUT: `${AUTH_API}/logout`,
-  githubLoginURI: `${AUTH_API}/github/login`
+  githubLoginURI: `${AUTH_API}/github/login`,
 };
 
 // 상품
@@ -20,6 +20,13 @@ export const PRODUCT = {
   PRODUCT_BUY_LIST_MEMBER: `${PRODUCT_API}/products`,
   getProdutDetialUri: (id) => `${PRODUCT_API}/products/${id}`,
   deleteProductURI: (id) => `${PRODUCT_API}/products/${id}`,
+};
+
+// 채팅
+const CHAT_API = 'http://localhost:80';
+export const CHAT = {
+  NAME_SPACE: '/chat',
+  INIT_PATH: `${CHAT_API}/chat`,
 };
 
 // client
@@ -38,4 +45,5 @@ export const ROUTES = {
   FAVORITE_LIST: `${VIEW_WITH_NVAIGATOR}/products/favorite`,
   SELL_LIST: `${VIEW_WITH_NVAIGATOR}/products/sell`,
   MYPAGE: `${VIEW_WITH_NVAIGATOR}/my-page`,
+  CHAT_ROOM: '/chat/room',
 };

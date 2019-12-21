@@ -5,6 +5,8 @@ import React, {
   useCallback,
   useContext,
 } from 'react';
+import {useParams} from 'react-router-dom';
+import io from 'socket.io-client';
 
 // material ui
 import List from '@material-ui/core/List';
@@ -13,14 +15,15 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 // components
-import ChatInputField from '../components/ChatInputField';
-import ChatSection from '../components/ChatSection';
+import MessageInputField from '../components/MessageInputField';
+import MessageSection from '../components/MessageSection';
 
 // context
-import {ChatSocketContext} from '../contexts/Socket';
+import {UserContext} from '../contexts/User';
 
 // utils
 import {isInSameDay, isEmptyArr, setBaseDate, formatChat} from '../utils';
+import {CHAT} from '../assets/uris';
 
 // material ui style
 const useStyles = makeStyles((theme) => ({
@@ -46,97 +49,150 @@ const useStyles = makeStyles((theme) => ({
     right: '1rem',
   },
 }));
-const currentUser = 1;
-export default function Chat() {
-  const classes = useStyles({});
-  const {chatSocket} = useContext(ChatSocketContext);
 
-  const [newChat, setNewChat] = useState([]);
+export default function ChatRoom() {
+  const classes = useStyles({});
+  // @ts-ignore
+  const {user} = useContext(UserContext);
+  const {id: roomId} = useParams();
+
+  const [formattedMessages, setFormattedMessages] = useState([]);
   const chatInputRef = useRef(null);
-  const bottomEl = useRef(null);
   const outerBoxRef = useRef(null);
 
-  const goToBottom = () => {
-    if (bottomEl.current) {
-      window.scrollTo({
-        behavior: 'smooth',
-        top: bottomEl.current.offsetTop,
-      });
-    }
-  };
-
-  const insertMessages = useCallback((messages) => {
-    setNewChat(formatChat(messages));
+  // socket
+  const socket = useRef(null);
+  const enterRoom = useCallback((_roomId) => {
+    socket.current.emit('enterRoom', {_roomId});
+  }, []);
+  const listenSocketEvent = useCallback((on = '', cb = () => {}) => {
+    socket.current.once(on, cb);
+  }, []);
+  const removeSocketEventListener = useCallback((of = '') => {
+    socket.current.off(of);
+  }, []);
+  const connectSocket = useCallback(() => {
+    socket.current = io.connect(CHAT.INIT_PATH);
+  }, []);
+  const emitNewMessage = useCallback((userId, content) => {
+    socket.current.emit('message', {
+      userId,
+      content,
+    });
   }, []);
 
-  useEffect(() => {
-    chatSocket.once('prevMessages', insertMessages);
-    return () => chatSocket.off('prevMessages');
-  }, [insertMessages, chatSocket]);
+  const goTo = useCallback((block = 'end', behavior = 'smooth') => {
+    if (outerBoxRef.current) {
+      outerBoxRef.current.scrollIntoView({
+        behavior,
+        block,
+        inline: 'nearest',
+      });
+    }
+  }, []);
 
-  const insertNewMessage = useCallback(
-    (msgObject) => {
-      let messages = null;
-      const lastChat = newChat[newChat.length - 1];
-      const addMessageToLastBaseDate = (chats) => {
-        if (chats !== lastChat) return chats;
+  const insertMessages = useCallback(
+    (messages) => {
+      setFormattedMessages(formatChat(messages));
+      goTo('end', 'auto');
+    },
+    [goTo],
+  );
+
+  const addMessageToLastBaseDate = useCallback(
+    (_formattedMessages, _newRawMessage) => {
+      const lastChat = _formattedMessages[_formattedMessages.length - 1];
+      const addNewMessage = (_chat) => {
+        if (_chat !== lastChat) return _chat;
         return {
-          ...chats,
-          messages: [...chats.messages, msgObject],
+          ..._chat,
+          messages: [..._chat.messages, _newRawMessage],
         };
       };
-      if (
-        isEmptyArr(newChat) ||
-        !isInSameDay(lastChat.baseDate, msgObject.timestamp)
-      ) {
-        messages = [
-          ...newChat,
-          {
-            baseDate: setBaseDate(msgObject.timestamp),
-            messages: [msgObject],
-          },
-        ];
-      } else {
-        messages = newChat.map(addMessageToLastBaseDate);
-      }
-      setNewChat(messages);
-      goToBottom();
+      return _formattedMessages.map(addNewMessage);
     },
-    [newChat],
+    [],
   );
-  useEffect(() => {
-    chatSocket.once('message', insertNewMessage);
-    return () => chatSocket.off('message');
-  }, [insertNewMessage, chatSocket]);
+  const addMessageWithNewBaseDate = useCallback(
+    (_chat, _rawMessage) =>
+      _chat.concat({
+        baseDate: setBaseDate(_rawMessage.timestamp),
+        messages: [_rawMessage],
+      }),
+    [],
+  );
+
+  const insertNewMessage = useCallback(
+    (newRawMessage) => {
+      let messages = null;
+      const lastChat = formattedMessages[formattedMessages.length - 1];
+
+      if (
+        isEmptyArr(formattedMessages) ||
+        !isInSameDay(lastChat.baseDate, newRawMessage.timestamp)
+      ) {
+        messages = addMessageWithNewBaseDate(formattedMessages, newRawMessage);
+      } else {
+        messages = addMessageToLastBaseDate(formattedMessages, newRawMessage);
+      }
+
+      setFormattedMessages(messages);
+      goTo('end');
+    },
+    [
+      addMessageToLastBaseDate,
+      addMessageWithNewBaseDate,
+      formattedMessages,
+      goTo,
+    ],
+  );
 
   const onMessageSubmit = (e) => {
     e.preventDefault();
     if (chatInputRef.current.value === '') return;
-    chatSocket.emit('message', {
-      userId: currentUser,
-      content: chatInputRef.current.value,
-    });
-    chatInputRef.current.value = '';
+    const content = chatInputRef.current;
+    emitNewMessage(user.id, content.value);
+    content.value = '';
   };
+
+  useEffect(() => {
+    connectSocket();
+    listenSocketEvent('connect', () => {
+      enterRoom(roomId);
+    });
+    return () => removeSocketEventListener('connect');
+  }, [
+    connectSocket,
+    enterRoom,
+    listenSocketEvent,
+    removeSocketEventListener,
+    roomId,
+  ]);
+
+  useEffect(() => {
+    listenSocketEvent('prevMessages', insertMessages);
+    return () => removeSocketEventListener('prevMessages');
+  }, [insertMessages, listenSocketEvent, removeSocketEventListener]);
+
+  useEffect(() => {
+    listenSocketEvent('message', insertNewMessage);
+    return () => removeSocketEventListener('message');
+  }, [insertNewMessage, listenSocketEvent, removeSocketEventListener]);
 
   return (
     <>
       <List className={classes.root} subheader={<li />} ref={outerBoxRef}>
-        <ChatSection messagesByDate={newChat} currentUser={currentUser} />
+        <MessageSection messagesByDate={formattedMessages} />
 
         <IconButton
           type='submit'
           className={classes.goToBottomBTN}
-          onClick={goToBottom}
-          aria-label='search'
-          ref={bottomEl}
+          onClick={goTo}
         >
           <ArrowDownwardIcon />
         </IconButton>
-
-        <span ref={bottomEl} />
       </List>
-      <ChatInputField
+      <MessageInputField
         onMessageSubmit={onMessageSubmit}
         chatInputRef={chatInputRef}
       />
