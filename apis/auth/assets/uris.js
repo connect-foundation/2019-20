@@ -1,8 +1,8 @@
 export default {
-  client500ErrorPage: 'http://localhost:3000/server_error',
-  badRequestPage: 'http://localhost:3000/bad_request',
-  clientMainPage: 'http://localhost:3000/service/main',
-  enrollLocationPage: 'http://localhost:3000/enroll-location',
+  client500ErrorPage: 'https://oemarket.shop/server_error',
+  badRequestPage: 'https://oemarket.shop/bad_request',
+  clientMainPage: 'https://oemarket.shop/service/main',
+  enrollLocationPage: 'https://oemarket.shop/enroll-location',
   clientHost: 'http://localhost:3000',
-  productionClientHost: 'https://www.oemarket.shop',
+  productionClientHost: 'https://oemarket.shop',
 };
