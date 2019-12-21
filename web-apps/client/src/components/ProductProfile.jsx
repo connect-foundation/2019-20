@@ -8,11 +8,11 @@ const Header = styled.div`
   height: 250px;
 `;
 
-const ProductProfile = ({images}) => {
+const ProductProfile = ({images, id, seller}) => {
   return (
     <Header>
       <Carousel images={images} />
-      <HeaderInProduct />
+      <HeaderInProduct id={id} seller={seller}/>
     </Header>
   );
 };

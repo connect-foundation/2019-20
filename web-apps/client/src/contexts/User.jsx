@@ -1,23 +1,14 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, {useState, createContext, useContext} from 'react';
 
 import useCredentialFetch from '../hooks/useCredentialFetch';
-import { loginStatusHandleURI } from '../assets/uris';
-import { AlertMessageContext } from './AlertMessage';
+import {AUTH} from '../assets/uris';
+import {AlertMessageContext} from './AlertMessage';
 
 export const UserContext = createContext({});
 
-const User = ({ children }) => {
-  const [user, setUser] = useState({
-    id: '김철수',
-    name: 'tester',
-    email: 'test@jest.com',
-    authority: '손님',
-    latitude: 123.1234,
-    longitude: 76.1234,
-    reputation: 10,
-    numberOfRater: 3,
-  });
-  const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
+const User = ({children}) => {
+  const [user, setUser] = useState({id: ''});
+  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
 
   const jwtErrorMessage = '잘못된 유저 정보로 인해 로그아웃 됩니다.';
   const serverErrorMessage =
@@ -26,17 +17,17 @@ const User = ({ children }) => {
   const detectUserErrorHandler = (err) => {
     if (err) {
       if (err.message === 'Network Error') {
-        dispatchMessage({ type: ACTION_TYPE.ERROR, payload: serverErrorMessage });
+        dispatchMessage({type: ACTION_TYPE.ERROR, payload: serverErrorMessage});
       } else if (err.response.status === 400) {
-        dispatchMessage({ type: ACTION_TYPE.ERROR, payload: jwtErrorMessage });
+        dispatchMessage({type: ACTION_TYPE.ERROR, payload: jwtErrorMessage});
       }
     }
   };
 
-  //useCredentialFetch(loginStatusHandleURI, setUser, detectUserErrorHandler);
+  useCredentialFetch(AUTH.LOGIN_STATUS_HANDLE, setUser, detectUserErrorHandler);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{user, setUser}}>
       {children}
     </UserContext.Provider>
   );

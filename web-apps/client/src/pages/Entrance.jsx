@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import NaverLogInButton from '../components/NaverLogInButton';
+import GithubLogInButton from '../components/GithubLogInButton';
 import SkipLogInButton from '../components/SkipLogInButton';
 import Logo from '../components/Logo';
 import { UserContext } from '../contexts/User';
@@ -32,7 +32,7 @@ const Entrance = () => {
   return (
     <Wrapper>
       <Logo />
-      <NaverLogInButton />
+      <GithubLogInButton />
       <SkipLogInButton />
       {isLogInned() && <Redirect to='/service/main' />}
     </Wrapper>

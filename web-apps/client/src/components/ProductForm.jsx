@@ -73,7 +73,7 @@ const ProductForm = () => {
   const [contents, setContents] = useState('');
   const [nextPage, setNextPage] = useState('');
 
-  const {images} = useContext(ImageContext);
+  const {images, setImages} = useContext(ImageContext);
   const {user} = useContext(UserContext);
   const {dispatchMessage} = useContext(AlertMessageContext);
 
@@ -167,7 +167,7 @@ const ProductForm = () => {
 
     try {
       const {_id} = await uploadProduct(product);
-      window.localStorage.clear();
+      setImages([]);
       setNextPage(`/product/${_id}`);
     } catch (err) {
       dispatchMessage({

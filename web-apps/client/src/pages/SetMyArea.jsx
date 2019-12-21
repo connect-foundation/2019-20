@@ -11,6 +11,7 @@ import {UserContext} from '../contexts/User';
 import ToolBar from '../components/ToolBar';
 import KakakoMap from '../components/KakaoMap';
 
+import msg from '../assets/errorMessages'
 import {KAKAO_API} from '../utils/config';
 import {addUser} from '../utils/apiCall';
 
@@ -41,7 +42,7 @@ const AreaPage = () => {
   const mapRef = useRef(null);
 
   const {setUser} = useContext(UserContext);
-  const {setAlertMessage} = useContext(AlertMessageContext);
+  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
 
   const [addressList, setAddressList] = useState([]);
 
@@ -57,9 +58,9 @@ const AreaPage = () => {
       setUser(user);
     } catch (err) {
       if (err.message === 400) {
-        setAlertMessage('이미 가입한 회원입니다. 다시 로그인 해 주세요.');
+        dispatchMessage({action:ACTION_TYPE.ERROR, payload:msg.alreadySignedUpMemberError});
       } else if (err.message === 500) {
-        setAlertMessage('서버 에러입니다. 잠시 후 다시 시도 해 주세요.');
+        dispatchMessage({action:ACTION_TYPE.ERROR, payload:msg.serverError});
       }
     }
   };

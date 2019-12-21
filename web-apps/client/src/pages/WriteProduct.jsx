@@ -12,6 +12,8 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import initCSS from '../assets/cssText';
 
+import isLoggedIn from '../utils/auth';
+
 const useStyles = makeStyles(() => ({
   productForm: {
     position: 'relative',
@@ -22,15 +24,8 @@ const useStyles = makeStyles(() => ({
 const WriteProduct = () => {
   const classes = useStyles();
   const {user} = useContext(UserContext);
-  const {dispatchMessage} = useContext(AlertMessageContext);
+  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
   const notLogInErrorMessage = '로그인 먼저 하셔야 합니다.';
-
-  const isLogInned = (user) => {
-    if (user === null) {
-      return false;
-    }
-    return true;
-  };
 
   useEffect(() => {
     const css = document.createElement('style');
@@ -43,10 +38,10 @@ const WriteProduct = () => {
     };
   }, []);
 
-  const result = isLogInned(user);
+  const result = isLoggedIn(user);
   if (!result) {
     dispatchMessage({
-      type: 'error_message',
+      type: ACTION_TYPE.ERROR,
       payload: notLogInErrorMessage,
     });
     return <Redirect to='/' />;

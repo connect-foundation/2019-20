@@ -57,4 +57,16 @@ const deleteJWTRequest = async () => {
   }
 };
 
-export { deletePicture, uploadImages, uploadProduct, addUser, deleteJWTRequest };
+const deleteProduct = async (id, userId) => {
+  try {
+    const options = {
+      method: 'delete',
+      url: PRODUCT.deleteProductURI(id),
+      data: {userId},
+    };
+    await axios(options);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+export { deletePicture, uploadImages, uploadProduct, addUser, deleteJWTRequest, deleteProduct };

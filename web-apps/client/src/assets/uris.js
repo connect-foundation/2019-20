@@ -1,10 +1,10 @@
 // 인증
-const AUTH_API = 'http://10.180.170.213:5001';
+const AUTH_API = 'https://auth.oemarket.shop';
 export const AUTH = {
   LOGIN_STATUS_HANDLE: `${AUTH_API}/myinfo`,
-  NAVER_LOGIN: `${AUTH_API}/naver/login`,
   ADD_USER: `${AUTH_API}/addUser`,
   LOGOUT: `${AUTH_API}/logout`,
+  githubLoginURI: `${AUTH_API}/github/login`
 };
 
 // 상품
@@ -19,6 +19,7 @@ export const PRODUCT = {
   PRODUCT_INTEREST_LIST_MEMBER: `${PRODUCT_API}/products`,
   PRODUCT_BUY_LIST_MEMBER: `${PRODUCT_API}/products`,
   getProdutDetialUri: (id) => `${PRODUCT_API}/products/${id}`,
+  deleteProductURI: (id) => `${PRODUCT_API}/products/${id}`,
 };
 
 // client

@@ -14,7 +14,7 @@ import PrettoSlider from '../components/PrettoSlider';
 import InlineItems from '../components/InlineItems';
 import ActionBar from '../components/ActionBar';
 import LogoutButton from '../components/LogOutButton';
-import NaverLogInButton from '../components/NaverLogInButton';
+import GithubLogInButton from '../components/GithubLogInButton';
 
 import { AlertMessageContext } from '../contexts/AlertMessage';
 import { UserContext } from '../contexts/User';
@@ -29,8 +29,8 @@ const useStyles = makeStyles({
       color: 'white',
     },
     '& .card': {
-      padding: '1.5rem'
-    }
+      padding: '1.5rem',
+    },
   },
   reputation: {
     padding: '2rem 2rem 0 2rem',
@@ -42,9 +42,7 @@ const LabledIconButton = (item) => {
   return (
     <Link to={link}>
       <IconButton>
-        <Avatar style={({ backgroundColor: '#1db000' })}>
-          {icon}
-        </Avatar>
+        <Avatar style={{backgroundColor: '#1db000'}}>{icon}</Avatar>
       </IconButton>
       <Typography>{label}</Typography>
     </Link>
@@ -52,7 +50,7 @@ const LabledIconButton = (item) => {
 };
 
 const MyPage = () => {
-  const { user } = useContext(UserContext);
+  const {user} = useContext(UserContext);
   const classes = useStyles({});
   const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
 
@@ -67,7 +65,7 @@ const MyPage = () => {
   if (!isLogged(user)) {
     return (
       <Grid container justify='center' alignItems='center' style={({ height: '100vh' })}>
-        <NaverLogInButton />
+        <GithubLogInButton />
       </Grid>
     );
   }
@@ -84,18 +82,14 @@ const MyPage = () => {
 
   return (
     <>
-      <ActionBar
-        title='나의 정보'
-      />
+      <ActionBar title='나의 정보' />
       <List dense className={classes.root}>
         <ListItem>
           <Avatar>{lastName}</Avatar>
-          <strong>
-            {firstName}님
-          </strong>
+          <strong>{firstName}님</strong>
         </ListItem>
         <ListItem>
-          #{user.authority} #{user.email}
+          #{user && user.authority} #{user && user.email}
         </ListItem>
         <ListItem className={classes.reputation}>
           <PrettoSlider value={grade} max={10} valueLabelDisplay='on' />
@@ -116,7 +110,7 @@ const MyPage = () => {
         </ListItem>
       </List>
     </>
-  )
+  );
 };
 
 export default MyPage;
