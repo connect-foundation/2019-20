@@ -5,7 +5,7 @@ import {arrayOf} from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 
 // components
-import MessageItem from './MessageItem';
+import MessageItemWrapper from './MessageItemWrapper';
 
 // types
 import {messageShape} from '../types';
@@ -28,7 +28,10 @@ export default function ChatList({messages}) {
   return (
     <ul className={classes.ul}>
       {messages.map((message) => (
-        <MessageItem key={`item-${message.timestamp}`} message={message} />
+        <MessageItemWrapper
+          key={`item-${message.timestamp}`}
+          message={message}
+        />
       ))}
     </ul>
   );
