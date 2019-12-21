@@ -26,15 +26,20 @@ const Form = ({ holders }, ref) => {
       inputRef={inputRefs[i] || null}
       placeholder={holders.length > i ? holders[i] : ''}
       type='number'
-      style={({ flexGrow: 2 })}
     />
   ));
 
   return (
     <Grid container justify='center' direction='row'>
-      {customInputComponent[0]}
-      <Typography align='center' style={({ flexGrow: 1 })}>~</Typography>
-      {customInputComponent[1]}
+      <Grid xs={5}>
+        {customInputComponent[0]}
+      </Grid>
+      <Grid xs={2}>
+        <Typography align='center'>~</Typography>
+      </Grid>
+      <Grid xs={5}>
+        {customInputComponent[1]}
+      </Grid>
     </Grid>
   )
 };
