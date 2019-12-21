@@ -11,7 +11,7 @@ import SectionHeader from './SectionHeader';
 import {getKoKRFormatFullDate} from '../utils';
 
 // types
-import {uIdType, messagesByDateShape} from '../types';
+import {messagesByDateShape} from '../types';
 
 // material ui style
 const useStyles = makeStyles((theme) => ({
@@ -36,13 +36,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // component
-const MessageSection = ({messagesByDate, currentUser}) => {
+const MessageSection = ({messagesByDate}) => {
   const classes = useStyles({});
   return messagesByDate.map(({baseDate, messages}) => (
     <li key={`section-${baseDate}`} className={classes.listSection}>
       <ul className={classes.ul}>
         <SectionHeader content={getKoKRFormatFullDate(baseDate)} />
-        <MessageList messages={messages} currentUser={currentUser} />
+        <MessageList messages={messages} />
       </ul>
     </li>
   ));
@@ -50,12 +50,10 @@ const MessageSection = ({messagesByDate, currentUser}) => {
 
 MessageSection.propTypes = {
   messagesByDate: arrayOf(messagesByDateShape),
-  currentUser: uIdType,
 };
 
 MessageSection.defaultProps = {
   messagesByDate: [],
-  currentUser: null,
 };
 
 export default MessageSection;

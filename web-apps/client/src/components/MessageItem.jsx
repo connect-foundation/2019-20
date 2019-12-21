@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 // material ui
 import ListItem from '@material-ui/core/ListItem';
@@ -10,32 +10,39 @@ import ChatBox from './ChatBox';
 // utils
 import {getISOCurrentDate} from '../utils';
 
+// context
+import {UserContext} from '../contexts/User';
+
 // types
-import {uIdType, messageShape} from '../types';
+import {messageShape} from '../types';
 
 // component
-const MessageItem = ({message: {userId, content, timestamp}, currentUser}) => (
-  <ListItem>
-    <Grid
-      container
-      direction='row'
-      justify={currentUser === userId ? 'flex-end' : 'flex-start'}
-      alignItems='center'
-    >
-      <Grid item>
-        <ChatBox
-          content={content}
-          timestamp={timestamp}
-          isMyChat={currentUser === userId}
-        />
+const MessageItem = ({message: {userId, content, timestamp}}) => {
+  // @ts-ignore
+  const {user} = useContext(UserContext);
+
+  return (
+    <ListItem>
+      <Grid
+        container
+        direction='row'
+        justify={user === userId ? 'flex-end' : 'flex-start'}
+        alignItems='center'
+      >
+        <Grid item>
+          <ChatBox
+            content={content}
+            timestamp={timestamp}
+            isMyChat={user === userId}
+          />
+        </Grid>
       </Grid>
-    </Grid>
-  </ListItem>
-);
+    </ListItem>
+  );
+};
 
 MessageItem.propTypes = {
   message: messageShape,
-  currentUser: uIdType,
 };
 
 MessageItem.defaultProps = {
@@ -44,7 +51,6 @@ MessageItem.defaultProps = {
     content: '',
     userId: null,
   },
-  currentUser: null,
 };
 
 export default MessageItem;
