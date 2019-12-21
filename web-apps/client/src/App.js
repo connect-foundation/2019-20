@@ -56,12 +56,11 @@ export default () => {
             <Image>
               <Router>
                 <Switch>
-                  <Route exact path={ROUTES.INDEX} component={Entrance} />
-                  <Route exact path={ROUTES.ENROLL_LOCATION} component={SetMyArea} />
-                  <Route exact path={ROUTES.WRITE} component={WriteProduct} />
-                  <Route path={ROUTES.PRODUCT_INFO} component={ProductDetail} />
-
                   <Grid container className={classes.root}>
+                    <Route exact path={ROUTES.INDEX} component={Entrance} />
+                    <Route exact path={ROUTES.ENROLL_LOCATION} component={SetMyArea} />
+                    <Route exact path={ROUTES.WRITE} component={WriteProduct} />
+                    <Route path={ROUTES.PRODUCT_INFO} component={ProductDetail} />
                     <Route path={VIEW_WITH_NVAIGATOR}>
                       <ThemeProvider theme={theme}>
                         <Route exact path={ROUTES.MYPAGE} component={Mypage} />
