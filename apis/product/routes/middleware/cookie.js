@@ -12,7 +12,7 @@ export const setCookieView = ({ params: { id } }, res, next) => {
   const { locals: { read } } = res;
   if (!read) {
     const { views } = res.locals;
-    let list = (views) ? `${views},${id}` : id;
+    const list = (views) ? `${views},${id}` : id;
     res.cookie('view', list, { httpOnly: true, secure: true });
   }
   next();

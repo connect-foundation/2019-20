@@ -22,14 +22,16 @@ export const dbConnect = () => {
   };
 };
 
-export const mongoosasticSettings = (process.env.NODE_ENV === 'test') ? {} : {
-  host: process.env.ELASTICSEARCH,
-  port: process.env.ESPORT,
-  bulk: {
-    size: 100,
-    delay: 1000,
-  },
-};
+export const mongoosasticSettings = process.env.NODE_ENV === 'test'
+  ? {}
+  : {
+    host: process.env.ELASTICSEARCH,
+    port: process.env.ESPORT,
+    bulk: {
+      size: 100,
+      delay: 1000,
+    },
+  };
 
 export const redisConnection = {
   port: process.env.REDIS_PORT,
@@ -37,7 +39,9 @@ export const redisConnection = {
   password: process.env.REDIS_PASSWORD,
 };
 
-export const sslOptions = {
-  key: fs.readFileSync(process.env.KEY),
-  cert: fs.readFileSync(process.env.CERT)
-};
+export const sslOptions = process.env.NODE_ENV === 'test'
+  ? {}
+  : {
+    key: fs.readFileSync(process.env.KEY),
+    cert: fs.readFileSync(process.env.CERT),
+  };

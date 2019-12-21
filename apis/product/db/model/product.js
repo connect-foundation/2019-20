@@ -242,9 +242,9 @@ const timer = setInterval(() => {
     const wordSet = new Set();
     words.forEach((word) => wordSet.add(word));
     wordSet.forEach((word) => {
-      Keyword.findOneAndUpdate(word, word, { upsert: true }, (err) => {
-        if (err && err.codeName !== 'DuplicateKey') {
-          console.log('update', err);
+      Keyword.findOneAndUpdate(word, word, { upsert: true }, (error) => {
+        if (error && error.codeName !== 'DuplicateKey') {
+          console.log('update', error);
         }
       });
     });

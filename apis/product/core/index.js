@@ -2,6 +2,8 @@ import model from '../db/model';
 import message from './message';
 import CODE from './code';
 
+import { ncpDeletePicture } from '../config/multipart';
+
 const Product = model.product;
 const Keyword = model.keyword;
 
@@ -48,6 +50,7 @@ const Core = {
         .sort(sort)
         .skip((page - 1) * limits)
         .limit(limits);
+      console.log(options);
       return result;
     } catch (e) {
       throw Error(message.errorProcessing);
@@ -104,6 +107,21 @@ const Core = {
         return CODE.ERASERDATA_FAIL;
       }
       await product.remove();
+
+      const { pictures } = product;
+      const keys = pictures
+        .map((picture) => {
+          const { mobile, deskTop } = picture;
+          const key1 = mobile.split('/').pop();
+          const key2 = deskTop.split('/').pop();
+          return [key1, key2];
+        })
+        .flat();
+
+      keys.forEach((key) => {
+        ncpDeletePicture(key);
+      });
+
       return CODE.ERASERDATA_SUCCESS;
     } catch (e) {
       return CODE.ERASERDATA_FAIL;
@@ -120,13 +138,16 @@ const Core = {
   async getRecommandKeyword(keyword, fuzzy) {
     try {
       const fuzziness = fuzzy || Core.getFuzzinessDefault(keyword);
-      const list = await Keyword.search({
-        query: {
-          match: {
-            word: { query: keyword, fuzziness },
+      const list = await Keyword.search(
+        {
+          query: {
+            match: {
+              word: { query: keyword, fuzziness },
+            },
           },
         },
-      }, {});
+        {},
+      );
       return list;
     } catch (e) {
       console.log(e);
@@ -156,10 +177,7 @@ const Core = {
     let sort = esquery.sort || [];
     const isNotDefaultSetSortOption = (arr) => !arr || !arr.includes((info) => 'order' in info);
     if (isNotDefaultSetSortOption(sort)) {
-      sort = [
-        ...sort,
-        { _score: 'desc', order: 'desc' },
-      ];
+      sort = [...sort, { _score: 'desc', order: 'desc' }];
     }
     const query = { _source: true, ...esquery, sort };
     try {
