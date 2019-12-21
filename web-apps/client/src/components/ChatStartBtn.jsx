@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '0.8rem',
   },
 }));
-const ChatLink = () => {
+const ChatStartBtn = () => {
   const classes = useStyles();
   return (
     <div className={classes.chatButtonWrapper}>
@@ -26,4 +26,4 @@ const ChatLink = () => {
   );
 };
 
-export default ChatLink;
+export default ChatStartBtn;
