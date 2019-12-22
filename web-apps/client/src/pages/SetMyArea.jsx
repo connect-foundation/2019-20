@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 
 import {Link} from 'react-router-dom';
 
@@ -12,7 +12,6 @@ import MapAdjust from '../components/MapAdjust';
 
 import msg from '../assets/errorMessages';
 import {addUser} from '../utils/apiCall';
-import {ROUTES} from '../assets/uris';
 
 const useStyles = makeStyles({
   link: {
@@ -35,9 +34,9 @@ const AreaPage = () => {
   const {dispatchMessage, ALERT_ACTION_TYPE} = useContext(AlertMessageContext);
   const [coordinates, setCoordinates] = useState({});
 
-  const listenFromMapAdjust = (latitude, longitude) => {
+  const listenFromMapAdjust = useCallback((latitude, longitude) => {
     setCoordinates({latitude, longitude});
-  };
+  }, []);
 
   const enrollLocation = async () => {
     if (!Object.keys(coordinates).length) {
