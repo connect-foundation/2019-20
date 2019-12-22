@@ -12,10 +12,11 @@ import { PRODUCT } from '../assets/uris';
 
 const getProducts = async (id, from) => {
   try {
-    const response = await axios.get(PRODUCT.PRODUCT_SELL_LIST_MEMBER,
-      {
-        params: { id, from }
-      });
+    const response = await axios({
+      method: 'get',
+      url: `${PRODUCT.PRODUCT_SELL_LIST_MEMBER}?from=${from}`,
+      withCredentials: true,
+    });
     return response.data;
   } catch (e) {
     return [];
