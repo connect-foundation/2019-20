@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // component
-const ChatBox = ({content, isMyChat, timestamp}) => {
+const MessageItem = ({content, isMyChat, timestamp}) => {
   const classes = useStyles({});
 
   return (
@@ -68,16 +68,16 @@ const ChatBox = ({content, isMyChat, timestamp}) => {
   );
 };
 
-ChatBox.propTypes = {
+MessageItem.propTypes = {
   content: string,
   isMyChat: bool,
   timestamp: string,
 };
 
-ChatBox.defaultProps = {
+MessageItem.defaultProps = {
   content: '',
   isMyChat: false,
   timestamp: getISOCurrentDate(),
 };
 
-export default ChatBox;
+export default MessageItem;

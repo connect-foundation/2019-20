@@ -11,7 +11,7 @@ import ProductDescription from '../components/ProductDescription';
 
 import useCredentialFetch from '../hooks/useCredentialFetch';
 
-import {isMobile,debounce} from '../utils/index';
+import {isMobile, debounce} from '../utils/index';
 import filterObject from '../utils/object';
 import {PRODUCT} from '../assets/uris';
 import descriptionField from '../assets/productDescriptionField';
@@ -19,8 +19,6 @@ import msg from '../assets/errorMessages';
 
 import {UserContext} from '../contexts/User';
 import {AlertMessageContext} from '../contexts/AlertMessage';
-
-
 
 const Wrapper = styled.div`
   position: relative;
@@ -65,7 +63,7 @@ const ProductDetail = ({match}) => {
       type: ACTION_TYPE.ERROR,
       payload: msg.ProductDetailLoadFailError,
     });
-  },[ACTION_TYPE.ERROR, dispatchMessage]);
+  }, [ACTION_TYPE.ERROR, dispatchMessage]);
 
   const selectImages = (data) => {
     let result = [];
@@ -75,8 +73,8 @@ const ProductDetail = ({match}) => {
           result = data.pictures.map((pic) => pic.mobile);
         }
       } else if (data.pictures.length) {
-          result = data.pictures.map((pic) => pic.deskTop);
-        }
+        result = data.pictures.map((pic) => pic.deskTop);
+      }
     }
     return result;
   };
@@ -121,6 +119,8 @@ const ProductDetail = ({match}) => {
         data={footerData}
         heartStatus={heartStatus}
         clickHeart={clickHeart}
+        seller={seller}
+        product={product}
       />
     </Wrapper>
   );
