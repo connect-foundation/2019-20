@@ -16,7 +16,7 @@ app.use(dbConnect());
 
 app.use(cors({
   origin: WHITELIST,
-  methods: 'GET,POST,UPDATE,DELETE',
+  methods: 'GET,POST,UPDATE,DELETE,PUT',
   credentials: true,
   preflightContinue: true,
 }));
