@@ -118,6 +118,8 @@ const ProductForm = () => {
     }
     if (!pictures || !pictures.length) {
       result += '사진';
+    } else if (pictures[0].loading) {
+      return '사진이 로딩중입니다.';
     }
     if (!contents || !contents.length) {
       result += '본문';
