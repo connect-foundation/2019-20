@@ -1,11 +1,12 @@
 // 인증
-const AUTH_API = 'https://auth.oemarket.shop';
+const AUTH_API = 'https://auth.oemarket.shop'; // 고쳐야함
 export const AUTH = {
   LOGIN_STATUS_HANDLE: `${AUTH_API}/myinfo`,
   ADD_USER: `${AUTH_API}/addUser`,
   LOGOUT: `${AUTH_API}/logout`,
-  WITHDRAWAL: `${AUTH_API}/myinfo`,
   githubLoginURI: `${AUTH_API}/github/login`,
+  FETCH_TOKEN_PATH: `${AUTH_API}/myToken`,
+  WITHDRAWAL: `${AUTH_API}/myinfo`,
 };
 
 // 상품
@@ -21,6 +22,14 @@ export const PRODUCT = {
   PRODUCT_BUY_LIST_MEMBER: `${PRODUCT_API}/products`,
   getProdutDetialUri: (id) => `${PRODUCT_API}/products/${id}`,
   deleteProductURI: (id) => `${PRODUCT_API}/products/${id}`,
+};
+
+// 채팅
+const CHAT_API = 'https://chat.oemarket.shop:80';
+export const CHAT = {
+  NAME_SPACE: '/chat',
+  INIT_PATH: `${CHAT_API}/chat`,
+  getChatListQuery: (id) => `${CHAT_API}/chat?uid=${id}`,
 };
 
 // client
@@ -39,4 +48,8 @@ export const ROUTES = {
   FAVORITE_LIST: `${VIEW_WITH_NVAIGATOR}/products/favorite`,
   SELL_LIST: `${VIEW_WITH_NVAIGATOR}/products/sell`,
   MYPAGE: `${VIEW_WITH_NVAIGATOR}/my-page`,
+  CHAT: `${VIEW_WITH_NVAIGATOR}/chat`,
+  CHAT_ROOM: `${VIEW_WITH_NVAIGATOR}/chat/room`,
+  CHAT_ROOM_WITH_ID: `${VIEW_WITH_NVAIGATOR}/chat/room/:_id`,
+  getChatRoomPath: (id) => `${VIEW_WITH_NVAIGATOR}/chat/room/${id}`,
 };

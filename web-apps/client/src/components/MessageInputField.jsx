@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // component
-const ChatInputField = ({onMessageSubmit, chatInputRef}) => {
+const MessageInputField = ({onMessageSubmit, chatInputRef}) => {
   const classes = useStyles({});
 
   return (
@@ -56,14 +56,14 @@ const ChatInputField = ({onMessageSubmit, chatInputRef}) => {
   );
 };
 
-ChatInputField.propTypes = {
+MessageInputField.propTypes = {
   onMessageSubmit: func,
   chatInputRef: refType,
 };
 
-ChatInputField.defaultProps = {
+MessageInputField.defaultProps = {
   onMessageSubmit: () => {},
   chatInputRef: null,
 };
 
-export default ChatInputField;
+export default MessageInputField;

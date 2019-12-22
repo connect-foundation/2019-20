@@ -18,6 +18,7 @@ const Wrapper = styled.div`
 `;
 const Entrance = () => {
   const {user} = useContext(UserContext);
+
   if (isLoggedIn(user) && isVisited(user)) {
     return <Redirect to='/service/main' />;
   }
