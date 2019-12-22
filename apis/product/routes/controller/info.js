@@ -20,25 +20,21 @@ export default {
       next({ status: 500, message: e.toString() });
     }
   },
-  getProductUserList: async ({ query: { id, from } }, res, next) => {
-    if (!id) {
-      next({ status: 400, message: '필수항목을 입력하세요' });
-    } else {
-      const esquery = {
-        from: from || 0,
-        size: 10,
-        query: {
-          match: {
-            userId: id,
-          },
+  getProductUserList: async ({ query: { from } }, res, next) => {
+    const esquery = {
+      from: from || 0,
+      size: 10,
+      query: {
+        match: {
+          userId: res.locals.userId,
         },
-      };
-      try {
-        const result = await getElasticSearchResults(esquery);
-        res.json(result);
-      } catch (e) {
-        next({ status: 500, message: e.toString() });
-      }
+      },
+    };
+    try {
+      const result = await getElasticSearchResults(esquery);
+      res.json(result);
+    } catch (e) {
+      next({ status: 500, message: e.toString() });
     }
   },
 };

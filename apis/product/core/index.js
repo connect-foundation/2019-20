@@ -69,6 +69,11 @@ const Core = {
     Core.refreshLastModified();
     try {
       const product = await Product.findById(_id);
+      if(contents['interests']) {
+        product['interests'] = contents['interests'];
+        const result = await product.save();
+        return result;
+      }
       if (product.userId !== userId) {
         throw Error(message.doNotHavePermission);
       }
