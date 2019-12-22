@@ -9,6 +9,17 @@ import {
   node,
 } from 'prop-types';
 
+export const imageShape = shape({
+  mobile: string,
+  deskTop: string,
+});
+
+export const productShape = shape({
+  _id: string,
+  title: string,
+  pictures: arrayOf(imageShape),
+});
+
 /**
  * user의 정보 형태
  */
