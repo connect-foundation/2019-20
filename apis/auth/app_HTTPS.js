@@ -15,7 +15,7 @@ import {
 
 const app = express();
 
-app.use(cors(toAllowSetCookie('http')));
+app.use(cors(toAllowSetCookie('https')));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -1,15 +1,16 @@
 import msg from '../../assets/errorMessages';
-import uri from '../../assets/uris';
+import { client500ErrorPage } from '../../assets/uris';
 import { isClientError, isServerError } from '../../utils/detectError';
 
 const serverErrorHandler = (err, req, res, next) => {
+  const { host } = req.headers;
   if (isServerError(err)) {
     switch (err.message) {
       case msg.githubError:
-        res.redirect(uri.client500ErrorPage);
+        res.redirect(client500ErrorPage(host));
         break;
       case msg.ErrorWhenCheckMember:
-        res.redirect(uri.client500ErrorPage);
+        res.redirect(client500ErrorPage(host));
         break;
       case msg.internalError:
         res.status(err.status);
