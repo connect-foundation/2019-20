@@ -21,7 +21,7 @@ const AddPicture = () => {
   const {dispatchMessage, ALERT_ACTION_TYPE} = useContext(AlertMessageContext);
 
   const errorCallback = (msg) => {
-    dispatchMessage({action: ALERT_ACTION_TYPE.ERROR, payload: msg});
+    dispatchMessage({type: ALERT_ACTION_TYPE.ERROR, payload: msg});
   };
 
   useImageUpload(images, file, inputRef, setImages, errorCallback);

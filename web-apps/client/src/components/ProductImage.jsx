@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import {ImageContext} from '../contexts/Image';
+import {AlertMessageContext} from '../contexts/AlertMessage';
 import {makeStyles} from '@material-ui/core/styles';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import {deletePicture} from '../utils/apiCall';
@@ -31,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductImage = ({mobile, name, deskTop}) => {
   const classes = useStyles();
-  const {images, setImages, setAlertMessage} = useContext(ImageContext);
+  const {images, setImages} = useContext(ImageContext);
+  const {dispatchMessage, ALERT_ACTION_TYPE} = useContext(AlertMessageContext);
 
   const onDelete = async () => {
     const mobileKey = mobile.split('/').slice(-1)[0];
@@ -46,7 +48,10 @@ const ProductImage = ({mobile, name, deskTop}) => {
       const imageList = images.filter((image) => image.mobile !== mobile);
       setImages(imageList);
     } catch (err) {
-      setAlertMessage(deleteImageErrorMessage);
+      dispatchMessage({
+        type: ALERT_ACTION_TYPE.ERROR,
+        payload: deleteImageErrorMessage,
+      });
     }
   };
 

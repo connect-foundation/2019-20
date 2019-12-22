@@ -117,12 +117,13 @@ const ProductForm = () => {
       result += '가격 ';
     }
     if (!pictures || !pictures.length) {
-      result += '사진';
-    } else if (pictures[0].loading) {
-      return '사진이 로딩중입니다.';
+      result += '사진 ';
+    }
+    if (pictures.length && pictures[pictures.length - 1].loading) {
+      return '사진 업로드 중 입니다.';
     }
     if (!contents || !contents.length) {
-      result += '본문';
+      result += '본문 ';
     }
     if (productStatus === '제품상태') {
       result += '제품상태 ';
@@ -138,8 +139,8 @@ const ProductForm = () => {
     evt.preventDefault();
 
     const enrolledImages = images.map((image) => {
-      const {mobile, deskTop} = image;
-      return {mobile, deskTop};
+      const {mobile, deskTop, loading} = image;
+      return {mobile, deskTop, loading};
     });
 
     const product = {
