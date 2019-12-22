@@ -28,6 +28,7 @@
     "etag": "^1.8.1",
     "express": "~4.16.1",
     "https": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoosastic": "https://github.com/kgpyo/mongoosastic",
     "mongoose": "^5.7.12",
     "morgan": "~1.9.1",
