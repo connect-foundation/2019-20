@@ -1,14 +1,17 @@
 // 인증
-const AUTH_API = 'https://auth.oemarket.shop';
+// const AUTH_API = 'https://auth.oemarket.shop';
+const AUTH_API = 'http://auth.oemarket.shop:5000';
+// const AUTH_API = 'http://localhost:5000';
 export const AUTH = {
   LOGIN_STATUS_HANDLE: `${AUTH_API}/myinfo`,
   ADD_USER: `${AUTH_API}/addUser`,
   LOGOUT: `${AUTH_API}/logout`,
-  githubLoginURI: `${AUTH_API}/github/login`
+  githubLoginURI: `${AUTH_API}/github/login`,
 };
 
 // 상품
-const PRODUCT_API = 'https://product.oemarket.shop';
+// const PRODUCT_API = 'https://product.oemarket.shop';
+const PRODUCT_API = 'http://product.oemarket.shop:5000';
 export const PRODUCT = {
   IMAGE_HANDLE: `${PRODUCT_API}/products/picture`,
   PRODUCT_HANDLE: `${PRODUCT_API}/products`,
