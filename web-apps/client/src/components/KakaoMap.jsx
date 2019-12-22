@@ -93,7 +93,9 @@ const KakaoMap = ({ appKey, width, height, callback }, ref) => {
         throw Error(MESSAGE.NOT_LOADED);
       }
       const { geocoder, map, kakao } = mapObjects.current;
-      geocoder.coord2RegionCode(lng, lat, (result, status) => {
+      const x = lng;
+      const y = lat;
+      geocoder.coord2RegionCode(x, y, (result, status) => {
         if (status !== kakao.maps.services.Status.OK) {
           return;
         }
@@ -149,8 +151,10 @@ const KakaoMap = ({ appKey, width, height, callback }, ref) => {
       setCurrentCoordinates();
 
       // 좌표 값에 해당하는 행정동, 법정동 정보 callback 반환
-      const getCurrentAddressByCoordinates = (lng, lat) => {
-        geocoder.coord2RegionCode(lat, lng, (result, status) => {
+      const getCurrentAddressByCoordinates = (lat, lng) => {
+        const y = lat;
+        const x = lng;
+        geocoder.coord2RegionCode(x, y, (result, status) => {
           const { ZERO_RESULT, ERROR } = kakao.maps.services.Status;
           if (!callback) {
             return;

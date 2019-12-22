@@ -77,7 +77,8 @@ const MyPage = () => {
     const getAddress = async () => {
       try {
         const { latitude, longitude } = user;
-        const name = await findAddressByCoordinates(latitude, longitude);
+        // x = longitude, y = latitude (카카오 api 명세 /#services_Geocoder_coord2RegionCode)
+        const name = await findAddressByCoordinates(longitude, latitude);
         setAddress(name);
       } catch (e) {
         setAddress(MESSAGE.LOAD_LOCATION_FAIL);
@@ -109,7 +110,7 @@ const MyPage = () => {
     try {
       await deleteUser();
     } catch (e) {
-      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: '처리중 오류가 발생하였습니다.' });
+      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: MESSAGE.LOAD_LOCATION_FAIL });
     }
     setUser(null);
   };

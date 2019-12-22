@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { PRODUCT, AUTH } from '../assets/uris';
+import {PRODUCT, AUTH} from '../assets/uris';
 
 export const deletePicture = async (mobileKey, deskTopKey) => {
   try {
-    await axios.delete(PRODUCT.IMAGE_HANDLE, { data: { key: mobileKey } });
+    await axios.delete(PRODUCT.IMAGE_HANDLE, {data: {key: mobileKey}});
     if (mobileKey !== deskTopKey) {
-      await axios.delete(PRODUCT.IMAGE_HANDLE, { data: { key: deskTopKey } });
+      await axios.delete(PRODUCT.IMAGE_HANDLE, {data: {key: deskTopKey}});
     }
   } catch (err) {
     throw new Error(err);
@@ -23,22 +23,23 @@ export const uploadImages = async (formData) => {
 
 export const uploadProduct = async (product) => {
   try {
-    const { data } = await axios.post(PRODUCT.PRODUCT_HANDLE, product);
+    const {data} = await axios.post(PRODUCT.PRODUCT_HANDLE, product);
     return data;
   } catch (err) {
     throw new Error(err);
   }
 };
 
-export const addUser = async ({ latitude, longitude }) => {
+export const addUser = async ({latitude, longitude}) => {
   try {
     const options = {
       method: 'post',
       url: AUTH.ADD_USER,
       withCredentials: true,
-      data: { latitude, longitude },
+      data: {latitude, longitude},
     };
-    await axios(options);
+    const {data} = await axios(options);
+    return data;
   } catch (e) {
     throw new Error(e.response.status);
   }
@@ -68,14 +69,14 @@ export const deleteUser = async () => {
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 export const deleteProduct = async (id, userId) => {
   try {
     const options = {
       method: 'delete',
       url: PRODUCT.deleteProductURI(id),
-      data: { userId },
+      data: {userId},
     };
     await axios(options);
   } catch (e) {
