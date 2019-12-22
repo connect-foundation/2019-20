@@ -3,9 +3,9 @@ import uri from '../../assets/uris';
 import msg from '../../assets/errorMessages';
 import filterObject from '../../utils';
 
-const getUserInfoByJWT = (req, res, next) => {
+export const getUserInfoByJWT = (req, res, next) => {
   const { info } = res.locals;
-  if (info === null) {
+  if (info === null || !info.id) {
     res.json(info);
     return;
   }
@@ -15,47 +15,39 @@ const getUserInfoByJWT = (req, res, next) => {
       message: msg.internalError,
     });
   }
-  const {
-    id,
-    name,
-    email,
-    authority,
-    latitude,
-    longitude,
-    reputation,
-    numberOfRater,
-  } = info;
+  const fields = [
+    'id',
+    'name',
+    'email',
+    'authority',
+    'latitude',
+    'longitude',
+    'reputation',
+    'numberOfRater',
+  ];
+  const user = filterObject(info, fields);
   if (
-    id.length
-    && name.length
-    && email.length
-    && authority.length
-    && latitude
-    && longitude
-    && reputation >= 0
-    && numberOfRater >= 0
+    user.id.length
+    && user.name.length
+    && user.email.length
+    && user.authority.length
+    && user.latitude
+    && user.longitude
+    && user.reputation >= 0
+    && user.numberOfRater >= 0
   ) {
-    res.json({
-      id,
-      name,
-      email,
-      authority,
-      latitude,
-      longitude,
-      reputation,
-      numberOfRater,
-    });
+    res.json(user);
   } else {
     next({ status: 500, message: msg.invalidJwtToken });
   }
 };
 
-const logOutProcess = (req, res) => {
+export const logOutProcess = (req, res) => {
   res.clearCookie('jwt');
   res.end();
 };
 
-const newAccountLogIn = (req, res) => {
+export const newAccountLogIn = (req, res) => {
   const fields = [
     'id',
     'name',
@@ -76,7 +68,7 @@ const newAccountLogIn = (req, res) => {
   res.json(info);
 };
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
   const fields = [
     'id',
     'name',
@@ -104,6 +96,14 @@ const login = async (req, res) => {
   }
 };
 
-export {
-  getUserInfoByJWT, logOutProcess, login, newAccountLogIn,
+export const sendJWT = (req, res, next) => {
+  const { info } = res.locals;
+  const token = req.cookies.jwt;
+  if (info === null || !info.id) {
+    res.json({ token });
+  } else if (info.id) {
+    res.json({ token });
+  } else {
+    next({ status: 500, message: msg.internalError });
+  }
 };
