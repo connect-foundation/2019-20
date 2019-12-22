@@ -33,17 +33,13 @@ export default function ChatList() {
   const [chatList, setChatList] = useState([]);
 
   const fetchChatList = useCallback(async () => {
-    console.log(CHAT.getChatListQuery(user.id));
     const {data} = await axios.get(CHAT.getChatListQuery(user.id));
-    console.log(data);
     setChatList(data);
   }, [user.id]);
 
   useEffect(() => {
     if (user.id) fetchChatList();
   }, [fetchChatList, user.id]);
-
-  console.log('로그인 햇니?', user, isLoggedIn(user));
 
   return (
     <>
