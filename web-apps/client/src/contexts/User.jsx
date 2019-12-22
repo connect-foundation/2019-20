@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  createContext,
-  useContext,
-  useCallback,
-  useReducer,
-} from 'react';
+import React, {createContext, useContext, useCallback, useReducer} from 'react';
 
 import useCredentialFetch from '../hooks/useCredentialFetch';
 import {AUTH} from '../assets/uris';
