@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const UseCredentialFetch = (uri, callback, errCallback) => {
   const [loading, setLoading] = useState(false);
+
   const fetchData = useCallback(
     async (_uri) => {
       setLoading(true);
@@ -13,7 +14,7 @@ const UseCredentialFetch = (uri, callback, errCallback) => {
       };
       try {
         const {data} = await axios(options);
-        callback({...data, visited: true});
+        callback(data);
         setLoading(false);
       } catch (err) {
         errCallback(err);
