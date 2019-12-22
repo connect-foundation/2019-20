@@ -5,8 +5,8 @@ export const authorizedURL = '.oemarket.shop';
 
 const getURI = (referer, path) => {
   if (
-    referer === 'https://oemarket.shop'
-    || referer === 'http://localhost:3000'
+    referer === 'https://oemarket.shop/'
+    || referer === 'http://localhost:3000/'
   ) {
     return `${referer}${path}`;
   }
