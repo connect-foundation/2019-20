@@ -13,8 +13,8 @@ export const AUTH = {
 };
 
 // 상품
-// const PRODUCT_API = 'https://product.oemarket.shop';
-const PRODUCT_API = 'http://product.oemarket.shop:5000';
+const PRODUCT_API = 'https://product.oemarket.shop';
+// const PRODUCT_API = 'http://product.oemarket.shop:5000';
 export const PRODUCT = {
   IMAGE_HANDLE: `${PRODUCT_API}/products/picture`,
   PRODUCT_HANDLE: `${PRODUCT_API}/products`,
