@@ -80,16 +80,24 @@ const ProductForm = () => {
   const categoryAPI = 'category';
   const statusTypeListAPI = 'statusType';
   const emptyErrorMessage = (msg) => {
-    const basic = <div>비어있는 항목이 있습니다. 확인해 주세요 :D</div>;
+    const basic = (
+      <span>
+        비어있는 항목이 있습니다. 확인해 주세요 :D
+        <br />
+      </span>
+    );
     return (
-      <div>
+      <>
         {basic}
         {msg}
-      </div>
+      </>
     );
   };
   const submitErrorMessage = (
-    <div>상품 등록에 실패했습니다. 잠시후 다시 시도해 주세요. :D</div>
+    <>
+      상품 등록에 실패했습니다. 잠시후 다시 시도해 주세요. :D
+      <br />
+    </>
   );
 
   const loadCategory = useFetch(categoryAPI, setCategoryList);
