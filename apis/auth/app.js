@@ -6,7 +6,7 @@ import cors from 'cors';
 import indexRouter from './routes/index';
 import githubRouter from './routes/github';
 
-import toAllowSetCookie from './utils/corsOptions';
+import { toAllowSetCookie } from './utils/corsOptions';
 
 import {
   serverErrorHandler,
@@ -15,7 +15,7 @@ import {
 
 const app = express();
 
-app.use(cors(toAllowSetCookie('http')));
+app.use(cors(toAllowSetCookie));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

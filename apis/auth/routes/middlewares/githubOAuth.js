@@ -4,9 +4,11 @@ import msg from '../../assets/errorMessages';
 const getClientID = (host) => {
   if (host === 'auth.oemarket.shop') {
     return process.env.CLIENT_ID;
-  } if (host === 'auth.oemarket.shop:5000') {
+  }
+  if (host === 'auth.oemarket.shop:5000') {
     return process.env.TEST_CLIENT_ID;
-  } if (host === 'localhost:5000') {
+  }
+  if (host === 'localhost:5000') {
     return process.env.DEV_CLIENT_ID;
   }
   return null;
@@ -14,9 +16,11 @@ const getClientID = (host) => {
 const getClientSecret = (host) => {
   if (host === 'auth.oemarket.shop') {
     return process.env.CLIENT_SECRET;
-  } if (host === 'auth.oemarket.shop:5000') {
+  }
+  if (host === 'auth.oemarket.shop:5000') {
     return process.env.TEST_CLIENT_SECRET;
-  } if (host === 'localhost:5000') {
+  }
+  if (host === 'localhost:5000') {
     return process.env.DEV_CLIENT_SECRET;
   }
   return null;

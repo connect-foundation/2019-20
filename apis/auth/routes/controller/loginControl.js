@@ -1,5 +1,9 @@
 import jwt from 'jsonwebtoken';
-import { enrollLocationPage, clientMainPage } from '../../assets/uris';
+import {
+  enrollLocationPage,
+  clientMainPage,
+  authorizedURL,
+} from '../../assets/uris';
 import msg from '../../assets/errorMessages';
 import filterObject from '../../utils';
 
@@ -69,7 +73,7 @@ export const newAccountLogIn = (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { host } = req.headers;
+  const { referer } = req.headers;
   const fields = [
     'id',
     'name',
@@ -85,15 +89,15 @@ export const login = async (req, res) => {
 
   if (info.id && info.id.length) {
     const token = jwt.sign(info, process.env.JWT_PRIVATE_KEY);
-    res.cookie('jwt', token, { httpOnly: true });
-    res.redirect(clientMainPage(host));
+    res.cookie('jwt', token, { httpOnly: true, domain: authorizedURL });
+    res.redirect(clientMainPage(referer));
   } else {
     const token = jwt.sign(
       { name: info.name, email: info.email },
       process.env.JWT_PRIVATE_KEY,
     );
-    res.cookie('jwt', token, { httpOnly: true });
-    res.redirect(enrollLocationPage(host));
+    res.cookie('jwt', token, { httpOnly: true, domain: authorizedURL });
+    res.redirect(enrollLocationPage(referer));
   }
 };
 
