@@ -13,7 +13,7 @@
     "precommit": "lint-staged && yarn test",
     "dev:start": "NODE_ENV=development nodemon --exec babel-node bin/www.js",
     "build": "babel ./ -d build",
-    "start": "NODE_ENV=production pm2 start ./build/bin/www.js",
+    "start": "yarn build && NODE_ENV=production pm2 start ./build/bin/www.js --watch",
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
