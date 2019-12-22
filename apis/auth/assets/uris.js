@@ -1,27 +1,24 @@
 export const HTTPS_HOST = 'https://oemarket.shop';
-export const HTTP_HOST = 'http://localhost:3000';
+export const HTTP_DEV_HOST = 'http://localhost:3000';
+export const HTTP_TEST_HOST = 'http://oemarket.shop:5000';
+export const authorizedURL = '.oemarket.shop';
 
-const getURI = (host, path) => {
-  if (host === 'auth.oemarket.shop:5000' || host === 'localhost:5000') {
-    return `${HTTP_HOST}${path}`;
-  }
-  return `${HTTPS_HOST}${path}`;
-};
+const getURI = (referer, path) => `${referer}${path}`;
 
 // req.headers.host
-export const client500ErrorPage = (host) => {
-  const path = '/server_error';
-  return getURI(host, path);
+export const client500ErrorPage = (referer) => {
+  const path = 'server_error';
+  return getURI(referer, path);
 };
-export const badRequestPage = (host) => {
-  const path = '/bad_request';
-  return getURI(host, path);
+export const badRequestPage = (referer) => {
+  const path = 'bad_request';
+  return getURI(referer, path);
 };
-export const clientMainPage = (host) => {
-  const path = '/service/main';
-  return getURI(host, path);
+export const clientMainPage = (referer) => {
+  const path = 'service/main';
+  return getURI(referer, path);
 };
-export const enrollLocationPage = (host) => {
-  const path = '/enroll-location';
-  return getURI(host, path);
+export const enrollLocationPage = (referer) => {
+  const path = 'enroll-location';
+  return getURI(referer, path);
 };

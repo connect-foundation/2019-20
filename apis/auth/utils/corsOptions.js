@@ -1,23 +1,8 @@
-import { HTTPS_HOST, HTTP_HOST } from '../assets/uris';
-
-const toAllowSetCookie = (protocol) => {
-  if (protocol === 'https') {
-    return {
-      origin: HTTPS_HOST,
-      methods: 'GET,POST,UPDATE,DELETE',
-      credentials: true,
-      preflightContinue: true,
-    };
-  }
-  if (protocol === 'http') {
-    return {
-      origin: HTTP_HOST,
-      methods: 'GET,POST,UPDATE,DELETE',
-      credentials: true,
-      preflightContinue: true,
-    };
-  }
-  return null;
+import { HTTPS_HOST, HTTP_DEV_HOST, HTTP_TEST_HOST } from '../assets/uris';
+// eslint-disable-next-line import/prefer-default-export
+export const toAllowSetCookie = {
+  origin: [HTTPS_HOST, HTTP_DEV_HOST, HTTP_TEST_HOST],
+  methods: 'GET,POST,UPDATE,DELETE',
+  credentials: true,
+  preflightContinue: true,
 };
-
-export default toAllowSetCookie;

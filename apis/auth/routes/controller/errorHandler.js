@@ -3,14 +3,14 @@ import { client500ErrorPage } from '../../assets/uris';
 import { isClientError, isServerError } from '../../utils/detectError';
 
 const serverErrorHandler = (err, req, res, next) => {
-  const { host } = req.headers;
+  const { referer } = req.headers;
   if (isServerError(err)) {
     switch (err.message) {
       case msg.githubError:
-        res.redirect(client500ErrorPage(host));
+        res.redirect(client500ErrorPage(referer));
         break;
       case msg.ErrorWhenCheckMember:
-        res.redirect(client500ErrorPage(host));
+        res.redirect(client500ErrorPage(referer));
         break;
       case msg.internalError:
         res.status(err.status);

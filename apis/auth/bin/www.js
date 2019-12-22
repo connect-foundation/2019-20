@@ -5,7 +5,6 @@
  */
 require('dotenv').config();
 var app = require('../app');
-var httpsApp = require('../app_HTTPS');
 var debug = require('debug')('template:server');
 var http = require('http');
 var https = require('https');
@@ -36,7 +35,7 @@ if (process.env.NODE_ENV === 'production') {
     ),
     cert: fs.readFileSync('/etc/letsencrypt/live/auth.oemarket.shop/cert.pem'),
   };
-  const httpsServer = https.createServer(options, httpsApp);
+  const httpsServer = https.createServer(options, app);
   httpsServer.listen(443);
   httpsServer.on('error', onError);
   httpsServer.on('listening', onListening);
