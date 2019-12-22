@@ -95,7 +95,7 @@ const MyPage = () => {
     );
   }
 
-  const grade = (user.reputation / user.numberOfRater).toFixed(2);
+  const grade = (!user.numberOfRater) ? 5 : (user.reputation / user.numberOfRater).toFixed(2);
   const lastName = user.name[0];
   const firstName = user.name.slice(1);
 
