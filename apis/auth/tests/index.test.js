@@ -97,7 +97,7 @@ it('add user fail test', () => new Promise((resolve) => {
   );
 }));
 it('get seller info test', () => new Promise((resolve) => {
-  const sellerID = '3cad91fe-480c-557b-80af-97692131763c';
+  const sellerID = '2d50da16-ed7f-5802-aec6-59da27ec9142';
   request(app)
     .get(`/seller/${sellerID}`)
     .then((res) => resolve(res));
@@ -116,3 +116,20 @@ it('check exist member fail test', async () => {
   }
   expect(JSON.stringify(result)).toBe(JSON.stringify(info));
 });
+
+it('get token test', () => new Promise((resolve) => {
+  const key = process.env.JWT_PRIVATE_KEY;
+  const token = jwt.sign(tester, key);
+
+  request(app)
+    .get('/myToken')
+    .set('Cookie', [`jwt=${token}`])
+    .then((res) => resolve(res));
+}).then((res) => {
+  const key = process.env.JWT_PRIVATE_KEY;
+  const token = jwt.sign(tester, key);
+
+  expect(res.status).toBe(200);
+  expect(res.headers['content-type']).toBe('application/json; charset=utf-8');
+  expect(res.text).toBe(JSON.stringify({ token }));
+}));

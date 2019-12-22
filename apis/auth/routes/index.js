@@ -5,6 +5,7 @@ import {
   getUserInfoByJWT,
   logOutProcess,
   newAccountLogIn,
+  sendJWT,
 } from './controller/loginControl';
 import { addUser, deleteUserInfo } from './middlewares/userManagement';
 import findBasicInfoById from './controller/publicInformation';
@@ -19,5 +20,5 @@ router
 router.post('/addUser', jwtValidator, addUser, newAccountLogIn);
 router.get('/logout', logOutProcess);
 router.get('/seller/:id', findBasicInfoById);
-
+router.get('/myToken', jwtValidator, sendJWT);
 module.exports = router;
