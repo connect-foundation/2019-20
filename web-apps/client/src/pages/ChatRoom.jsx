@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import {useParams} from 'react-router-dom';
 import io from 'socket.io-client';
-
+import axios from 'axios';
 // material ui
 import List from '@material-ui/core/List';
 import {makeStyles} from '@material-ui/core/styles';
@@ -23,7 +23,7 @@ import {UserContext} from '../contexts/User';
 
 // utils
 import {isInSameDay, isEmptyArr, setBaseDate, formatChat} from '../utils';
-import {CHAT} from '../assets/uris';
+import {CHAT, AUTH} from '../assets/uris';
 
 // material ui style
 const useStyles = makeStyles((theme) => ({
@@ -54,7 +54,7 @@ export default function ChatRoom() {
   const classes = useStyles({});
   // @ts-ignore
   const {user} = useContext(UserContext);
-  const {id: roomId} = useParams();
+  const {_id: roomId} = useParams();
 
   const [formattedMessages, setFormattedMessages] = useState([]);
   const chatInputRef = useRef(null);
@@ -62,8 +62,20 @@ export default function ChatRoom() {
 
   // socket
   const socket = useRef(null);
-  const enterRoom = useCallback((_roomId) => {
-    socket.current.emit('enterRoom', {_roomId});
+  const enterRoom = useCallback(async (_roomId) => {
+    const options = {
+      method: 'get',
+      url: AUTH.FETCH_TOKEN_PATH,
+      withCredentials: true,
+    };
+    try {
+      const {
+        data: {token},
+      } = await axios(options);
+      socket.current.emit('enterRoom', {roomId: _roomId, token});
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
   const listenSocketEvent = useCallback((on = '', cb = () => {}) => {
     socket.current.once(on, cb);
