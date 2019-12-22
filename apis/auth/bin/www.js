@@ -5,6 +5,7 @@
  */
 require('dotenv').config();
 var app = require('../app');
+var httpsApp = require('../app_HTTPS');
 var debug = require('debug')('template:server');
 var http = require('http');
 var https = require('https');
@@ -13,7 +14,7 @@ var fs = require('fs');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '5001');
+var port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
 
 /**
@@ -35,7 +36,10 @@ if (process.env.NODE_ENV === 'production') {
     ),
     cert: fs.readFileSync('/etc/letsencrypt/live/auth.oemarket.shop/cert.pem'),
   };
-  https.createServer(options, app).listen(443);
+  const httpsServer = https.createServer(options, httpsApp);
+  httpsServer.listen(443);
+  httpsServer.on('error', onError);
+  httpsServer.on('listening', onListening);
 }
 
 /**

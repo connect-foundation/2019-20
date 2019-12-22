@@ -1,15 +1,39 @@
 import axios from 'axios';
 import msg from '../../assets/errorMessages';
 
+const getClientID = (host) => {
+  if (host === 'auth.oemarket.shop') {
+    return process.env.CLIENT_ID;
+  } if (host === 'auth.oemarket.shop:5000') {
+    return process.env.TEST_CLIENT_ID;
+  } if (host === 'localhost:5000') {
+    return process.env.DEV_CLIENT_ID;
+  }
+  return null;
+};
+const getClientSecret = (host) => {
+  if (host === 'auth.oemarket.shop') {
+    return process.env.CLIENT_SECRET;
+  } if (host === 'auth.oemarket.shop:5000') {
+    return process.env.TEST_CLIENT_SECRET;
+  } if (host === 'localhost:5000') {
+    return process.env.DEV_CLIENT_SECRET;
+  }
+  return null;
+};
+
 const redirectGithubLogin = (req, res) => {
-  const id = process.env.CLIENT_ID;
+  const { host } = req.headers;
+
+  const id = getClientID(host);
   const githubLogin = `https://github.com/login/oauth/authorize?scope=user:email&client_id=${id}`;
   res.redirect(githubLogin);
 };
 const getAccessToken = async (req, res, next) => {
   const { code } = req.query;
-  const id = process.env.CLIENT_ID;
-  const secret = process.env.CLIENT_SECRET;
+  const { host } = req.headers;
+  const id = getClientID(host);
+  const secret = getClientSecret(host);
 
   const options = {
     method: 'post',
