@@ -1,5 +1,5 @@
 import uuid from 'uuid/v5';
-import db from '../models';
+import db from '../db/models';
 import msg from '../assets/errorMessages';
 
 const { User } = db;
@@ -67,5 +67,8 @@ const deleteMember = async (id) => {
   }
 };
 export default {
-  addUser, checkExistMember, findUserById, deleteMember,
+  addUser,
+  checkExistMember,
+  findUserById,
+  deleteMember,
 };
