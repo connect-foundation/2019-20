@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { PRODUCT } from '../assets/uris';
+import {PRODUCT} from '../assets/uris';
 
 const getData = async (uri, params) => {
   try {
-    const response = await axios.get(uri, { params });
+    const response = await axios.get(uri, {params});
     return response.data;
   } catch (e) {
     return [];
@@ -39,16 +39,14 @@ export const getCategoryList = async () => {
 };
 
 const makeQuery = ({
-  price: {
-    start,
-    end,
-  },
+  price: {start, end},
   categories,
   coordinates,
   distance,
   from,
   limits,
-  keyword }) => {
+  keyword,
+}) => {
   const queries = [];
   if (from) {
     queries.push(['from', from]);
@@ -77,8 +75,12 @@ export const getProductList = async (options) => {
   try {
     const query = makeQuery(options);
     const requestUri = `${PRODUCT.PRODUCT_LIST}?${query}`;
-    const response = await axios.get(requestUri);
-    const result = response.data.map(({ _id, _source, fields }) => {
+    const response = await axios({
+      method: 'post',
+      url: requestUri,
+      withCredentials: true,
+    });
+    const result = response.data.map(({_id, _source, fields}) => {
       const data = {
         id: _id,
         ..._source,
