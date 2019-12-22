@@ -75,11 +75,7 @@ export const getProductList = async (options) => {
   try {
     const query = makeQuery(options);
     const requestUri = `${PRODUCT.PRODUCT_LIST}?${query}`;
-    const response = await axios({
-      method: 'post',
-      url: requestUri,
-      withCredentials: true,
-    });
+    const response = await axios.get(requestUri);
     const result = response.data.map(({_id, _source, fields}) => {
       const data = {
         id: _id,
