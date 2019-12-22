@@ -1,11 +1,12 @@
 // 인증
-// const AUTH_API = 'https://auth.oemarket.shop';
-const AUTH_API = 'http://auth.oemarket.shop:5000';
+const AUTH_API = 'https://auth.oemarket.shop';
+// const AUTH_API = 'http://auth.oemarket.shop:5000';
 // const AUTH_API = 'http://localhost:5000';
 export const AUTH = {
   LOGIN_STATUS_HANDLE: `${AUTH_API}/myinfo`,
   ADD_USER: `${AUTH_API}/addUser`,
   LOGOUT: `${AUTH_API}/logout`,
+  FETCH_TOKEN_PATH: `${AUTH_API}/myToken`,
   WITHDRAWAL: `${AUTH_API}/myinfo`,
   githubLoginURI: `${AUTH_API}/github/login`,
   GET_TOKEN: `${AUTH_API}/myToken`,
@@ -27,6 +28,14 @@ export const PRODUCT = {
   deleteProductURI: (id) => `${PRODUCT_API}/products/${id}`,
 };
 
+// 채팅
+const CHAT_API = 'https://chat.oemarket.shop:80';
+export const CHAT = {
+  NAME_SPACE: '/chat',
+  INIT_PATH: `${CHAT_API}/chat`,
+  getChatListQuery: (id) => `${CHAT_API}/chat?uid=${id}`,
+};
+
 // client
 export const VIEW_WITH_NVAIGATOR = '/service';
 export const ROUTES = {
@@ -44,4 +53,8 @@ export const ROUTES = {
   SELL_LIST: `${VIEW_WITH_NVAIGATOR}/products/sell`,
   MYPAGE: `${VIEW_WITH_NVAIGATOR}/my-page`,
   EDIT: '/edit/:id',
+  CHAT: `${VIEW_WITH_NVAIGATOR}/chat`,
+  CHAT_ROOM: `${VIEW_WITH_NVAIGATOR}/chat/room`,
+  CHAT_ROOM_WITH_ID: `${VIEW_WITH_NVAIGATOR}/chat/room/:_id`,
+  getChatRoomPath: (id) => `${VIEW_WITH_NVAIGATOR}/chat/room/${id}`,
 };

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useEffect, useState, useMemo } from 'react';
+import React, { useContext, useEffect, useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
@@ -13,19 +13,25 @@ import { ROUTES } from '../assets/uris';
 
 import useScrollDown from '../hooks/useScrollDown';
 import { debounce } from '../utils';
+import {isLoggedIn, isVisited} from '../utils/auth';
+
 const Lists = ({ title, getProducts }) => {
   const LOAD_DELAY = 1000;
   const { user } = useContext(UserContext);
   const [from, setFrom] = useState(0);
   const [list, setList] = useState([]);
 
-  const loadList = debounce(async () => {
+  const loadList = useCallback(debounce(async () => {
+    if(!isLoggedIn(user)) {
+      return;
+    }
     const data = await getProducts(user.id, from);
     setList((state) => [...state, ...data]);
-  }, LOAD_DELAY);
+  }, LOAD_DELAY), [user]);
+
   useEffect(() => {
     loadList();
-  }, [from]);
+  }, [from, loadList]);
   useScrollDown(() => { setFrom(from + 10); });
 
   const makeNoDataMessage = `${title}이 없습니다.`;
@@ -34,8 +40,13 @@ const Lists = ({ title, getProducts }) => {
       <Link to={`${ROUTES.PRODUCT}/${_id}`}>
         {_source.title}
       </Link>
-    </ListItem >
+    </ListItem>
   )), []);
+
+  
+  if(!(isLoggedIn(user) && isVisited(user))) {
+    return '비정상적인 접근';
+  }
 
   return (
     <>

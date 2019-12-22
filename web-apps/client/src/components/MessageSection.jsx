@@ -4,14 +4,14 @@ import {arrayOf} from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 
 // components
-import ChatList from './ChatList';
+import MessageList from './MessageList';
 import SectionHeader from './SectionHeader';
 
 // utils
 import {getKoKRFormatFullDate} from '../utils';
 
 // types
-import {uIdType, messagesByDateShape} from '../types';
+import {messagesByDateShape} from '../types';
 
 // material ui style
 const useStyles = makeStyles((theme) => ({
@@ -36,26 +36,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // component
-const ChatSection = ({messagesByDate, currentUser}) => {
+const MessageSection = ({messagesByDate}) => {
   const classes = useStyles({});
   return messagesByDate.map(({baseDate, messages}) => (
     <li key={`section-${baseDate}`} className={classes.listSection}>
       <ul className={classes.ul}>
         <SectionHeader content={getKoKRFormatFullDate(baseDate)} />
-        <ChatList messages={messages} currentUser={currentUser} />
+        <MessageList messages={messages} />
       </ul>
     </li>
   ));
 };
 
-ChatSection.propTypes = {
+MessageSection.propTypes = {
   messagesByDate: arrayOf(messagesByDateShape),
-  currentUser: uIdType,
 };
 
-ChatSection.defaultProps = {
+MessageSection.defaultProps = {
   messagesByDate: [],
-  currentUser: null,
 };
 
-export default ChatSection;
+export default MessageSection;

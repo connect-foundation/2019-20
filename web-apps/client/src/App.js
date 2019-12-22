@@ -4,8 +4,8 @@ import './App.css';
 
 import {ThemeProvider, makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
-import TmpChat from './pages/TmpChat';
 import ChatRoom from './pages/ChatRoom';
+import ChatList from './pages/ChatList';
 import Main from './pages/Main';
 import Entrance from './pages/Entrance';
 import Filters from './pages/filters';
@@ -33,7 +33,6 @@ import Image from './contexts/Image';
 import Navigator from './pages/Navigator';
 import NoticeBar from './pages/SnackBarBuilder';
 
-import muiTheme from './theme/muiTheme';
 import theme from './theme';
 
 import './style.css';
@@ -66,6 +65,13 @@ export default () => {
                   <Route exact path={ROUTES.WRITE} component={WriteProduct} />
                   <Route path={ROUTES.PRODUCT_INFO} component={ProductDetail} />
                   <Route path={ROUTES.EDIT} component={EditProduct} />
+                  <Route exact path={ROUTES.CHAT}>
+                    <ChatList />
+                    <Navigator />
+                  </Route>
+                  <Route exact path={ROUTES.CHAT_ROOM_WITH_ID}>
+                    <ChatRoom />
+                  </Route>
                   <Route path={VIEW_WITH_NVAIGATOR}>
                     <Grid container className={classes.root}>
                       <ThemeProvider theme={theme}>
@@ -95,16 +101,6 @@ export default () => {
                             title='관심목록'
                           />
                         </Route>
-                      </ThemeProvider>
-                      <ThemeProvider theme={muiTheme}>
-                        <Route exact path='/service/chat' component={TmpChat} />
-                        <Route
-                          exact
-                          path='/service/chat/room/:id'
-                          Component={ChatRoom}
-                        />
-                      </ThemeProvider>
-                      <ThemeProvider theme={theme}>
                         <Navigator />
                         <NoticeBar />
                       </ThemeProvider>
