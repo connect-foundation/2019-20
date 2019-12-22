@@ -6,7 +6,7 @@ import ProductForm from '../components/ProductForm';
 import {UserContext} from '../contexts/User';
 import {AlertMessageContext} from '../contexts/AlertMessage';
 import initCSS from '../assets/cssText';
-import {isLoggedIn, isVisited} from '../utils/auth';
+import {isLoggedIn, isFetched} from '../utils/auth';
 
 const useStyles = makeStyles(() => ({
   productForm: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
 const WriteProduct = () => {
   const classes = useStyles();
   const {user} = useContext(UserContext);
-  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
+  const {dispatchMessage, ALERT_ACTION_TYPE} = useContext(AlertMessageContext);
   const notLogInErrorMessage = '로그인 먼저 하셔야 합니다.';
   useEffect(() => {
     const css = document.createElement('style');
@@ -27,9 +27,9 @@ const WriteProduct = () => {
       document.head.removeChild(id);
     };
   }, []);
-  if (!isLoggedIn(user) && isVisited(user)) {
+  if (!isLoggedIn(user) && isFetched(user)) {
     dispatchMessage({
-      type: ACTION_TYPE.ERROR,
+      type: ALERT_ACTION_TYPE.ERROR,
       payload: notLogInErrorMessage,
     });
     return <Redirect to='/' />;

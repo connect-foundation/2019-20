@@ -30,7 +30,7 @@ const ProductDetail = ({match}) => {
   let history = useHistory();
   const INTEREST_UPDATE_DELAY = 1000;
   const {user} = useContext(UserContext);
-  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
+  const {dispatchMessage, ALERT_ACTION_TYPE} = useContext(AlertMessageContext);
   const productID = match.params.id;
 
   const [detail, setDetail] = useState(null);
@@ -62,7 +62,7 @@ const ProductDetail = ({match}) => {
 
   const productInfoLoadError = () => {
     dispatchMessage({
-      type: ACTION_TYPE.ERROR,
+      type: ALERT_ACTION_TYPE.ERROR,
       payload: msg.ProductDetailLoadFailError,
     });
   };

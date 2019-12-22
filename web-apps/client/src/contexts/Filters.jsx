@@ -1,11 +1,11 @@
-import React, { createContext, useReducer, useEffect, useContext } from 'react';
+import React, {createContext, useReducer, useEffect, useContext} from 'react';
 
-import { childrenType } from '../types';
-import { getCategoryList } from '../service/product';
-import { AlertMessageContext } from './AlertMessage';
+import {childrenType} from '../types';
+import {getCategoryList} from '../service/product';
+import {AlertMessageContext} from './AlertMessage';
 
 const initialFilters = {
-  price: { start: 0, end: 0, },
+  price: {start: 0, end: 0},
   categories: [],
   coordinates: '',
   distance: 0,
@@ -26,44 +26,44 @@ const FILTER_TYPE = {
   KEYWORD: 8,
 };
 
-const filterReducer = (state, { type, payload }) => {
+const filterReducer = (state, {type, payload}) => {
   switch (type) {
-
     case FILTER_TYPE.INITIAL:
       return JSON.parse(JSON.stringify(initialFilters));
 
     case FILTER_TYPE.PRICE:
-      return { ...state, price: { ...payload } };
+      return {...state, price: {...payload}};
 
     case FILTER_TYPE.CATEGORY_ADD:
-      return { ...state, categories: [...state.categories, payload] };
+      return {...state, categories: [...state.categories, payload]};
 
     case FILTER_TYPE.CATEGORY_REMOVE: {
-      const updatedCategory =
-        state.categories.filter((name) => name !== payload);
-      return { ...state, categories: updatedCategory };
+      const updatedCategory = state.categories.filter(
+        (name) => name !== payload,
+      );
+      return {...state, categories: updatedCategory};
     }
 
     case FILTER_TYPE.COORDINATE: {
-      const { coordinates, localname } = payload;
+      const {coordinates, localname} = payload;
       const [lon, lat] = coordinates.split(',');
       const distance = state.distance || 1;
-      return { ...state, coordinates: `${lat},${lon}`, localname, distance };
+      return {...state, coordinates: `${lat},${lon}`, localname, distance};
     }
 
     case FILTER_TYPE.CATEGORY_INITIAL:
       initialFilters.CATEGORYLABEL = payload;
       initialFilters.categories = payload;
-      return { ...state, categories: payload, CATEGORYLABEL: payload };
+      return {...state, categories: payload, CATEGORYLABEL: payload};
 
     case FILTER_TYPE.DISTANCE:
       if (+payload === 0) {
-        return { ...state, distance: +payload, localname: '전체' }
+        return {...state, distance: +payload, localname: '전체'};
       }
-      return { ...state, distance: +payload };
+      return {...state, distance: +payload};
 
     case FILTER_TYPE.KEYWORD:
-      return { ...state, keyword: payload };
+      return {...state, keyword: payload};
 
     default:
       return state;
@@ -72,23 +72,26 @@ const filterReducer = (state, { type, payload }) => {
 
 export const filterContext = createContext({});
 
-export const FilterProvider = ({ children }) => {
+export const FilterProvider = ({children}) => {
   const [filter, dispatchFilter] = useReducer(filterReducer, initialFilters);
-  const { ACTION_TYPE, dispatchMessage } = useContext(AlertMessageContext)
+  const {ALERT_ACTION_TYPE, dispatchMessage} = useContext(AlertMessageContext);
   const CATEOGRY_LABEL_LOAD_FAIL = '카테고리 정보를 불러 올 수 없습니다.';
   useEffect(() => {
     const getCategoryFromServer = async () => {
       try {
         const list = await getCategoryList();
-        dispatchFilter({ type: FILTER_TYPE.CATEGORY_INITIAL, payload: list });
+        dispatchFilter({type: FILTER_TYPE.CATEGORY_INITIAL, payload: list});
       } catch (err) {
-        dispatchMessage({ type: ACTION_TYPE.ERROR, payload: CATEOGRY_LABEL_LOAD_FAIL })
+        dispatchMessage({
+          type: ALERT_ACTION_TYPE.ERROR,
+          payload: CATEOGRY_LABEL_LOAD_FAIL,
+        });
       }
     };
     getCategoryFromServer();
-  }, [ACTION_TYPE.ERROR, dispatchMessage]);
+  }, [ALERT_ACTION_TYPE.ERROR, dispatchMessage]);
   return (
-    <filterContext.Provider value={{ FILTER_TYPE, filter, dispatchFilter }}>
+    <filterContext.Provider value={{FILTER_TYPE, filter, dispatchFilter}}>
       {children}
     </filterContext.Provider>
   );

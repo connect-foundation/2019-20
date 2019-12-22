@@ -1,12 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useState, useEffect, useContext} from 'react';
+import {Link} from 'react-router-dom';
 
-import {
-  Typography,
-  GridList,
-  GridListTile,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {Typography, GridList, GridListTile} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import FilterIcon from '@material-ui/icons/Tune';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -17,14 +13,14 @@ import LoadingProgress from '../components/LoadingCenter';
 
 import getButtons from '../utils/action-bar';
 
-import { getProductList } from '../service/product';
-import { filterContext } from '../contexts/Filters';
-import { AlertMessageContext } from '../contexts/AlertMessage';
-import { SnackbarContext } from '../contexts/SnackBar';
+import {getProductList} from '../service/product';
+import {filterContext} from '../contexts/Filters';
+import {AlertMessageContext} from '../contexts/AlertMessage';
+import {SnackbarContext} from '../contexts/SnackBar';
 
-import { ROUTES } from '../assets/uris';
+import {ROUTES} from '../assets/uris';
 
-import { isScrollBottom, debounce } from '../utils';
+import {isScrollBottom, debounce} from '../utils';
 import useScrollDown from '../hooks/useScrollDown';
 import useWindowResize from '../hooks/useWindowResize';
 
@@ -50,21 +46,21 @@ const Main = () => {
   const SCROLL_EVENT_DELAY = 200;
   const classes = useStyles({});
 
-  const { FILTER_TYPE, filter, dispatchFilter } = useContext(filterContext);
-  const { ACTION_TYPE, dispatchMessage } = useContext(AlertMessageContext);
-  const { setNotice } = useContext(SnackbarContext);
+  const {FILTER_TYPE, filter, dispatchFilter} = useContext(filterContext);
+  const {ALERT_ACTION_TYPE, dispatchMessage} = useContext(AlertMessageContext);
+  const {setNotice} = useContext(SnackbarContext);
 
   const [loading, setLoading] = useState(false);
   const [cols, setCols] = useState(1);
   const [list, setList] = useState([]);
-  const [settings, setSettings] = useState({ from: 0, limits: 10 });
+  const [settings, setSettings] = useState({from: 0, limits: 10});
   const [noData, setNoData] = useState(false);
 
   const clearKeyword = (event) => {
     event.preventDefault();
-    dispatchFilter({ type: FILTER_TYPE.KEYWORD, payload: '' });
+    dispatchFilter({type: FILTER_TYPE.KEYWORD, payload: ''});
     setNotice('검색어가 초기화 되었습니다.');
-  }
+  };
 
   const buttons = [
     getButtons('검색', ROUTES.SEARCH, <SearchIcon />),
@@ -79,14 +75,15 @@ const Main = () => {
       }
       setLoading(true);
       try {
-        const result = await getProductList({ ...filter, ...settings });
+        const result = await getProductList({...filter, ...settings});
         if (!result.length) {
           setNoData(true);
         }
         setList((state) => [...state, ...result]);
       } catch (e) {
         dispatchMessage({
-          type: ACTION_TYPE.ERROR, payload: MESSAGE.LOAD_LIST_FAIL
+          type: ALERT_ACTION_TYPE.ERROR,
+          payload: MESSAGE.LOAD_LIST_FAIL,
         });
       }
       setLoading(false);
@@ -122,22 +119,20 @@ const Main = () => {
   return (
     <>
       <ActionBar
-        leftArea={(
+        leftArea={
           <Link to={ROUTES.LOCATION_FILTER}>
             <Typography color='primary' variant='subtitle1'>
               {name}
             </Typography>
           </Link>
-        )}
+        }
         title={headerTitle}
         buttons={buttons}
       />
-      {loading && (
-        <LoadingProgress />
-      )}
+      {loading && <LoadingProgress />}
       <GridList spacing={0} cols={cols} className={classes.list}>
         {list.map(
-          ({ id, hits, title, pictures, price, order, distance, interests }) => (
+          ({id, hits, title, pictures, price, order, distance, interests}) => (
             <GridListTile key={id} className={classes.list}>
               <Link to={`/product/${id}`}>
                 <ProductListItem
@@ -153,13 +148,11 @@ const Main = () => {
             </GridListTile>
           ),
         )}
-        {
-          noData && (
-            <GridListTile className={classes.list}>
-              <div>{MESSAGE.NO_DATA}</div>
-            </GridListTile>
-          )
-        }
+        {noData && (
+          <GridListTile className={classes.list}>
+            <div>{MESSAGE.NO_DATA}</div>
+          </GridListTile>
+        )}
       </GridList>
     </>
   );

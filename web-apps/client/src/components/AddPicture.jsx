@@ -18,10 +18,10 @@ const AddPicture = () => {
   const [file, setFile] = useState([]);
   const inputRef = useRef(false);
   const {images, setImages} = useContext(ImageContext);
-  const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
+  const {dispatchMessage, ALERT_ACTION_TYPE} = useContext(AlertMessageContext);
 
   const errorCallback = (msg) => {
-    dispatchMessage({action: ACTION_TYPE.ERROR, payload: msg});
+    dispatchMessage({action: ALERT_ACTION_TYPE.ERROR, payload: msg});
   };
 
   useImageUpload(images, file, inputRef, setImages, errorCallback);
@@ -41,7 +41,7 @@ const AddPicture = () => {
       });
       setFile(allowed);
       dispatchMessage({
-        type: ACTION_TYPE.ERROR,
+        type: ALERT_ACTION_TYPE.ERROR,
         payload: msg.fileMaximumUploadErrorMessage,
       });
       return;
