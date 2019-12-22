@@ -2,17 +2,16 @@ import React, {useEffect, useContext} from 'react';
 
 import {Redirect} from 'react-router-dom';
 
+import {makeStyles} from '@material-ui/core/styles';
 import WriteHeader from '../components/WriteHeader';
 import ProductForm from '../components/ProductForm';
 
 import {UserContext} from '../contexts/User';
 import {AlertMessageContext} from '../contexts/AlertMessage';
 
-import {makeStyles} from '@material-ui/core/styles';
-
 import initCSS from '../assets/cssText';
 
-import isLoggedIn from '../utils/auth';
+import {isLoggedIn, isVisited} from '../utils/auth';
 
 const useStyles = makeStyles(() => ({
   productForm: {
@@ -38,8 +37,7 @@ const WriteProduct = () => {
     };
   }, []);
 
-  const result = isLoggedIn(user);
-  if (!result) {
+  if (!isLoggedIn(user) && isVisited(user)) {
     dispatchMessage({
       type: ACTION_TYPE.ERROR,
       payload: notLogInErrorMessage,
