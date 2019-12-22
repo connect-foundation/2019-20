@@ -17,6 +17,7 @@ import Mypage from './pages/MyPage';
 import SetMyArea from './pages/SetMyArea';
 import ProductDetail from './pages/ProductDetail';
 import Search from './pages/Search';
+import EditProduct from './pages/EditProduct';
 
 import ListView from './components/ListView';
 import AlertDialog from './components/AlertDialog';
@@ -63,6 +64,7 @@ export default () => {
                   />
                   <Route exact path={ROUTES.WRITE} component={WriteProduct} />
                   <Route path={ROUTES.PRODUCT_INFO} component={ProductDetail} />
+                  <Route path={ROUTES.EDIT} component={EditProduct} />
                   <Route exact path={ROUTES.CHAT}>
                     <ChatList />
                     <Navigator />

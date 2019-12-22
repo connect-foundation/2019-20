@@ -1,16 +1,20 @@
 // 인증
-const AUTH_API = 'https://auth.oemarket.shop'; // 고쳐야함
+const AUTH_API = 'https://auth.oemarket.shop';
+// const AUTH_API = 'http://auth.oemarket.shop:5000';
+// const AUTH_API = 'http://localhost:5000';
 export const AUTH = {
   LOGIN_STATUS_HANDLE: `${AUTH_API}/myinfo`,
   ADD_USER: `${AUTH_API}/addUser`,
   LOGOUT: `${AUTH_API}/logout`,
-  githubLoginURI: `${AUTH_API}/github/login`,
   FETCH_TOKEN_PATH: `${AUTH_API}/myToken`,
   WITHDRAWAL: `${AUTH_API}/myinfo`,
+  githubLoginURI: `${AUTH_API}/github/login`,
+  GET_TOKEN: `${AUTH_API}/myToken`,
 };
 
 // 상품
-const PRODUCT_API = 'https://product.oemarket.shop';
+// const PRODUCT_API = 'https://product.oemarket.shop';
+const PRODUCT_API = 'http://product.oemarket.shop:5000';
 export const PRODUCT = {
   IMAGE_HANDLE: `${PRODUCT_API}/products/picture`,
   PRODUCT_HANDLE: `${PRODUCT_API}/products`,
@@ -48,6 +52,7 @@ export const ROUTES = {
   FAVORITE_LIST: `${VIEW_WITH_NVAIGATOR}/products/favorite`,
   SELL_LIST: `${VIEW_WITH_NVAIGATOR}/products/sell`,
   MYPAGE: `${VIEW_WITH_NVAIGATOR}/my-page`,
+  EDIT: '/edit/:id',
   CHAT: `${VIEW_WITH_NVAIGATOR}/chat`,
   CHAT_ROOM: `${VIEW_WITH_NVAIGATOR}/chat/room`,
   CHAT_ROOM_WITH_ID: `${VIEW_WITH_NVAIGATOR}/chat/room/:_id`,

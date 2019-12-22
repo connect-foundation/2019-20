@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 
 import getFormData from '../utils/resizeProcess';
 import {uploadImages} from '../utils/apiCall';

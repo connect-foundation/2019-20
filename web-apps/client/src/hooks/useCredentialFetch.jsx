@@ -15,7 +15,7 @@ const UseCredentialFetch = (uri, callback, errCallback) => {
 
       try {
         const {data} = await axios(options);
-        callback({...data, visited: true});
+        callback(data);
         setLoading(false);
       } catch (err) {
         errCallback(err);

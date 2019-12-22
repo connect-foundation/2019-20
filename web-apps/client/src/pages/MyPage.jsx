@@ -1,8 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 
-import { Grid, Avatar, ListItem, List, Typography, IconButton } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  Grid,
+  Avatar,
+  ListItem,
+  List,
+  Typography,
+  IconButton,
+} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import SellIcon from '@material-ui/icons/LocalMall';
@@ -16,13 +23,13 @@ import ActionBar from '../components/ActionBar';
 import LogoutButton from '../components/LogOutButton';
 import GithubLogInButton from '../components/GithubLogInButton';
 
-import { AlertMessageContext } from '../contexts/AlertMessage';
-import { UserContext } from '../contexts/User';
+import {AlertMessageContext} from '../contexts/AlertMessage';
+import {UserContext} from '../contexts/User';
 
-import { deleteUser } from '../utils/apiCall';
-import { isLoggedIn, isVisited } from '../utils/auth';
-import { findAddressByCoordinates } from '../utils/geolocation';
-import { ROUTES } from '../assets/uris';
+import {deleteUser} from '../utils/apiCall';
+import {isLoggedIn} from '../utils/auth';
+import {findAddressByCoordinates} from '../utils/geolocation';
+import {ROUTES} from '../assets/uris';
 
 const useStyles = makeStyles({
   root: {
@@ -39,8 +46,8 @@ const useStyles = makeStyles({
     padding: '2rem 2rem 0 2rem',
   },
   labelButton: {
-    backgroundColor: '#1db000'
-  }
+    backgroundColor: '#1db000',
+  },
 });
 
 const MESSAGE = {
@@ -64,11 +71,11 @@ const LabledIconButton = (item) => {
 const MyPage = () => {
   const classes = useStyles({});
 
-  const { user, setUser } = useContext(UserContext);
-  const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
+  const {user, dispatchUser, USER_ACTION_TYPE} = useContext(UserContext);
+  const {dispatchMessage, ALERT_ACTION_TYPE} = useContext(AlertMessageContext);
   const [address, setAddress] = useState(MESSAGE.LOAD_LOCATION);
 
-  const correctUser = (member) => (isLoggedIn(member) && isVisited(member));
+  const correctUser = (member) => isLoggedIn(member);
 
   useEffect(() => {
     if (!correctUser(user)) {
@@ -76,7 +83,7 @@ const MyPage = () => {
     }
     const getAddress = async () => {
       try {
-        const { latitude, longitude } = user;
+        const {latitude, longitude} = user;
         // x = longitude, y = latitude (카카오 api 명세 /#services_Geocoder_coord2RegionCode)
         const name = await findAddressByCoordinates(longitude, latitude);
         setAddress(name);
@@ -89,7 +96,12 @@ const MyPage = () => {
 
   if (!correctUser(user)) {
     return (
-      <Grid container justify='center' alignItems='center' style={({ height: '100vh' })}>
+      <Grid
+        container
+        justify='center'
+        alignItems='center'
+        style={{height: '100vh'}}
+      >
         <GithubLogInButton />
       </Grid>
     );
@@ -102,7 +114,7 @@ const MyPage = () => {
   const buttons = [
     [<SellIcon />, '판매 내역', ROUTES.SELL_LIST],
     [<BuyIcon />, '구매 내역', ROUTES.BUY_LIST],
-    [<FavoriteIcon />, '찜한 내역', ROUTES.FAVORITE_LIST]
+    [<FavoriteIcon />, '찜한 내역', ROUTES.FAVORITE_LIST],
   ].map(LabledIconButton);
 
   const leaveHere = async (event) => {
@@ -110,9 +122,12 @@ const MyPage = () => {
     try {
       await deleteUser();
     } catch (e) {
-      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: MESSAGE.LOAD_LOCATION_FAIL });
+      dispatchMessage({
+        type: ALERT_ACTION_TYPE.ERROR,
+        payload: MESSAGE.LOAD_LOCATION_FAIL,
+      });
     }
-    setUser(null);
+    dispatchUser({type: USER_ACTION_TYPE.NOT_LOG_IN});
   };
 
   return (
