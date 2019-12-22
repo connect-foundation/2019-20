@@ -7,9 +7,10 @@ const getURI = (referer, path) => {
   if (
     referer === 'https://oemarket.shop/'
     || referer === 'http://localhost:3000/'
-    || referer === 'https://github.com/'
   ) {
     return `${referer}${path}`;
+  } if (referer === 'https://github.com/') {
+    return `https://oemarket.shop/${path}`;
   }
   return null;
 };
