@@ -9,7 +9,7 @@ import ProductProfile from '../components/ProductProfile';
 import SellerInfo from '../components/SellerInfo';
 import ProductDescription from '../components/ProductDescription';
 
-import useFetch from '../hooks/useFetch';
+import useCredentialFetch from '../hooks/useCredentialFetch';
 
 import {isMobile, debounce} from '../utils/index';
 import filterObject from '../utils/object';
@@ -58,12 +58,12 @@ const ProductDetail = ({match}) => {
     }
   }, [history, product]);
 
-  const productInfoLoadError = () => {
+  const productInfoLoadError = useCallback(() => {
     dispatchMessage({
       type: ACTION_TYPE.ERROR,
       payload: msg.ProductDetailLoadFailError,
     });
-  };
+  }, [ACTION_TYPE.ERROR, dispatchMessage]);
 
   const selectImages = (data) => {
     let result = [];
@@ -102,7 +102,7 @@ const ProductDetail = ({match}) => {
 
   const heartStatus = user ? interest.includes(user.id) : false;
 
-  useFetch(
+  useCredentialFetch(
     PRODUCT.getProdutDetialUri(productID),
     setDetail,
     productInfoLoadError,

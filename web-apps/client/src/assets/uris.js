@@ -1,15 +1,16 @@
 // 인증
-const AUTH_API = 'http://auth.oemarket.shop:5000'; // 고쳐야함
+const AUTH_API = 'https://auth.oemarket.shop'; // 고쳐야함
 export const AUTH = {
   LOGIN_STATUS_HANDLE: `${AUTH_API}/myinfo`,
   ADD_USER: `${AUTH_API}/addUser`,
   LOGOUT: `${AUTH_API}/logout`,
   githubLoginURI: `${AUTH_API}/github/login`,
   FETCH_TOKEN_PATH: `${AUTH_API}/myToken`,
+  WITHDRAWAL: `${AUTH_API}/myinfo`,
 };
 
 // 상품
-const PRODUCT_API = 'http://product.oemarket.shop:5000';
+const PRODUCT_API = 'https://product.oemarket.shop';
 export const PRODUCT = {
   IMAGE_HANDLE: `${PRODUCT_API}/products/picture`,
   PRODUCT_HANDLE: `${PRODUCT_API}/products`,
@@ -24,7 +25,7 @@ export const PRODUCT = {
 };
 
 // 채팅
-const CHAT_API = 'http://chat.oemarket.shop:80';
+const CHAT_API = 'https://chat.oemarket.shop:80';
 export const CHAT = {
   NAME_SPACE: '/chat',
   INIT_PATH: `${CHAT_API}/chat`,

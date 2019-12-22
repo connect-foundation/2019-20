@@ -12,13 +12,9 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  height: 100vmin;
-  width: 100vmax;
-  @media all and (orientation: portrait) {
-    height: 100vmax;
-    width: 100vmin;
-  }
+  overflow: hidden;
+  width: 100vw;
+  height: 80vh;
 `;
 const Entrance = () => {
   const {user} = useContext(UserContext);
@@ -34,5 +30,4 @@ const Entrance = () => {
     </Wrapper>
   );
 };
-
 export default Entrance;

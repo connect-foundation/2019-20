@@ -6,7 +6,7 @@ import {ThemeProvider, makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
 import ChatRoom from './pages/ChatRoom';
 import ChatList from './pages/ChatList';
-import Main from './pages/main';
+import Main from './pages/Main';
 import Entrance from './pages/Entrance';
 import Filters from './pages/filters';
 import Location from './pages/Area';
@@ -40,7 +40,7 @@ import {ROUTES, VIEW_WITH_NVAIGATOR} from './assets/uris';
 
 const useStyles = makeStyles({
   root: {
-    margin: '0',
+    padding: '0 0 2.5rem 0',
   },
 });
 
@@ -70,8 +70,8 @@ export default () => {
                   <Route exact path={ROUTES.CHAT_ROOM_WITH_ID}>
                     <ChatRoom />
                   </Route>
-                  <Grid container className={classes.root}>
-                    <Route path={VIEW_WITH_NVAIGATOR}>
+                  <Route path={VIEW_WITH_NVAIGATOR}>
+                    <Grid container className={classes.root}>
                       <ThemeProvider theme={theme}>
                         <Route exact path={ROUTES.MYPAGE} component={Mypage} />
                         <Route exact path={ROUTES.MAIN} component={Main} />
@@ -102,8 +102,8 @@ export default () => {
                         <Navigator />
                         <NoticeBar />
                       </ThemeProvider>
-                    </Route>
-                  </Grid>
+                    </Grid>
+                  </Route>
                 </Switch>
               </Router>
             </Image>

@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     position: 'relative',
     height: '100%',
+    backgroundColor: 'white',
   },
   footerWrapper: {
     position: 'fixed',

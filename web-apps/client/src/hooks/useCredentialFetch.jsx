@@ -7,7 +7,6 @@ const UseCredentialFetch = (uri, callback, errCallback) => {
   const fetchData = useCallback(
     async (_uri) => {
       setLoading(true);
-
       const options = {
         method: 'get',
         url: _uri,
@@ -31,5 +30,4 @@ const UseCredentialFetch = (uri, callback, errCallback) => {
 
   return loading;
 };
-
 export default UseCredentialFetch;
