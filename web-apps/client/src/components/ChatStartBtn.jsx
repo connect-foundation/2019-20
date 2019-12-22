@@ -38,7 +38,7 @@ const ChatStartBtn = ({seller, product}) => {
         data: {_id},
       } = await axios({
         method: 'post',
-        url: CHAT.PATH,
+        url: CHAT.INIT_PATH,
         withCredentials: true,
         data,
       });
@@ -53,14 +53,17 @@ const ChatStartBtn = ({seller, product}) => {
   const startChat = async (e) => {
     e.preventDefault();
     const fetchedRoomId = await getRoomId({
-      buyer: user,
-      seller,
-      product: {
-        ...product,
-        _id: product.id,
+      buyer: {
+        ...user,
+        _id: user.id,
       },
+      seller,
+      product,
     });
-    history.push(`${ROUTES.CHAT_ROOM}/${fetchedRoomId}`);
+
+    if (fetchedRoomId) {
+      history.push(ROUTES.getChatRoomPath(fetchedRoomId));
+    }
   };
 
   const buttonMessage = () =>
