@@ -13,12 +13,14 @@ import useCredentialFetch from '../hooks/useCredentialFetch';
 
 import {isMobile, debounce} from '../utils/index';
 import filterObject from '../utils/object';
-import {PRODUCT} from '../assets/uris';
+import {PRODUCT,ROUTES} from '../assets/uris';
 import descriptionField from '../assets/productDescriptionField';
 import msg from '../assets/errorMessages';
 
 import {UserContext} from '../contexts/User';
 import {AlertMessageContext} from '../contexts/AlertMessage';
+
+import {isLoggedIn} from '../utils/auth';
 
 const Wrapper = styled.div`
   position: relative;
@@ -26,7 +28,7 @@ const Wrapper = styled.div`
 
 const ProductDetail = ({match}) => {
   const history = useHistory();
-  const INTEREST_UPDATE_DELAY = 1000;
+  const INTEREST_UPDATE_DELAY = 500;
   const {user} = useContext(UserContext);
   const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
   const productID = match.params.id;
@@ -54,7 +56,7 @@ const ProductDetail = ({match}) => {
       setFooterData(footer);
     } else if (product === undefined) {
       alert(msg.productNotFound);
-      history.replace('/service/main');
+      history.replace(ROUTES.MAIN);
     }
   }, [history, product]);
 
@@ -80,16 +82,26 @@ const ProductDetail = ({match}) => {
   };
 
   const updateInterest = useCallback(
-    debounce((updateList) => {
-      axios.put(`${PRODUCT.PRODUCT_HANDLE}/${productID}`, {
-        interests: updateList,
-      });
+    debounce(async (updateList) => {
+      const options = {
+        method: 'put',
+        url: `${PRODUCT.PRODUCT_HANDLE}/${productID}`,
+        withCredentials: true,
+        data: {
+          interests: updateList,  
+        }
+      };
+      await axios(options);
     }, INTEREST_UPDATE_DELAY),
     [],
   );
 
   const clickHeart = (event, active) => {
     let updateList;
+    if(!isLoggedIn(user)) {
+      dispatchMessage({type:ACTION_TYPE.ERROR, payload: '로그인한 사용자만 가능합니다.'})
+      return;
+    }
     if (active) {
       updateList = [...interest, user.id];
     }
