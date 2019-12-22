@@ -46,7 +46,7 @@ const filterReducer = (state, {type, payload}) => {
 
     case FILTER_TYPE.COORDINATE: {
       const {coordinates, localname} = payload;
-      const [lon, lat] = coordinates.split(',');
+      const [lat, lon] = coordinates.split(',');
       const distance = state.distance || 1;
       return {...state, coordinates: `${lat},${lon}`, localname, distance};
     }
