@@ -13,7 +13,7 @@ import useCredentialFetch from '../hooks/useCredentialFetch';
 
 import {isMobile, debounce} from '../utils/index';
 import filterObject from '../utils/object';
-import {PRODUCT,ROUTES} from '../assets/uris';
+import {PRODUCT, ROUTES} from '../assets/uris';
 import descriptionField from '../assets/productDescriptionField';
 import msg from '../assets/errorMessages';
 
@@ -65,7 +65,7 @@ const ProductDetail = ({match}) => {
       type: ALERT_ACTION_TYPE.ERROR,
       payload: msg.ProductDetailLoadFailError,
     });
-  }, [ACTION_TYPE.ERROR, dispatchMessage]);
+  }, [ALERT_ACTION_TYPE.ERROR, dispatchMessage]);
 
   const selectImages = (data) => {
     let result = [];
@@ -88,8 +88,8 @@ const ProductDetail = ({match}) => {
         url: `${PRODUCT.PRODUCT_HANDLE}/${productID}`,
         withCredentials: true,
         data: {
-          interests: updateList,  
-        }
+          interests: updateList,
+        },
       };
       await axios(options);
     }, INTEREST_UPDATE_DELAY),
@@ -98,8 +98,11 @@ const ProductDetail = ({match}) => {
 
   const clickHeart = (event, active) => {
     let updateList;
-    if(!isLoggedIn(user)) {
-      dispatchMessage({type:ACTION_TYPE.ERROR, payload: '로그인한 사용자만 가능합니다.'})
+    if (!isLoggedIn(user)) {
+      dispatchMessage({
+        type: ALERT_ACTION_TYPE.ERROR,
+        payload: '로그인한 사용자만 가능합니다.',
+      });
       return;
     }
     if (active) {
