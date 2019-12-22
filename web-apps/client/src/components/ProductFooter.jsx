@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductFooter = ({data, heartStatus, clickHeart, seller, product}) => {
   const classes = useStyles();
-  console.log('seller', seller, product);
+
   return (
     <div className={classes.footerWrapper}>
       <Grid container className={classes.root}>

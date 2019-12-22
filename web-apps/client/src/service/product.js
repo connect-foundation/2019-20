@@ -10,17 +10,17 @@ const getData = async (uri, params) => {
   }
 };
 
-export const getBuyListById = async (user, from) => {
+export const getBuyListById = async (id, from) => {
   const response = await getData(PRODUCT.PRODUCT_BUY_LIST_MEMBER, {
-    buyer: user.id,
+    buyer: id,
     from,
   });
   return response;
 };
 
-export const getInterestProductById = async (user, from) => {
+export const getInterestProductById = async (id, from) => {
   const response = await getData(PRODUCT.PRODUCT_INTEREST_LIST_MEMBER, {
-    interest: user.id,
+    interest: id,
     from,
   });
   return response;

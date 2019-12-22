@@ -27,10 +27,15 @@ const LogOutButton = ({ width }) => {
     setUser(null);
   };
   const logoutProcess = async () => {
-    deleteAllImages();
-    cleanLocalStorage();
-    deleteJWT();
-    logout();
+    try{
+      deleteAllImages();
+    } catch(e) {
+      console.log(e);
+    } finally {
+      cleanLocalStorage();
+      deleteJWT();  
+      logout();
+    }
   };
   return (
     <div
