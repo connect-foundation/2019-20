@@ -45,7 +45,7 @@ const Lists = ({ title, getProducts }) => {
 
   
   if(!(isLoggedIn(user) && isVisited(user))) {
-    return null;
+    return '비정상적인 접근';
   }
 
   return (
