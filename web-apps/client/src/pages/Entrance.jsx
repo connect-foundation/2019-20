@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   justify-content: center;
   overflow: hidden;
   width: 100vw;
-  height: 80vh;
+  height: 93vh;
 `;
 const Entrance = () => {
   const {user} = useContext(UserContext);

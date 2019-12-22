@@ -23,7 +23,13 @@ export const uploadImages = async (formData) => {
 
 export const uploadProduct = async (product) => {
   try {
-    const {data} = await axios.post(PRODUCT.PRODUCT_HANDLE, product);
+    const options = {
+      method: 'post',
+      url: PRODUCT.PRODUCT_HANDLE,
+      withCredentials: true,
+      data: product,
+    };
+    const {data} = await axios(options);
     return data;
   } catch (err) {
     throw new Error(err);
@@ -76,6 +82,7 @@ export const deleteProduct = async (id, userId) => {
     const options = {
       method: 'delete',
       url: PRODUCT.deleteProductURI(id),
+      withCredentials: true,
       data: {userId},
     };
     await axios(options);

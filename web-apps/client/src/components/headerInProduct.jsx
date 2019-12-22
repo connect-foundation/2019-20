@@ -1,15 +1,15 @@
-import React, { useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, {useState, useContext} from 'react';
+import {useHistory} from 'react-router-dom';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import GoBackButton from './GoBackButton';
 
-import { UserContext } from '../contexts/User';
+import {UserContext} from '../contexts/User';
 
-import { deleteProduct } from '../utils/apiCall';
+import {deleteProduct} from '../utils/apiCall';
 
 const useStyles = makeStyles({
   header: {
@@ -34,12 +34,12 @@ const useStyles = makeStyles({
     height: '2rem',
   },
 });
-const HeaderInProduct = ({ id, seller }) => {
+const HeaderInProduct = ({id, seller}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   let history = useHistory();
 
-  const { user } = useContext(UserContext);
+  const {user} = useContext(UserContext);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -49,6 +49,7 @@ const HeaderInProduct = ({ id, seller }) => {
     setAnchorEl(null);
   };
   const handleUpdate = () => {
+    history.push(`/edit/${id}`);
     handleClose();
   };
   const handleDelete = async () => {

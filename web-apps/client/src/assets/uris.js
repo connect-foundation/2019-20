@@ -8,6 +8,7 @@ export const AUTH = {
   LOGOUT: `${AUTH_API}/logout`,
   WITHDRAWAL: `${AUTH_API}/myinfo`,
   githubLoginURI: `${AUTH_API}/github/login`,
+  GET_TOKEN: `${AUTH_API}/myToken`,
 };
 
 // 상품
@@ -42,4 +43,5 @@ export const ROUTES = {
   FAVORITE_LIST: `${VIEW_WITH_NVAIGATOR}/products/favorite`,
   SELL_LIST: `${VIEW_WITH_NVAIGATOR}/products/sell`,
   MYPAGE: `${VIEW_WITH_NVAIGATOR}/my-page`,
+  EDIT: '/edit/:id',
 };
