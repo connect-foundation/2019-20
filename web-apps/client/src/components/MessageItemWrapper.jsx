@@ -26,14 +26,14 @@ const MessageItemWrapper = ({message: {userId, content, timestamp}}) => {
       <Grid
         container
         direction='row'
-        justify={user === userId ? 'flex-end' : 'flex-start'}
+        justify={user.id === userId ? 'flex-end' : 'flex-start'}
         alignItems='center'
       >
         <Grid item>
           <MessageItem
             content={content}
             timestamp={timestamp}
-            isMyChat={user === userId}
+            isMyChat={user.id === userId}
           />
         </Grid>
       </Grid>
