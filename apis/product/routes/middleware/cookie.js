@@ -1,19 +1,24 @@
-export const isAlreadyViewed = ({ params: { id }, cookies }, res, next) => {
-  const { view } = cookies;
+export const isAlreadyViewed = (req, res, next) => {
+  const { view } = req.cookies;
+  const { params: { id } } = req;
   if (view && view.split(',').includes(id)) {
     res.locals.read = true;
     res.locals.views = view;
-  } else {
-    next();
   }
+  next();
 };
 
-export const setCookieView = ({ params: { id } }, res, next) => {
-  const { locals: { read } } = res;
+export const setCookieView = (req, res, next) => {
+  const { params: { id } } = req;
+  const { locals: { read, views } } = res;
   if (!read) {
-    const { views } = res.locals;
     const list = (views) ? `${views},${id}` : id;
-    res.cookie('view', list, { httpOnly: true, secure: true });
+    res.cookie('view', list, {
+      maxAge: 20 * 365 * 30 * 24 * 60 * 3600,
+      secure: (req.protocol === 'https'),
+      httpOnly: true,
+      sameSite: false,
+    });
   }
   next();
 };

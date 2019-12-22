@@ -6,13 +6,20 @@ import indexRouter from './routes/index';
 import productRouter from './routes/product';
 import infoRouter from './routes/info';
 import etagGenerator from './routes/middleware/etag-generator';
+
 import { dbConnect } from './config';
+import { WHITELIST } from './assets/uri';
 
 const app = express();
 
 app.use(dbConnect());
 
-app.use(cors());
+app.use(cors({
+  origin: WHITELIST,
+  methods: 'GET,POST,UPDATE,DELETE',
+  credentials: true,
+  preflightContinue: true,
+}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
