@@ -9,9 +9,9 @@ import ProductProfile from '../components/ProductProfile';
 import SellerInfo from '../components/SellerInfo';
 import ProductDescription from '../components/ProductDescription';
 
-import useFetch from '../hooks/useFetch';
+import useCredentialFetch from '../hooks/useCredentialFetch';
 
-import {isMobile} from '../utils/index';
+import {isMobile,debounce} from '../utils/index';
 import filterObject from '../utils/object';
 import {PRODUCT} from '../assets/uris';
 import descriptionField from '../assets/productDescriptionField';
@@ -20,14 +20,14 @@ import msg from '../assets/errorMessages';
 import {UserContext} from '../contexts/User';
 import {AlertMessageContext} from '../contexts/AlertMessage';
 
-import {debounce} from '../utils';
+
 
 const Wrapper = styled.div`
   position: relative;
 `;
 
 const ProductDetail = ({match}) => {
-  let history = useHistory();
+  const history = useHistory();
   const INTEREST_UPDATE_DELAY = 1000;
   const {user} = useContext(UserContext);
   const {dispatchMessage, ACTION_TYPE} = useContext(AlertMessageContext);
@@ -58,14 +58,14 @@ const ProductDetail = ({match}) => {
       alert(msg.productNotFound);
       history.replace('/service/main');
     }
-  }, [product]);
+  }, [history, product]);
 
-  const productInfoLoadError = () => {
+  const productInfoLoadError = useCallback(() => {
     dispatchMessage({
       type: ACTION_TYPE.ERROR,
       payload: msg.ProductDetailLoadFailError,
     });
-  };
+  },[ACTION_TYPE.ERROR, dispatchMessage]);
 
   const selectImages = (data) => {
     let result = [];
@@ -74,11 +74,9 @@ const ProductDetail = ({match}) => {
         if (data.pictures.length) {
           result = data.pictures.map((pic) => pic.mobile);
         }
-      } else {
-        if (data.pictures.length) {
+      } else if (data.pictures.length) {
           result = data.pictures.map((pic) => pic.deskTop);
         }
-      }
     }
     return result;
   };
@@ -106,7 +104,7 @@ const ProductDetail = ({match}) => {
 
   const heartStatus = user ? interest.includes(user.id) : false;
 
-  useFetch(
+  useCredentialFetch(
     PRODUCT.getProdutDetialUri(productID),
     setDetail,
     productInfoLoadError,
