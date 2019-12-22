@@ -41,7 +41,7 @@ import { ROUTES, VIEW_WITH_NVAIGATOR } from './assets/uris';
 
 const useStyles = makeStyles({
   root: {
-    margin: '0',
+    padding: '0 0 2.5rem 0',
   },
 });
 
@@ -56,12 +56,12 @@ export default () => {
             <Image>
               <Router>
                 <Switch>
-                  <Grid container className={classes.root}>
-                    <Route exact path={ROUTES.INDEX} component={Entrance} />
-                    <Route exact path={ROUTES.ENROLL_LOCATION} component={SetMyArea} />
-                    <Route exact path={ROUTES.WRITE} component={WriteProduct} />
-                    <Route path={ROUTES.PRODUCT_INFO} component={ProductDetail} />
-                    <Route path={VIEW_WITH_NVAIGATOR}>
+                  <Route exact path={ROUTES.INDEX} component={Entrance} />
+                  <Route exact path={ROUTES.ENROLL_LOCATION} component={SetMyArea} />
+                  <Route exact path={ROUTES.WRITE} component={WriteProduct} />
+                  <Route path={ROUTES.PRODUCT_INFO} component={ProductDetail} />
+                  <Route path={VIEW_WITH_NVAIGATOR}>
+                    <Grid container className={classes.root}>
                       <ThemeProvider theme={theme}>
                         <Route exact path={ROUTES.MYPAGE} component={Mypage} />
                         <Route exact path={ROUTES.MAIN} component={Main} />
@@ -88,8 +88,8 @@ export default () => {
                         <Navigator />
                         <NoticeBar />
                       </ThemeProvider>
-                    </Route>
-                  </Grid>
+                    </Grid>
+                  </Route>
                 </Switch>
               </Router>
             </Image>
