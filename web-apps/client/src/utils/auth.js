@@ -1,5 +1,2 @@
-const isLoggedIn = (user) => {
-  return user !== null;
-};
-
-export default isLoggedIn;
+export const isLoggedIn = (user) => user && user.id;
+export const isVisited = (user) => user.visited;

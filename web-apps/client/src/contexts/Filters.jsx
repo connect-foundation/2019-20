@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useEffect, useContext } from 'react';
 
 import { childrenType } from '../types';
-import { getCategoryList } from '../pages/main/fetch';
+import { getCategoryList } from '../service/product';
 import { AlertMessageContext } from './AlertMessage';
 
 const initialFilters = {
@@ -46,8 +46,9 @@ const filterReducer = (state, { type, payload }) => {
 
     case FILTER_TYPE.COORDINATE: {
       const { coordinates, localname } = payload;
+      const [lon, lat] = coordinates.split(',');
       const distance = state.distance || 1;
-      return { ...state, coordinates, localname, distance };
+      return { ...state, coordinates: `${lat},${lon}`, localname, distance };
     }
 
     case FILTER_TYPE.CATEGORY_INITIAL:

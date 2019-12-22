@@ -38,8 +38,8 @@ export default () => {
   const { setNotice } = useContext(SnackbarContext);
   const {
     filter: { price },
-    dispatch,
-    TYPE,
+    dispatchFilter,
+    FILTER_TYPE,
   } = useContext(filterContext);
 
   const applyPriceRangeInput = (event) => {
@@ -50,13 +50,13 @@ export default () => {
       setNotice(MESSAGE.INCORRECT_PRICE);
       return;
     }
-    dispatch({ type: TYPE.PRICE, payload: { start, end } });
+    dispatchFilter({ type: FILTER_TYPE.PRICE, payload: { start, end } });
     setNotice(MESSAGE.APPLY);
   };
 
   const initialFilters = (event) => {
     event.preventDefault();
-    dispatch({ type: TYPE.INITIAL });
+    dispatchFilter({ type: FILTER_TYPE.INITIAL });
     priceRef.current.clear();
     setNotice(MESSAGE.INITIAL);
   };
@@ -80,12 +80,12 @@ export default () => {
       >
         <Field
           description='홈 화면에서 보고 싶지 않은 카테고리는 체크를 해제하세요.'
-          subscription='최소 1개 이상 선택되어 있어야 합니다.'
+          subdescription='최소 1개 이상 선택되어 있어야 합니다.'
           field={<Category />}
         />
         <Field
           description='가격범위 설정'
-          subscription='가격범위는 상단의 적용버튼을 눌러야만 적용됩니다.'
+          subdescription='가격범위는 상단의 적용버튼을 눌러야만 적용됩니다.'
           field={(
             <InputForm
               holders={['0', '제한없음']}

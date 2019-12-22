@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useRef,
   useCallback,
+  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -52,13 +53,19 @@ const useStyles = makeStyles({
 const KakaoMap = ({ appKey, width, height, callback }, ref) => {
   const SEARCH_DELAY = 1000;
   const KAKAOAPIURL = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false&libraries=services,drawing,clusterer`;
-
+  const KILLOMETER = 1000;
   const classes = useStyles({ width, height });
   const scriptLoadingStatus = useLoadScript(KAKAOAPIURL);
   const drawingArea = useRef(null);
   const mapObjects = useRef(null);
+  const [initialRadius, setInitialRadius] = useState(0);
 
-  const isLoadedKakaoApi = () => Object.keys(mapObjects.current).length !== 0;
+  const isLoadedKakaoApi = () => {
+    if (!mapObjects.current) {
+      return false;
+    }
+    return Object.keys(mapObjects.current).length !== 0;
+  }
 
   useImperativeHandle(ref, () => ({
     searchAddress: (address) => {
@@ -74,18 +81,21 @@ const KakaoMap = ({ appKey, width, height, callback }, ref) => {
     },
     adjustRadius: (distance) => {
       if (!isLoadedKakaoApi()) {
-        throw Error(MESSAGE.NOT_LOADED);
+        setInitialRadius(distance);
+        return;
       }
       const { circle, map } = mapObjects.current;
       circle.setPosition(map.getCenter());
-      circle.setRadius(distance * 1000);
+      circle.setRadius(distance * KILLOMETER);
     },
     setCenterCoordinates: (lat, lng) => {
       if (!isLoadedKakaoApi()) {
         throw Error(MESSAGE.NOT_LOADED);
       }
       const { geocoder, map, kakao } = mapObjects.current;
-      geocoder.coord2RegionCode(lng, lat, (result, status) => {
+      const x = lng;
+      const y = lat;
+      geocoder.coord2RegionCode(x, y, (result, status) => {
         if (status !== kakao.maps.services.Status.OK) {
           return;
         }
@@ -132,6 +142,7 @@ const KakaoMap = ({ appKey, width, height, callback }, ref) => {
       const circle = new kakao.maps.Circle({
         fillColor: '#000000',
         fillOpacity: 0.5,
+        radius: initialRadius * KILLOMETER,
       });
       marker.setMap(map);
       circle.setMap(map);
@@ -141,7 +152,9 @@ const KakaoMap = ({ appKey, width, height, callback }, ref) => {
 
       // 좌표 값에 해당하는 행정동, 법정동 정보 callback 반환
       const getCurrentAddressByCoordinates = (lat, lng) => {
-        geocoder.coord2RegionCode(lng, lat, (result, status) => {
+        const y = lat;
+        const x = lng;
+        geocoder.coord2RegionCode(x, y, (result, status) => {
           const { ZERO_RESULT, ERROR } = kakao.maps.services.Status;
           if (!callback) {
             return;
@@ -181,7 +194,7 @@ const KakaoMap = ({ appKey, width, height, callback }, ref) => {
 
       kakao.maps.event.addListener(map, 'center_changed', centerChangedEvent);
     });
-  }, [callback, scriptLoadingStatus, setCurrentCoordinates]);
+  }, [callback, initialRadius, scriptLoadingStatus, setCurrentCoordinates]);
 
   if (!scriptLoadingStatus) {
     return <CircularProgress />;

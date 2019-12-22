@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Grid, Avatar, ListItem, List, Typography, IconButton } from '@material-ui/core';
@@ -19,6 +19,9 @@ import GithubLogInButton from '../components/GithubLogInButton';
 import { AlertMessageContext } from '../contexts/AlertMessage';
 import { UserContext } from '../contexts/User';
 
+import { deleteUser } from '../utils/apiCall';
+import { isLoggedIn, isVisited } from '../utils/auth';
+import { findAddressByCoordinates } from '../utils/geolocation';
 import { ROUTES } from '../assets/uris';
 
 const useStyles = makeStyles({
@@ -35,14 +38,23 @@ const useStyles = makeStyles({
   reputation: {
     padding: '2rem 2rem 0 2rem',
   },
+  labelButton: {
+    backgroundColor: '#1db000'
+  }
 });
+
+const MESSAGE = {
+  LOAD_LOCATION: '현재 주소를 읽고있습니다.',
+  LOAD_LOCATION_FAIL: '주소 정보를 읽을 수 없습니다',
+  FORBIDEN: '로그인한 사용자만 접근 가능합니다.',
+};
 
 const LabledIconButton = (item) => {
   const [icon, label, link] = item;
   return (
     <Link to={link}>
       <IconButton>
-        <Avatar style={{backgroundColor: '#1db000'}}>{icon}</Avatar>
+        <Avatar>{icon}</Avatar>
       </IconButton>
       <Typography>{label}</Typography>
     </Link>
@@ -50,19 +62,32 @@ const LabledIconButton = (item) => {
 };
 
 const MyPage = () => {
-  const {user} = useContext(UserContext);
   const classes = useStyles({});
-  const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
 
-  const isLogged = (user) => user !== null;
+  const { user, setUser } = useContext(UserContext);
+  const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
+  const [address, setAddress] = useState(MESSAGE.LOAD_LOCATION);
+
+  const correctUser = (member) => (isLoggedIn(member) && isVisited(member));
 
   useEffect(() => {
-    if (!isLogged(user)) {
-      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: '로그인한 사용자만 접근 가능합니다.' });
+    if (!correctUser(user)) {
+      return;
     }
-  }, []);
+    const getAddress = async () => {
+      try {
+        const { latitude, longitude } = user;
+        // x = longitude, y = latitude (카카오 api 명세 /#services_Geocoder_coord2RegionCode)
+        const name = await findAddressByCoordinates(longitude, latitude);
+        setAddress(name);
+      } catch (e) {
+        setAddress(MESSAGE.LOAD_LOCATION_FAIL);
+      }
+    };
+    getAddress();
+  }, [user, setAddress]);
 
-  if (!isLogged(user)) {
+  if (!correctUser(user)) {
     return (
       <Grid container justify='center' alignItems='center' style={({ height: '100vh' })}>
         <GithubLogInButton />
@@ -79,6 +104,16 @@ const MyPage = () => {
     [<BuyIcon />, '구매 내역', ROUTES.BUY_LIST],
     [<FavoriteIcon />, '찜한 내역', ROUTES.FAVORITE_LIST]
   ].map(LabledIconButton);
+
+  const leaveHere = async (event) => {
+    event.preventDefault();
+    try {
+      await deleteUser();
+    } catch (e) {
+      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: MESSAGE.LOAD_LOCATION_FAIL });
+    }
+    setUser(null);
+  };
 
   return (
     <>
@@ -98,14 +133,12 @@ const MyPage = () => {
           <InlineItems items={buttons} />
         </ListItem>
         <ListItem divider className='card'>
-          <Link to={ROUTES.ENROLL_LOCATION}>
-            <LocatonIcon /> 내 동네 설정
-          </Link>
+          <LocatonIcon /> 내 동네 설정(준비중) - {address}
         </ListItem>
         <ListItem divider className='card'>
           <LogoutButton />
         </ListItem>
-        <ListItem divider className='card'>
+        <ListItem divider className='card' onClick={leaveHere}>
           <DeleteIcon /> 회원 탈퇴
         </ListItem>
       </List>

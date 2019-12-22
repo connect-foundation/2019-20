@@ -1,32 +1,32 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {Link} from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   Typography,
   GridList,
   GridListTile,
-  CircularProgress,
 } from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import FilterIcon from '@material-ui/icons/Tune';
 import ClearIcon from '@material-ui/icons/Clear';
 
-import ActionBar from '../../components/ActionBar';
-import ProductListItem from '../../components/ProductListItem';
+import ActionBar from '../components/ActionBar';
+import ProductListItem from '../components/ProductListItem';
+import LoadingProgress from '../components/LoadingCenter';
 
-import getButtons from '../../utils/action-bar';
+import getButtons from '../utils/action-bar';
 
-import { getProductList } from './fetch';
-import { filterContext } from '../../contexts/Filters';
-import { AlertMessageContext } from '../../contexts/AlertMessage';
-import { SnackbarContext } from '../../contexts/SnackBar';
+import { getProductList } from '../service/product';
+import { filterContext } from '../contexts/Filters';
+import { AlertMessageContext } from '../contexts/AlertMessage';
+import { SnackbarContext } from '../contexts/SnackBar';
 
-import { ROUTES } from '../../assets/uris';
+import { ROUTES } from '../assets/uris';
 
-import {isScrollBottom, debounce} from '../../utils';
-import useScrollDown from '../../hooks/useScrollDown';
-import useWindowResize from '../../hooks/useWindowResize';
+import { isScrollBottom, debounce } from '../utils';
+import useScrollDown from '../hooks/useScrollDown';
+import useWindowResize from '../hooks/useWindowResize';
 
 const useStyles = makeStyles({
   list: {
@@ -40,6 +40,11 @@ const useStyles = makeStyles({
   },
 });
 
+const MESSAGE = {
+  NO_DATA: '더 이상 데이터가 존재하지 않습니다',
+  LOAD_LIST_FAIL: '데이터를 불러오는 중 오류가 발생하였습니다.',
+};
+
 const Main = () => {
   const TITLE = '풀';
   const SCROLL_EVENT_DELAY = 200;
@@ -52,7 +57,8 @@ const Main = () => {
   const [loading, setLoading] = useState(false);
   const [cols, setCols] = useState(1);
   const [list, setList] = useState([]);
-  const [settings, setSettings] = useState({from: 0, limits: 10});
+  const [settings, setSettings] = useState({ from: 0, limits: 10 });
+  const [noData, setNoData] = useState(false);
 
   const clearKeyword = (event) => {
     event.preventDefault();
@@ -73,17 +79,22 @@ const Main = () => {
       }
       setLoading(true);
       try {
-        const result = await getProductList({...filter, ...settings});
+        const result = await getProductList({ ...filter, ...settings });
+        if (!result.length) {
+          setNoData(true);
+        }
         setList((state) => [...state, ...result]);
       } catch (e) {
-        dispatchMessage({ type: ACTION_TYPE.ERROR, payload: '데이터를 불러오는 중 오류가 발생하였습니다.' });
+        dispatchMessage({
+          type: ACTION_TYPE.ERROR, payload: MESSAGE.LOAD_LIST_FAIL
+        });
       }
       setLoading(false);
     };
     loadData();
   };
 
-  useEffect(findProductsBySettings, [settings]);
+  useEffect(findProductsBySettings, [settings, filter.keyword]);
 
   const loadNextPage = debounce(() => {
     if (isScrollBottom()) {
@@ -107,6 +118,7 @@ const Main = () => {
       {filter.localname === '전체' ? '' : ` ~ ${filter.distance}km 까지`}
     </>
   );
+
   return (
     <>
       <ActionBar
@@ -116,13 +128,16 @@ const Main = () => {
               {name}
             </Typography>
           </Link>
-)}
+        )}
         title={headerTitle}
         buttons={buttons}
       />
+      {loading && (
+        <LoadingProgress />
+      )}
       <GridList spacing={0} cols={cols} className={classes.list}>
         {list.map(
-          ({id, hits, title, pictures, price, order, distance, interests}) => (
+          ({ id, hits, title, pictures, price, order, distance, interests }) => (
             <GridListTile key={id} className={classes.list}>
               <Link to={`/product/${id}`}>
                 <ProductListItem
@@ -138,11 +153,13 @@ const Main = () => {
             </GridListTile>
           ),
         )}
-        {loading && (
-          <GridListTile className={classes.loading}>
-            <CircularProgress />
-          </GridListTile>
-        )}
+        {
+          noData && (
+            <GridListTile className={classes.list}>
+              <div>{MESSAGE.NO_DATA}</div>
+            </GridListTile>
+          )
+        }
       </GridList>
     </>
   );

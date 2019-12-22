@@ -6,6 +6,7 @@ export const AUTH = {
   LOGIN_STATUS_HANDLE: `${AUTH_API}/myinfo`,
   ADD_USER: `${AUTH_API}/addUser`,
   LOGOUT: `${AUTH_API}/logout`,
+  WITHDRAWAL: `${AUTH_API}/myinfo`,
   githubLoginURI: `${AUTH_API}/github/login`,
 };
 

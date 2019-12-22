@@ -1,18 +1,18 @@
 import axios from 'axios';
-import { PRODUCT, AUTH } from '../assets/uris';
+import {PRODUCT, AUTH} from '../assets/uris';
 
-const deletePicture = async (mobileKey, deskTopKey) => {
+export const deletePicture = async (mobileKey, deskTopKey) => {
   try {
-    await axios.delete(PRODUCT.IMAGE_HANDLE, { data: { key: mobileKey } });
+    await axios.delete(PRODUCT.IMAGE_HANDLE, {data: {key: mobileKey}});
     if (mobileKey !== deskTopKey) {
-      await axios.delete(PRODUCT.IMAGE_HANDLE, { data: { key: deskTopKey } });
+      await axios.delete(PRODUCT.IMAGE_HANDLE, {data: {key: deskTopKey}});
     }
   } catch (err) {
     throw new Error(err);
   }
 };
 
-const uploadImages = async (formData) => {
+export const uploadImages = async (formData) => {
   try {
     const response = await axios.post(PRODUCT.IMAGE_HANDLE, formData);
     return response;
@@ -21,30 +21,31 @@ const uploadImages = async (formData) => {
   }
 };
 
-const uploadProduct = async (product) => {
+export const uploadProduct = async (product) => {
   try {
-    const { data } = await axios.post(PRODUCT.PRODUCT_HANDLE, product);
+    const {data} = await axios.post(PRODUCT.PRODUCT_HANDLE, product);
     return data;
   } catch (err) {
     throw new Error(err);
   }
 };
 
-const addUser = async ({ latitude, longitude }) => {
+export const addUser = async ({latitude, longitude}) => {
   try {
     const options = {
       method: 'post',
       url: AUTH.ADD_USER,
       withCredentials: true,
-      data: { latitude, longitude },
+      data: {latitude, longitude},
     };
-    await axios(options);
+    const {data} = await axios(options);
+    return data;
   } catch (e) {
     throw new Error(e.response.status);
   }
 };
 
-const deleteJWTRequest = async () => {
+export const deleteJWTRequest = async () => {
   try {
     const options = {
       method: 'get',
@@ -57,7 +58,20 @@ const deleteJWTRequest = async () => {
   }
 };
 
-const deleteProduct = async (id, userId) => {
+export const deleteUser = async () => {
+  try {
+    const options = {
+      method: 'delete',
+      url: AUTH.WITHDRAWAL,
+      withCredentials: true,
+    };
+    await axios(options);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const deleteProduct = async (id, userId) => {
   try {
     const options = {
       method: 'delete',
@@ -69,4 +83,3 @@ const deleteProduct = async (id, userId) => {
     throw new Error(e);
   }
 };
-export { deletePicture, uploadImages, uploadProduct, addUser, deleteJWTRequest, deleteProduct };
