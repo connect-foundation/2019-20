@@ -68,6 +68,7 @@ export const newAccountLogIn = (req, res) => {
   const token = jwt.sign(info, process.env.JWT_PRIVATE_KEY);
   res.cookie('jwt', token, {
     httpOnly: true,
+    domain: authorizedURL,
   });
   res.json(info);
 };
