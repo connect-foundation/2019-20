@@ -20,7 +20,7 @@ import { AlertMessageContext } from '../contexts/AlertMessage';
 import { UserContext } from '../contexts/User';
 
 import { deleteUser } from '../utils/apiCall';
-import { isLoggedIn } from '../utils/auth';
+import { isLoggedIn, isVisited } from '../utils/auth';
 import { findAddressByCoordinates } from '../utils/geolocation';
 import { ROUTES } from '../assets/uris';
 
@@ -68,20 +68,17 @@ const MyPage = () => {
   const { dispatchMessage, ACTION_TYPE } = useContext(AlertMessageContext);
   const [address, setAddress] = useState(MESSAGE.LOAD_LOCATION);
 
-  useEffect(() => {
-    if (!isLoggedIn(user) || !user.name) {
-      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: MESSAGE.FORBIDEN });
-    }
-  }, [ACTION_TYPE.ERROR, dispatchMessage, user]);
+  const correctUser = (member) => (isLoggedIn(member) && isVisited(member));
 
   useEffect(() => {
-    if (!isLoggedIn(user)) {
+    if (!correctUser(user)) {
       return;
     }
     const getAddress = async () => {
       try {
         const { latitude, longitude } = user;
-        const name = await findAddressByCoordinates(latitude, longitude);
+        // x = longitude, y = latitude (카카오 api 명세 /#services_Geocoder_coord2RegionCode)
+        const name = await findAddressByCoordinates(longitude, latitude);
         setAddress(name);
       } catch (e) {
         setAddress(MESSAGE.LOAD_LOCATION_FAIL);
@@ -90,8 +87,7 @@ const MyPage = () => {
     getAddress();
   }, [user, setAddress]);
 
-  // 로그인을 하지 않아도 해당 조건이 거짓이 되는 경우가 있어 user.name 추가
-  if (!isLoggedIn(user) || !user.name) {
+  if (!correctUser(user)) {
     return (
       <Grid container justify='center' alignItems='center' style={({ height: '100vh' })}>
         <GithubLogInButton />
@@ -114,7 +110,7 @@ const MyPage = () => {
     try {
       await deleteUser();
     } catch (e) {
-      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: '처리중 오류가 발생하였습니다.' });
+      dispatchMessage({ type: ACTION_TYPE.ERROR, payload: MESSAGE.LOAD_LOCATION_FAIL });
     }
     setUser(null);
   };

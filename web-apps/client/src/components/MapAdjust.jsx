@@ -16,7 +16,7 @@ import { debounce } from '../utils';
 
 const useStyles = makeStyles({
   root: {
-    margin: '0.5rem 1.5rem'
+    padding: '0.5rem 1.5rem'
   },
   distance: {
     position: 'absolute',
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   },
 });
 
-const MapAdjust = ({ filter, message, title, clearArea, applySettings, arange }) => {
+const MapAdjust = ({ filter, message, title, clearArea, applySettings, arange, listenCoordinates }) => {
   const SEARCH_DELAY = 500;
   const classes = useStyles({});
   const addressRef = useRef(null);
@@ -58,7 +58,10 @@ const MapAdjust = ({ filter, message, title, clearArea, applySettings, arange })
   const updateCurrentPoisiton = useCallback(({ lat, lng, name }) => {
     setCoordinates(`${lat},${lng}`);
     setLocalname(name);
-  }, [setCoordinates, setLocalname]);
+    if(listenCoordinates) {
+      listenCoordinates(lat,lng);
+    }
+  }, [listenCoordinates]);
 
   const changeCurrentAddress = (event) => {
     const { target: { dataset: { x, y } } } = event;
@@ -103,7 +106,9 @@ const MapAdjust = ({ filter, message, title, clearArea, applySettings, arange })
   if (clearArea) {
     buttons.push(getButtons('취소', null, <ClearIcon />, clearAreaEvent));
   }
-  buttons.push(getButtons('적용', null, <CheckIcon />, applySettingsEvent));
+  if (applySettings) {
+    buttons.push(getButtons('적용', null, <CheckIcon />, applySettingsEvent));
+  }
 
   return (
     <>
@@ -151,9 +156,12 @@ const MapAdjust = ({ filter, message, title, clearArea, applySettings, arange })
               ), [updateCurrentPoisiton])
             }
             <AddressList list={addressList} onClick={changeCurrentAddress} />
-            <div className={classes.distance}>
-              {distance}Km
-            </div>
+            {arange && 
+            (
+              <div className={classes.distance}>
+                {distance}Km
+              </div>
+            )}
           </Grid>
         </Grid>
       </Grid>
@@ -168,10 +176,11 @@ MapAdjust.propTypes = {
     localname: PropTypes.string,
   })),
   title: PropTypes.string.isRequired,
-  clearArea: PropTypes.oneOfType([PropTypes.func, null]),
-  applySettings: PropTypes.func.isRequired,
   message: PropTypes.string,
   arange: PropTypes.bool,
+  clearArea: PropTypes.oneOfType([PropTypes.func, null]),
+  applySettings: PropTypes.oneOfType([PropTypes.func, null]),
+  listenCoordinates: PropTypes.oneOfType([PropTypes.func, null]),
 };
 
 MapAdjust.defaultProps = {
@@ -183,6 +192,8 @@ MapAdjust.defaultProps = {
   message: '',
   arange: false,
   clearArea: null,
+  applySettings: null,
+  listenCoordinates: null,
 };
 
 export default MapAdjust;
