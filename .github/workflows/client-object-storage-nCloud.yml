@@ -8,21 +8,26 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
     steps:
-    - uses: actions/checkout@master
-    - name: Use Node.js 10.x
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        node-version: 10.x
+        node-version: ${{ matrix.node-version }}
     - name: react-build 
       run: |
         path=$(echo ${GITHUB_BASE_REF%-web/master})
-        cd ./webapps/$path
+        cd ./web-apps/$path
         yarn
         yarn build
     - name: react-build-dir
-      run: echo "##[set-output name=dir]./webapps/$(echo $GITHUB_BASE_REF%-web/master})/build/"
+      run: echo "##[set-output name=dir]./web-apps/$(echo ${GITHUB_BASE_REF%-web/master})/build/"
       id: Dir
     - uses: jakejarvis/s3-sync-action@master
       with:
