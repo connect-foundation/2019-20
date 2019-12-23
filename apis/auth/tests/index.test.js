@@ -41,7 +41,7 @@ it('log out test', () => new Promise((resolve) => {
 }).then((res) => {
   expect(res.status).toBe(200);
   expect(res.headers['set-cookie'][0]).toBe(
-    'jwt=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+    'jwt=; Domain=.oemarket.shop; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly',
   );
 }));
 

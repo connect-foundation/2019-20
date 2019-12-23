@@ -47,7 +47,7 @@ export const getUserInfoByJWT = (req, res, next) => {
 };
 
 export const logOutProcess = (req, res) => {
-  res.clearCookie('jwt');
+  res.clearCookie('jwt', { httpOnly: true, domain: authorizedURL });
   res.end();
 };
 
