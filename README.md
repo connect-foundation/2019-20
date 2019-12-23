@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to 폴 👋</h1>
+<h1 align="center">Welcome to 오이마켓 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/connect-foundation/2019-20/wiki" target="_blank">
@@ -13,42 +13,61 @@
 
 > (2019.11.04 ~ 2019.12.20)
 
+### 🏠 [Web site](https://oemarket.shop)
 
-### 🏠 [Homepage](https://github.com/connect-foundation/2019-20/wiki)
+### 🥒 [오이마켓을 소개합니다](https://docs.google.com/presentation/d/1NS4_ZUd5yoVLa67TmKEV-AJkAdTEphC0rzO_zt2v0vE/edit#slide=id.g7bcf63de8b_6_13)
+
+### 서비스 구조 & DB Model
+
+> 각각의 서버가 독립적인 DB를 가지고 있는것이 특징입니다.
+
+![흐름도](https://user-images.githubusercontent.com/38881005/71332009-dbf7af80-2577-11ea-8a41-d35755b35db0.JPG)
 
 
-### DEMO
-
-[main](http://10.180.170.175:3000/)
-[상품등록](http://10.180.170.213:3000/)
-[채팅](http://10.180.171.184:3000/chat)
 ## 기술적인 고민들
 
-- [Git 규칙](https://github.com/connect-foundation/2019-20/wiki/git-%EA%B7%9C%EC%B9%99)
+📝[OEMarket_WIKI](https://github.com/connect-foundation/2019-20/wiki)
 
-- [그라운드 룰](https://github.com/connect-foundation/2019-20/wiki/%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EB%A3%B0)
+### 사용 기술
+
+#### Front-End
+
+- React.js
+- Material-UI
+
+#### Back-End
+
+- Express.js
+- socket.io
+
+#### Database
+
+- MySQL
+- MongoDB
+- Elasticsearch
+
+#### 협업툴
+
+- github action
+- husky
+- eslint
+- prettier
+
+#### Infra
+
+- Naver Cloud Platform
+- Object Storage
+- CDN
 
 
-### 사용 가능한 스크립트
-
-```sh
-# 설치
-yarn
-# 실행
-yarn start
-# 테스트
-yarn test
-# 린트 적용
-yarn lint:fix
-```
 
 ## 책임
 
 |  이름   |     책임     |                     깃허브                     |
 | :---: | :--------: | :-----------------------------------------: |
-|  이석재  | 스크럼, React |     [sukjae](https://github.com/sukjae)     |
-|  고경표  |   CI/CD    |      [kgpyo](https://github.com/kgpyo)      |
-|  여재환  |  일라스틱 서치   | [Johnie-Yeo](https://github.com/Johnie-Yeo) |
+|  이석재  | CI/CD, 스크럼, React, 채팅 서비스, 인프라 |     [sukjae](https://github.com/sukjae)     |
+|  고경표  |   CI/CD, Elasticsearch, 상품 관리 BE, 메인페이지    |      [kgpyo](https://github.com/kgpyo)      |
+|  여재환  |  Elasticsearch, 상품 관리 BE/FE, 인증관련 서비스   | [Johnie-Yeo](https://github.com/Johnie-Yeo) |
 
 
 
