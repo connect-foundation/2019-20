@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore, applyMiddleware} from 'redux';
-import {Provider} from 'react-redux';
-import {composeWithDevTools} from 'redux-devtools-extension';
+
+// style
 import './index.css';
-import {createLogger} from 'redux-logger';
+
+// redux
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { createLogger } from 'redux-logger';
 import ReduxThunk from 'redux-thunk';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+import App from './App';
 import rootReducer from './modules';
 
 const logger = createLogger();

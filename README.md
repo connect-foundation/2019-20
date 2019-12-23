@@ -17,6 +17,11 @@
 ### 🏠 [Homepage](https://github.com/connect-foundation/2019-20/wiki)
 
 
+### DEMO
+
+[main](http://10.180.170.175:3000/)
+[상품등록](http://10.180.170.213:3000/)
+[채팅](http://10.180.171.184:3000/chat)
 ## 기술적인 고민들
 
 - [Git 규칙](https://github.com/connect-foundation/2019-20/wiki/git-%EA%B7%9C%EC%B9%99)
