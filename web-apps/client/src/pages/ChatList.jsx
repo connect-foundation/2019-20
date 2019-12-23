@@ -21,7 +21,7 @@ import {CHAT} from '../assets/uris';
 const useStyles = makeStyles(() => ({
   root: {
     width: '100vw',
-    height: '100vh',
+    height: 'calc(100vh - 5rem)',
   },
 }));
 
