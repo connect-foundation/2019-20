@@ -20,10 +20,19 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Get yarn cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - uses: actions/cache@v1
+      with:
+        path: ./web-apps/client/node_modules
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
     - name: yarn install, build, test
       run: |
         path=$(echo ${GITHUB_BASE_REF%-web/master})
-        cd ./webapps/$path
+        cd ./web-apps/$path
         yarn
         yarn build
         yarn test
