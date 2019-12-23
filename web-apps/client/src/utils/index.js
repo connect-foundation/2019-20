@@ -31,7 +31,7 @@ export const formatChat = (rowChat = []) => {
   rowChat.forEach((chat) => {
     const chatTime = new Date(chat.timestamp);
     const lastChat = result[result.length - 1];
-    if (result.length < 1 || isInSameDay(lastChat.baseDate, chatTime)) {
+    if (result.length < 1 || !isInSameDay(lastChat.baseDate, chat.timestamp)) {
       result.push({
         baseDate: chatTime.setHours(0, 0, 0, 0),
         messages: [chat],
@@ -97,9 +97,9 @@ function getDistance(lon1, lat1, lon2, lat2) {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(toRadian(lat1)) *
-    Math.cos(toRadian(lat2)) *
-    Math.sin(dLon / 2) *
-    Math.sin(dLon / 2);
+      Math.cos(toRadian(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c; // Distance in km
   return d;
@@ -112,7 +112,7 @@ export const getDistanceFromCurrentLocation = async (location) => {
   }
   try {
     const {
-      coords: { latitude, longitude },
+      coords: {latitude, longitude},
     } = await getCurrentLocation();
     const distance = getDistance(
       longitude,
